@@ -473,5 +473,34 @@ export const settings = Object.freeze({
       warmthTarget: 0.07,
       consistencyRate: 0.015
     })
+  }),
+
+  scene009: Object.freeze({
+    journey: Object.freeze({
+      speed: 0.0003,
+      easeInDuration: 5,
+      easeOutDuration: 4,
+      commitmentThreshold: 0.3,
+      approachDistance: 60,
+      reducedMotionFactor: 0.3
+    }),
+    phases: Object.freeze({
+      stillness: Object.freeze({ start: 0, duration: 8 }),
+      decision: Object.freeze({ start: 8, duration: 7 }),
+      commitment: Object.freeze({ start: 15, duration: 8 }),
+      journey: Object.freeze({ start: 23, duration: 12 }),
+      approach: Object.freeze({ start: 35, duration: 10 })
+    }),
+    environment: Object.freeze({
+      warmthIncrease: 0.015,
+      depthEnhancement: 0.3,
+      nearParticleEnrichment: 0.4,
+      farParticleFade: 0.6,
+      fogDeepening: 0.02
+    }),
+    lighting: Object.freeze({
+      warmthTarget: 0.09,
+      consistencyRate: 0.01
+    })
   })
 });

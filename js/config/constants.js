@@ -262,3 +262,11 @@ export const REVELATION_STATES = Object.freeze({
   REALIZATION: 'realization',
   STILLNESS: 'stillness'
 });
+
+export const JOURNEY_STATES = Object.freeze({
+  STILLNESS: 'stillness',
+  DECISION: 'decision',
+  COMMITMENT: 'commitment',
+  JOURNEY: 'journey',
+  APPROACH: 'approach'
+});
