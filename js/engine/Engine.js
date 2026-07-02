@@ -18,6 +18,7 @@ import { AudioManager } from './AudioManager.js';
 import { UniverseEngine } from './universe/UniverseEngine.js';
 import { Scene001_FirstBreath } from '../scenes/Scene001_FirstBreath.js';
 import { Scene002_Awakening } from '../scenes/Scene002_Awakening.js';
+import { Scene003_FirstConnection } from '../scenes/Scene003_FirstConnection.js';
 
 export class Engine {
   constructor() {
@@ -31,6 +32,9 @@ export class Engine {
     this.scene001Duration = 10;
     this.scene001Elapsed = 0;
     this.scene002Registered = false;
+    this.scene002Instance = null;
+    this.scene002Elapsed = 0;
+    this.scene003Registered = false;
   }
 
   /**
@@ -60,6 +64,7 @@ export class Engine {
 
     await this.initScene001();
     this.initScene002();
+    this.initScene003();
     this.state = MANAGER_STATES.READY;
   }
 
@@ -88,7 +93,21 @@ export class Engine {
     const scene = new Scene002_Awakening();
     scene.setUniverse(this.universe);
     sceneManager.registerScene(scene.getId(), scene);
+    this.scene002Instance = scene;
     this.scene002Registered = true;
+  }
+
+  /**
+   * Register Scene003_FirstConnection for later transition.
+   */
+  initScene003() {
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    const scene = new Scene003_FirstConnection();
+    scene.setUniverse(this.universe);
+    sceneManager.registerScene(scene.getId(), scene);
+    this.scene003Registered = true;
   }
 
   /**
@@ -188,19 +207,26 @@ export class Engine {
   }
 
   /**
-   * Check if Scene001 has elapsed and transition to Scene002.
+   * Check scene transitions and advance when conditions are met.
    * @param {number} deltaTime - Frame delta in seconds
    */
   checkSceneTransition(deltaTime) {
-    if (!this.scene002Registered) return;
-
     const sceneManager = this.managers.get('scene');
     if (!sceneManager) return;
 
-    if (sceneManager.currentScene === 'scene001_firstBreath') {
+    // Scene001 -> Scene002 transition (time-based)
+    if (this.scene002Registered && sceneManager.currentScene === 'scene001_firstBreath') {
       this.scene001Elapsed += deltaTime;
       if (this.scene001Elapsed >= this.scene001Duration) {
         this.transitionToScene002();
+      }
+      return;
+    }
+
+    // Scene002 -> Scene003 transition (completion-based)
+    if (this.scene003Registered && sceneManager.currentScene === 'scene002_awakening') {
+      if (this.scene002Instance && this.scene002Instance.isCompleted()) {
+        this.transitionToScene003();
       }
     }
   }
@@ -215,6 +241,18 @@ export class Engine {
 
     await sceneManager.loadScene('scene002_awakening');
     await sceneManager.enterScene('scene002_awakening');
+  }
+
+  /**
+   * Transition from Scene002 to Scene003.
+   */
+  async transitionToScene003() {
+    this.scene003Registered = false;
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    await sceneManager.loadScene('scene003_firstConnection');
+    await sceneManager.enterScene('scene003_firstConnection');
   }
 
   /**
