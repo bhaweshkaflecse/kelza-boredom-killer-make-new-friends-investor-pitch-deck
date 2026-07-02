@@ -2,7 +2,7 @@
   "id": "FEAT-002",
   "type": "feat",
   "description": "Wire Scene005 into Engine.js: add initScene005(), transitionToScene005(), and Scene004->005 completion-based transition. Verify full integration.",
-  "status": "pending",
+  "status": "in_progress",
   "steps": [
     "In js/engine/Engine.js: Add import for Scene005_LivingNetwork from '../scenes/Scene005_LivingNetwork.js'.",
     "Add instance properties in constructor: this.scene005Registered = false, this.scene005Instance = null.",

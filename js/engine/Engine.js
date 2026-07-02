@@ -20,6 +20,7 @@ import { Scene001_FirstBreath } from '../scenes/Scene001_FirstBreath.js';
 import { Scene002_Awakening } from '../scenes/Scene002_Awakening.js';
 import { Scene003_FirstConnection } from '../scenes/Scene003_FirstConnection.js';
 import { Scene004_Ripple } from '../scenes/Scene004_Ripple.js';
+import { Scene005_LivingNetwork } from '../scenes/Scene005_LivingNetwork.js';
 
 export class Engine {
   constructor() {
@@ -39,6 +40,8 @@ export class Engine {
     this.scene003Instance = null;
     this.scene004Registered = false;
     this.scene004Instance = null;
+    this.scene005Registered = false;
+    this.scene005Instance = null;
     this.connectionDataForScene004 = null;
   }
 
@@ -71,6 +74,7 @@ export class Engine {
     this.initScene002();
     this.initScene003();
     this.initScene004();
+    this.initScene005();
     this.state = MANAGER_STATES.READY;
   }
 
@@ -244,6 +248,13 @@ export class Engine {
         this.transitionToScene004();
       }
     }
+
+    // Scene004 -> Scene005 transition (completion-based)
+    if (this.scene005Registered && sceneManager.currentScene === 'scene004_ripple') {
+      if (this.scene004Instance && this.scene004Instance.isCompleted()) {
+        this.transitionToScene005();
+      }
+    }
   }
 
   /**
@@ -285,6 +296,20 @@ export class Engine {
   }
 
   /**
+   * Register Scene005_LivingNetwork for later transition.
+   */
+  initScene005() {
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    const scene = new Scene005_LivingNetwork();
+    scene.setUniverse(this.universe);
+    sceneManager.registerScene(scene.getId(), scene);
+    this.scene005Instance = scene;
+    this.scene005Registered = true;
+  }
+
+  /**
    * Transition from Scene003 to Scene004.
    * Captures connection data before Scene003 leaves.
    */
@@ -307,6 +332,30 @@ export class Engine {
 
     await sceneManager.loadScene('scene004_ripple');
     await sceneManager.enterScene('scene004_ripple');
+  }
+
+  /**
+   * Transition from Scene004 to Scene005.
+   * Passes the persistent connection data forward.
+   */
+  async transitionToScene005() {
+    this.scene005Registered = false;
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    // Pass connection data to Scene005 (same persistent connection)
+    if (this.connectionDataForScene004 && this.scene005Instance) {
+      const cd = this.connectionDataForScene004;
+      this.scene005Instance.setConnectionData(cd.midX, cd.midY, cd.indexA, cd.indexB);
+    }
+
+    // Prevent frame-gap flash: tell Scene004 to skip environment teardown
+    if (this.scene004Instance) {
+      this.scene004Instance.skipEnvironmentTeardown = true;
+    }
+
+    await sceneManager.loadScene('scene005_livingNetwork');
+    await sceneManager.enterScene('scene005_livingNetwork');
   }
 
   /**
