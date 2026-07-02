@@ -1,0 +1,27 @@
+/**
+ * Background Layer Styles
+ * Styles for any DOM-based background layers (gradients, overlays).
+ */
+
+.universe-bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.universe-bg-layer--gradient {
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(10, 10, 15, 0) 0%,
+    rgba(10, 10, 15, 1) 100%
+  );
+}
+
+.universe-bg-layer--fog {
+  opacity: 0;
+  transition: opacity var(--duration-slow, 0.5s) ease;
+}
+
+.universe-bg-layer--fog.is-active {
+  opacity: 0.15;
+}

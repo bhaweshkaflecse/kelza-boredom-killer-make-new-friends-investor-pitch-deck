@@ -87,3 +87,29 @@ export const EVENTS = Object.freeze({
   ENGINE_READY: 'kelza:engine:ready',
   PERFORMANCE_WARNING: 'kelza:performance:warning'
 });
+
+export const UNIVERSE_LAYERS = Object.freeze({
+  DEEP_SPACE: 'deepSpace',
+  GRADIENTS: 'gradients',
+  AMBIENT_LIGHTING: 'ambientLighting',
+  PARTICLE_FIELD: 'particleField',
+  DEPTH_FOG: 'depthFog',
+  CONSTELLATIONS: 'constellations',
+  SCENE_OVERLAYS: 'sceneOverlays'
+});
+
+export const PARTICLE_LIMITS = Object.freeze({
+  [DEVICE_TIERS.LOW]: 4000,
+  [DEVICE_TIERS.MEDIUM]: 8000,
+  [DEVICE_TIERS.HIGH]: 15000,
+  [DEVICE_TIERS.ULTRA]: 25000
+});
+
+export const LIGHTING_THEMES = Object.freeze({
+  dark: Object.freeze({ r: 20, g: 15, b: 40 }),
+  purple: Object.freeze({ r: 80, g: 40, b: 120 }),
+  magenta: Object.freeze({ r: 120, g: 30, b: 80 }),
+  blue: Object.freeze({ r: 30, g: 60, b: 140 }),
+  gold: Object.freeze({ r: 140, g: 110, b: 40 }),
+  white: Object.freeze({ r: 200, g: 200, b: 220 })
+});

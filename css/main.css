@@ -9,6 +9,10 @@
 @import './layout.css';
 @import './utilities.css';
 @import './animations.css';
+@import './universe.css';
+@import './background.css';
+@import './particles.css';
+@import './lighting.css';
 @import './components.css';
 
 /**

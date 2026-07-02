@@ -15,11 +15,13 @@ import { PhysicsManager } from './PhysicsManager.js';
 import { LightingManager } from './LightingManager.js';
 import { PerformanceManager } from './PerformanceManager.js';
 import { AudioManager } from './AudioManager.js';
+import { UniverseEngine } from './universe/UniverseEngine.js';
 
 export class Engine {
   constructor() {
     this.state = MANAGER_STATES.UNINITIALIZED;
     this.managers = new Map();
+    this.universe = new UniverseEngine();
     this.rafId = null;
     this.lastTime = 0;
     this.isRunning = false;
@@ -47,9 +49,24 @@ export class Engine {
       manager.init();
     });
 
+    this.initUniverse();
     this.setupEventListeners();
     this.start();
     this.state = MANAGER_STATES.READY;
+  }
+
+  /**
+   * Initialize the universe engine with required references.
+   */
+  initUniverse() {
+    const container = document.getElementById('universe-container');
+    if (!container) return;
+
+    this.universe.init({
+      container,
+      performanceManager: this.managers.get('performance'),
+      cursorManager: this.managers.get('cursor')
+    });
   }
 
   /**
@@ -128,6 +145,8 @@ export class Engine {
     const lighting = this.managers.get('lighting');
     if (lighting) lighting.update(deltaTime);
 
+    this.universe.update(deltaTime);
+
     this.rafId = requestAnimationFrame(this.tick.bind(this));
   }
 
@@ -143,6 +162,8 @@ export class Engine {
         manager.resize(width, height);
       }
     });
+
+    this.universe.resize(width, height);
   }
 
   /**
@@ -161,6 +182,7 @@ export class Engine {
    */
   onReducedMotionChange(event) {
     this.reducedMotion = event.matches;
+    this.universe.setReducedMotion(event.matches);
   }
 
   /**
@@ -174,6 +196,8 @@ export class Engine {
     if (this.reducedMotionQuery) {
       this.reducedMotionQuery.removeEventListener('change', this.handleReducedMotionChange);
     }
+
+    this.universe.destroy();
 
     this.managers.forEach(manager => {
       if (manager.destroy) {

@@ -1,0 +1,24 @@
+/**
+ * Universe Container Styles
+ * Base styles for the universe canvas container.
+ * Sits behind all content, covers entire viewport.
+ */
+
+#universe-container {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-below, -1);
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+
+.universe-canvas {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  will-change: contents;
+}

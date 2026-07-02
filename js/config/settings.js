@@ -59,5 +59,35 @@ export const settings = Object.freeze({
     alpha: true,
     powerPreference: 'high-performance',
     pixelRatio: Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)
+  }),
+
+  universe: Object.freeze({
+    particles: Object.freeze({
+      initialDensity: 0.4,
+      spawnRate: 5,
+      baseSpeed: 8,
+      depthLayers: 5,
+      fadeInDuration: 0.1,
+      fadeOutStart: 0.8
+    }),
+    lighting: Object.freeze({
+      defaultTheme: 'dark',
+      breathSpeed: 0.15,
+      breathAmplitude: 0.03,
+      transitionSpeed: 0.8
+    }),
+    background: Object.freeze({
+      baseColor: '#0a0a0f',
+      layerCount: 7
+    }),
+    debug: Object.freeze({
+      enabled: false,
+      showFPS: false,
+      showParticles: false,
+      showLighting: false,
+      showSceneNames: false,
+      showMemory: false,
+      showRenderer: false
+    })
   })
 });

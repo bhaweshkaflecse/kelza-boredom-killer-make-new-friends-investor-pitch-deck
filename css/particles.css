@@ -1,0 +1,16 @@
+/**
+ * Particle Canvas Styles
+ * Ensures particle canvas renders with GPU acceleration.
+ */
+
+.universe-canvas--particles {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  image-rendering: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .universe-canvas--particles {
+    opacity: 0.5;
+  }
+}
