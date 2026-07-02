@@ -37,6 +37,9 @@ export class ConnectionPrediction {
     this.candidates = [];
     this.candidateCount = 0;
     this.maxCandidates = 256;
+
+    /** @type {{candidates: Array, count: number}} Pre-allocated result for getCandidateConnections */
+    this.candidateResult = { candidates: null, count: 0 };
   }
 
   /**
@@ -60,6 +63,8 @@ export class ConnectionPrediction {
       this.candidates[i] = { indexA: -1, indexB: -1, distSq: 0 };
     }
     this.candidateCount = 0;
+    this.candidateResult.candidates = this.candidates;
+    this.candidateResult.count = 0;
   }
 
   /**
@@ -192,10 +197,14 @@ export class ConnectionPrediction {
 
   /**
    * Get all candidate connection pairs from the last update.
-   * @returns {{indexA: number, indexB: number, distSq: number}[]} Array of candidates
+   * Returns the backing array and count to avoid per-frame allocations.
+   * Consumers must only read indices [0, count).
+   * @returns {{candidates: {indexA: number, indexB: number, distSq: number}[], count: number}}
    */
   getCandidateConnections() {
-    return this.candidates.slice(0, this.candidateCount);
+    this.candidateResult.candidates = this.candidates;
+    this.candidateResult.count = this.candidateCount;
+    return this.candidateResult;
   }
 
   /**

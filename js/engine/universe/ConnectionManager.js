@@ -10,7 +10,7 @@
 
 import { MANAGER_STATES, CONNECTION_STATES } from '../../config/constants.js';
 import { settings } from '../../config/settings.js';
-import { lerp, clamp } from '../../utils/helpers.js';
+import { clamp } from '../../utils/helpers.js';
 import { ConnectionState } from './ConnectionState.js';
 import { ConnectionRenderer } from './ConnectionRenderer.js';
 import { PulseRenderer } from './PulseRenderer.js';
@@ -30,55 +30,42 @@ const PHASE_COMPLETE = 'complete';
 export class ConnectionManager {
   constructor() {
     this.state = MANAGER_STATES.UNINITIALIZED;
-
-    /** @type {ConnectionState} */
     this.connectionState = new ConnectionState();
-    /** @type {ConnectionRenderer} */
     this.renderer = new ConnectionRenderer();
-    /** @type {PulseRenderer} */
     this.pulseRenderer = new PulseRenderer();
-
-    /** @type {string} Current lifecycle phase */
     this.phase = PHASE_IDLE;
-
-    /** @type {boolean} Ensures only one connection ever forms */
     this.connectionFormed = false;
-
-    /** @type {Object|null} Reference to universe engine */
     this.universe = null;
-
-    // Timing accumulators
+    this.prediction = null;
+    this.effectiveDiscoveryRadiusSq = 0;
     this.phaseElapsed = 0;
     this.totalElapsed = 0;
-
-    // Particle indices for the connection pair
     this.indexA = -1;
     this.indexB = -1;
-
-    // Pre-allocated particle references (set during discovery)
     this.particleA = null;
     this.particleB = null;
-
-    // Approach state
     this.approachStartDistSq = 0;
-
-    // Filament progress (0-1)
     this.filamentProgress = 0;
-
-    // Pulse progress (-1 = inactive, 0-1 = traveling)
     this.pulseProgress = -1;
-
-    // Event listeners for external hooks
     this.eventListeners = new Map();
   }
 
   /**
    * Initialize the connection manager.
-   * @param {Object} universe - UniverseEngine reference with particleEngine, connectionPrediction
+   * @param {Object} universe - UniverseEngine reference with particleEngine
+   * @param {Object} prediction - ConnectionPrediction instance (explicit dependency)
    */
-  init(universe) {
+  init(universe, prediction) {
     this.universe = universe;
+    this.prediction = prediction;
     const reducedMotion = this.getReducedMotion();
+
+    // Defensive: cap discovery radius to prediction's spatial query radius
+    this.effectiveDiscoveryRadiusSq = Math.min(
+      SCENE003.discoveryRadius,
+      prediction.maxDistance
+    );
+    this.effectiveDiscoveryRadiusSq *= this.effectiveDiscoveryRadiusSq;
 
     this.renderer.init(reducedMotion);
     this.pulseRenderer.init(reducedMotion);
@@ -128,14 +115,13 @@ export class ConnectionManager {
     if (this.connectionFormed) return;
     if (this.phaseElapsed < SCENE003.discoveryMinTime) return;
 
-    const prediction = this.universe.connectionPrediction;
-    if (!prediction) return;
+    if (!this.prediction) return;
 
-    const candidates = prediction.getCandidateConnections();
-    if (!candidates || candidates.length === 0) return;
+    const result = this.prediction.getCandidateConnections();
+    if (!result || result.count === 0) return;
 
     // Select the closest candidate pair
-    const best = this.selectBestCandidate(candidates);
+    const best = this.selectBestCandidate(result.candidates, result.count);
     if (!best) return;
 
     this.indexA = best.indexA;
@@ -159,16 +145,17 @@ export class ConnectionManager {
   }
 
   /**
-   * Select the best candidate connection (closest pair within discovery radius).
-   * @param {{indexA: number, indexB: number, distSq: number}[]} candidates
+   * Select the best candidate connection (closest pair within effective radius).
+   * @param {{indexA: number, indexB: number, distSq: number}[]} candidates - Backing array
+   * @param {number} count - Number of valid entries in candidates
    * @returns {{indexA: number, indexB: number, distSq: number}|null}
    */
-  selectBestCandidate(candidates) {
-    const maxDistSq = SCENE003.discoveryRadius * SCENE003.discoveryRadius;
+  selectBestCandidate(candidates, count) {
+    const maxDistSq = this.effectiveDiscoveryRadiusSq;
     let best = null;
     let bestDistSq = Infinity;
 
-    for (let i = 0; i < candidates.length; i++) {
+    for (let i = 0; i < count; i++) {
       const c = candidates[i];
       if (c.distSq < bestDistSq && c.distSq < maxDistSq) {
         const pA = this.universe.particleEngine.pool[c.indexA];
@@ -305,11 +292,12 @@ export class ConnectionManager {
       );
     }
 
-    // Render the pulse
+    // Render the pulse using the same control point as the filament
     if (this.pulseProgress >= 0 && this.pulseProgress <= 1) {
       this.pulseRenderer.render(
         ctx, this.particleA, this.particleB,
-        this.pulseProgress, reducedMotion
+        this.pulseProgress, reducedMotion,
+        this.renderer.cpX, this.renderer.cpY
       );
     }
   }
@@ -386,6 +374,7 @@ export class ConnectionManager {
     this.connectionState.destroy();
     this.eventListeners.clear();
     this.universe = null;
+    this.prediction = null;
     this.particleA = null;
     this.particleB = null;
     this.phase = PHASE_IDLE;

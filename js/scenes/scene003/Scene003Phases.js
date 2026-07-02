@@ -10,7 +10,6 @@
  */
 
 import { SCENE_DIRECTOR_PHASES } from '../../config/constants.js';
-import { settings } from '../../config/settings.js';
 
 /** Total duration of Scene003 emotional timeline in seconds */
 export const SCENE003_DURATION = 18;
@@ -125,7 +124,8 @@ function buildPhase4(scene) {
 }
 
 /**
- * Phase 5: Filament (12.5-14.5s). Connection line fades in. Camera begins attention.
+ * Phase 5: Filament (12.5-14.5s). Connection line fades in.
+ * Camera attention is now event-driven via ConnectionManager, not phase-driven.
  * @param {Object} scene - Scene reference
  * @returns {Object} Phase definition
  */
@@ -134,9 +134,7 @@ function buildPhase5(scene) {
     id: SCENE_DIRECTOR_PHASES.CONNECTING,
     startTime: PHASE5_START,
     duration: PHASE5_DURATION,
-    onEnter() {
-      scene.beginCameraAttention();
-    },
+    onEnter: null,
     onUpdate: null,
     onLeave: null
   };
@@ -144,6 +142,7 @@ function buildPhase5(scene) {
 
 /**
  * Phase 6: Pulse and Ripple (14.5-17s). Pulse travels, ripple affects environment.
+ * Ripple is now event-driven via ConnectionManager, not phase-driven.
  * @param {Object} scene - Scene reference
  * @returns {Object} Phase definition
  */
@@ -152,9 +151,7 @@ function buildPhase6(scene) {
     id: SCENE_DIRECTOR_PHASES.FLOURISHING,
     startTime: PHASE6_START,
     duration: PHASE6_DURATION,
-    onEnter() {
-      scene.triggerEnvironmentalRipple();
-    },
+    onEnter: null,
     onUpdate: null,
     onLeave: null
   };

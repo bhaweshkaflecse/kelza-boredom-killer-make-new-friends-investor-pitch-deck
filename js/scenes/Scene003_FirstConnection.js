@@ -22,6 +22,7 @@ import { isReducedMotion } from '../utils/helpers.js';
 import { BehaviorSystem } from '../engine/universe/BehaviorSystem.js';
 import { ConnectionPrediction } from '../engine/universe/ConnectionPrediction.js';
 import { ConnectionManager } from '../engine/universe/ConnectionManager.js';
+import { CONNECTION_EVENTS } from '../engine/universe/ConnectionEvents.js';
 import { AudioArchitecture } from '../engine/universe/AudioArchitecture.js';
 import { SceneDirector } from '../engine/SceneDirector.js';
 import {
@@ -117,11 +118,19 @@ export class Scene003_FirstConnection {
     this.connectionPrediction = new ConnectionPrediction();
     this.connectionPrediction.init(maxParticles);
 
-    // Expose connectionPrediction on universe for ConnectionManager access
-    this.universe.connectionPrediction = this.connectionPrediction;
-
+    // Pass prediction explicitly - no monkey-patching onto universe
     this.connectionManager = new ConnectionManager();
-    this.connectionManager.init(this.universe);
+    this.connectionManager.init(this.universe, this.connectionPrediction);
+
+    // Event-driven camera and ripple: synchronized with actual connection state
+    this.connectionManager.on(
+      CONNECTION_EVENTS.CONNECTION_CREATED,
+      () => { this.beginCameraAttention(); }
+    );
+    this.connectionManager.on(
+      CONNECTION_EVENTS.PULSE_STARTED,
+      () => { this.triggerEnvironmentalRipple(); }
+    );
   }
 
   /**
@@ -336,7 +345,6 @@ export class Scene003_FirstConnection {
     if (this.universe) {
       this.universe.cameraController.clearClusterBias();
       this.universe.cameraController.setTarget(0, 0);
-      this.universe.connectionPrediction = null;
       this.universe.setFogActive(false);
       this.universe.setVignetteActive(false);
       this.universe.setGradientsActive(false);

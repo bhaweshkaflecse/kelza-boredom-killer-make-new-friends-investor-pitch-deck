@@ -52,9 +52,15 @@ export class PulseRenderer {
    * @param {Object} particleB - Second particle {x, y}
    * @param {number} pulseProgress - Travel progress (0-1), -1 means inactive
    * @param {boolean} reducedMotion - Current reduced motion state
+   * @param {number} controlX - Bezier control point X (from ConnectionRenderer)
+   * @param {number} controlY - Bezier control point Y (from ConnectionRenderer)
    */
-  render(ctx, particleA, particleB, pulseProgress, reducedMotion) {
+  render(ctx, particleA, particleB, pulseProgress, reducedMotion, controlX, controlY) {
     if (pulseProgress < 0 || pulseProgress > 1) return;
+
+    // Use the same control point as ConnectionRenderer for path parity
+    this.cpX = controlX;
+    this.cpY = controlY;
 
     if (reducedMotion) {
       this.renderReducedMotion(ctx, particleA, particleB, pulseProgress);
@@ -66,18 +72,13 @@ export class PulseRenderer {
 
   /**
    * Render a traveling dot along the quadratic bezier curve.
+   * Uses the same control point as ConnectionRenderer for path parity.
    * @param {CanvasRenderingContext2D} ctx - Canvas context
    * @param {Object} particleA - Start particle
    * @param {Object} particleB - End particle
    * @param {number} t - Progress along path (0-1)
    */
   renderTravelingDot(ctx, particleA, particleB, t) {
-    // Compute control point (same bezier as ConnectionRenderer)
-    this.midX = (particleA.x + particleB.x) * 0.5;
-    this.midY = (particleA.y + particleB.y) * 0.5;
-    this.cpX = this.midX;
-    this.cpY = this.midY;
-
     // Quadratic bezier evaluation: B(t) = (1-t)^2*P0 + 2*(1-t)*t*CP + t^2*P1
     const invT = 1 - t;
     const invTSq = invT * invT;

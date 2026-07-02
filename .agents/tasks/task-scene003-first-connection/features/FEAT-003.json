@@ -1,0 +1,31 @@
+{
+  "id": "FEAT-003",
+  "type": "fix",
+  "description": "Address 5 review issues: pulse/filament bezier mismatch, per-frame allocation in discovery, phase timing desync, implicit coupling via universe.connectionPrediction, and dual discoveryRadius semantics.",
+  "status": "in_progress",
+  "steps": [
+    "Fix PulseRenderer to accept and use the ConnectionRenderer's noise-displaced control point instead of raw midpoint",
+    "Fix getCandidateConnections() to expose backing array and count without .slice() allocation",
+    "Make Scene003Phases camera attention and ripple event-driven (triggered by ConnectionManager events) rather than fixed-time phase callbacks",
+    "Replace monkey-patching of connectionPrediction onto universe with explicit parameter passing through ConnectionManager.init()",
+    "Add defensive clamping in ConnectionManager.selectBestCandidate to use min(discoveryRadius, prediction.maxDistance) so discoveryRadius never exceeds the spatial query radius"
+  ],
+  "acceptance_criteria": [
+    "PulseRenderer travels on the same bezier path as the filament",
+    "No .slice() allocation during discovery phase frames",
+    "Camera attention and ripple only fire after ConnectionManager confirms CONNECTED state",
+    "No monkey-patching of universe object for connectionPrediction",
+    "ConnectionManager defensively caps discoveryRadius to prediction maxDistance",
+    "ConnectionManager.js stays under 400 lines",
+    "All files pass node --check syntax validation"
+  ],
+  "verification": [
+    "NODE_OPTIONS='' node --check js/engine/universe/ConnectionManager.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/PulseRenderer.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/ConnectionPrediction.js",
+    "NODE_OPTIONS='' node --check js/scenes/Scene003_FirstConnection.js",
+    "NODE_OPTIONS='' node --check js/scenes/scene003/Scene003Phases.js"
+  ],
+  "blocked_reason": null,
+  "findings": null
+}
