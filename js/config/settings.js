@@ -164,6 +164,61 @@ export const settings = Object.freeze({
     cameraEaseSpeed: 0.8
   }),
 
+  scene004: Object.freeze({
+    influence: Object.freeze({
+      radius: 180,
+      strength: 0.12,
+      decayRate: 0.985,
+      expansionSpeed: 8,
+      connectionWeight: 1.0,
+      maxSources: 8
+    }),
+    ripple: Object.freeze({
+      speed: 3,
+      maxRadius: 400,
+      decayRate: 0.992,
+      residualStrength: 0.04,
+      expansionDelay: 4.0,
+      maxRipples: 4
+    }),
+    curiosity: Object.freeze({
+      searchStrength: 0.06,
+      noiseScale: 0.008,
+      noiseSpeed: 0.3,
+      activationThreshold: 0.05,
+      deactivationRadius: 250,
+      seed: 523
+    }),
+    synchronization: Object.freeze({
+      groupSize: 4,
+      syncDuration: 3.0,
+      divergeDuration: 2.0,
+      syncStrength: 0.03,
+      detectionRadius: 60,
+      maxGroups: 6,
+      updateInterval: 12,
+      seed: 631
+    }),
+    phases: Object.freeze({
+      silence: Object.freeze({ start: 0, duration: 4 }),
+      influence: Object.freeze({ start: 4, duration: 6 }),
+      ripple: Object.freeze({ start: 10, duration: 6 }),
+      discovery: Object.freeze({ start: 16, duration: 5 }),
+      hope: Object.freeze({ start: 21, duration: 4 })
+    }),
+    environment: Object.freeze({
+      warmthTransitionSpeed: 0.4,
+      fogBreathSpeedMult: 1.3,
+      densityIncrease: 0.02
+    }),
+    camera: Object.freeze({
+      broadenSpeed: 0.3,
+      influenceTrackingWeight: 0.08,
+      maxBroadenRadius: 5,
+      reducedMotionFactor: 0.2
+    })
+  }),
+
   scene002: Object.freeze({
     intelligenceField: Object.freeze({
       strength: 0.002,

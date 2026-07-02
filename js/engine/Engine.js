@@ -19,6 +19,7 @@ import { UniverseEngine } from './universe/UniverseEngine.js';
 import { Scene001_FirstBreath } from '../scenes/Scene001_FirstBreath.js';
 import { Scene002_Awakening } from '../scenes/Scene002_Awakening.js';
 import { Scene003_FirstConnection } from '../scenes/Scene003_FirstConnection.js';
+import { Scene004_Ripple } from '../scenes/Scene004_Ripple.js';
 
 export class Engine {
   constructor() {
@@ -35,6 +36,10 @@ export class Engine {
     this.scene002Instance = null;
     this.scene002Elapsed = 0;
     this.scene003Registered = false;
+    this.scene003Instance = null;
+    this.scene004Registered = false;
+    this.scene004Instance = null;
+    this.connectionDataForScene004 = null;
   }
 
   /**
@@ -65,6 +70,7 @@ export class Engine {
     await this.initScene001();
     this.initScene002();
     this.initScene003();
+    this.initScene004();
     this.state = MANAGER_STATES.READY;
   }
 
@@ -107,6 +113,7 @@ export class Engine {
     const scene = new Scene003_FirstConnection();
     scene.setUniverse(this.universe);
     sceneManager.registerScene(scene.getId(), scene);
+    this.scene003Instance = scene;
     this.scene003Registered = true;
   }
 
@@ -229,6 +236,14 @@ export class Engine {
         this.transitionToScene003();
       }
     }
+
+    // Scene003 -> Scene004 transition (completion-based)
+    if (this.scene004Registered && sceneManager.currentScene === 'scene003_firstConnection') {
+      if (this.scene003Instance && this.scene003Instance.isCompleted()) {
+        this.captureConnectionData();
+        this.transitionToScene004();
+      }
+    }
   }
 
   /**
@@ -253,6 +268,61 @@ export class Engine {
 
     await sceneManager.loadScene('scene003_firstConnection');
     await sceneManager.enterScene('scene003_firstConnection');
+  }
+
+  /**
+   * Register Scene004_Ripple for later transition.
+   */
+  initScene004() {
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    const scene = new Scene004_Ripple();
+    scene.setUniverse(this.universe);
+    sceneManager.registerScene(scene.getId(), scene);
+    this.scene004Instance = scene;
+    this.scene004Registered = true;
+  }
+
+  /**
+   * Transition from Scene003 to Scene004.
+   * Captures connection data before Scene003 leaves.
+   */
+  async transitionToScene004() {
+    this.scene004Registered = false;
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    // Pass connection midpoint data to Scene004
+    if (this.connectionDataForScene004 && this.scene004Instance) {
+      const cd = this.connectionDataForScene004;
+      this.scene004Instance.setConnectionData(cd.midX, cd.midY, cd.indexA, cd.indexB);
+    }
+
+    await sceneManager.loadScene('scene004_ripple');
+    await sceneManager.enterScene('scene004_ripple');
+  }
+
+  /**
+   * Capture connection data from Scene003 before transition.
+   * Stores midpoint and particle indices for Scene004.
+   */
+  captureConnectionData() {
+    if (!this.scene003Instance || !this.scene003Instance.connectionManager) {
+      this.connectionDataForScene004 = { midX: 0, midY: 0, indexA: -1, indexB: -1 };
+      return;
+    }
+
+    const conn = this.scene003Instance.connectionManager.getConnectedParticles();
+    if (conn.particleA && conn.particleB) {
+      const midX = (conn.particleA.x + conn.particleB.x) * 0.5;
+      const midY = (conn.particleA.y + conn.particleB.y) * 0.5;
+      this.connectionDataForScene004 = {
+        midX, midY, indexA: conn.indexA, indexB: conn.indexB
+      };
+    } else {
+      this.connectionDataForScene004 = { midX: 0, midY: 0, indexA: -1, indexB: -1 };
+    }
   }
 
   /**

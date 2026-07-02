@@ -1,0 +1,47 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Create Scene004 core architecture: InfluenceEngine, RipplePropagation, CuriosityBehavior, SynchronizationSystem, Scene004_Ripple scene class, Scene004Phases, and all config/constants additions. Also wire Engine.js transition from Scene003 to Scene004.",
+  "status": "in_progress",
+  "steps": [
+    "Step 1: Add new constants to js/config/constants.js - Add INFLUENCE_TYPES (connection, conversation, creator, community, marketplace, trust), CURIOSITY_STATES (idle, searching, attracted, satisfied), SYNC_STATES (independent, synchronizing, diverging). Add 'CURIOSITY' to BEHAVIOR_IDS. Add 'RIPPLE' to TIMELINE_CHAPTERS.",
+    "Step 2: Add scene004 config block to js/config/settings.js - Add frozen scene004 object with sub-objects: influence (radius, strength, decayRate, expansionSpeed, connectionWeight), ripple (speed, maxRadius, decayRate, residualStrength, expansionDelay), curiosity (searchStrength, noiseScale, noiseSpeed, activationThreshold, deactivationRadius, seed), synchronization (groupSize, syncDuration, divergeDuration, syncStrength, detectionRadius, maxGroups, updateInterval, seed), phases (timing for 5 phases matching emotional pacing: silence, influence, ripple, discovery, synchronization, hope), environment (warmthTransitionSpeed, fogBreathSpeedMult, densityIncrease), camera (broadenSpeed, influenceTrackingWeight, maxBroadenRadius).",
+    "Step 3: Create js/engine/universe/InfluenceEngine.js - Reusable radial influence system. Constructor pre-allocates a pool of influence sources (max 8). Each source has: x, y, radius, strength, type (from INFLUENCE_TYPES), active, expansionProgress. Methods: init(width, height), addSource(x, y, type, strength), update(deltaTime) expands radius slowly, getInfluenceAt(x, y) returns {strength, type} pre-allocated result (bilinear falloff from center), getActiveCount(), resize(w,h), destroy(). Only 'connection' type active for now. Zero per-frame allocations - pre-allocate the result object.",
+    "Step 4: Create js/engine/universe/RipplePropagation.js - Invisible residual wave from connection pulse. Pool of max 4 ripples. Each ripple: {x, y, radius, maxRadius, strength, speed, active}. Methods: init(), spawn(x, y) triggered once after connection pulse, update(deltaTime) expands extremely slowly (much slower than EnergyPulseSystem), getInfluenceAtDistance(distSq, rippleIndex) returns residual behavioral weight (0-1), getActiveRipples() returns pre-allocated view {ripples, count}, destroy(). Expansion speed configurable from settings.scene004.ripple.",
+    "Step 5: Create js/engine/universe/CuriosityBehavior.js - A behavior module compatible with BehaviorSystem's apply(particle, dt, elapsed, ctx) interface. Uses Noise for searching motion. Only activates when particle is within an influence region (checks ctx.influenceEngine.getInfluenceAt). When active: reduces wander/drift contribution conceptually by applying a gentle searching vector (noise-driven orbiting around nearby points). Has states: idle (outside influence), searching (inside influence, gentle seeking), attracted (near another particle but does NOT connect). Pre-allocates noise instance. Constructor takes config from settings.scene004.curiosity.",
+    "Step 6: Create js/engine/universe/SynchronizationSystem.js - Detects small groups (2-4 particles) that are near each other within influence regions and temporarily synchronizes their velocities. Pool of max sync groups (from settings). Each group: {particleIndices: Int32Array(4), count, syncTimer, phase (syncing/diverging), active}. Methods: init(maxParticles), update(particles, activeCount, deltaTime, influenceEngine) runs at reduced frequency (every N frames from settings), applySynchronization(particles, deltaTime) gently lerps velocity of grouped particles toward group average, getActiveGroupCount(), destroy(). Reduced motion: applies opacity variation instead of movement sync.",
+    "Step 7: Create js/scenes/scene004/Scene004Phases.js - Emotional phase definitions for Scene004. Total duration ~25s. Phases: Phase1 'Silence' (0-4s, nothing visible happens, the pause after connection pulse), Phase2 'Influence' (4-10s, InfluenceEngine activates from connection midpoint, first particle changes direction), Phase3 'Ripple' (10-16s, RipplePropagation expands, more particles affected), Phase4 'Discovery' (16-21s, CuriosityBehavior activates, micro-sync begins), Phase5 'Hope' (21-25s, environment responds with warmth, scene marks completed). Each phase has onEnter/onUpdate/onLeave callbacks referencing the scene instance.",
+    "Step 8: Create js/scenes/Scene004_Ripple.js - Main scene class following Scene003 pattern. Constructor initializes state. enter() creates: InfluenceEngine, RipplePropagation, CuriosityBehavior (registered in a local BehaviorSystem), SynchronizationSystem, AudioArchitecture, SceneDirector. Inherits the connected particle pair from Scene003 via the universe's particle pool (Engine passes connection data). Places influence source at connection midpoint. update(deltaTime) advances director, updates subsystems. Camera: starts focused on connection midpoint then gradually broadens (clears cluster bias, widens attention area). Environment: phase-driven warmth (lighting engine slight color shift toward gold), fog speed change, particle density slight increase. leave()/destroy() clean up all subsystems. Audio hooks: registers influence_started, ripple_expanding, curiosity_detected, synchronization_started (all muted). markCompleted()/isCompleted() for Engine transition. CONSTELLATIONS layer stays registered to keep the ONE connection line visible.",
+    "Step 9: Modify js/engine/Engine.js - Add import for Scene004_Ripple. Add initScene004() method (registers scene with SceneManager). Add transitionToScene004() async method. In checkSceneTransition(), add Scene003->Scene004 completion-based check (same pattern as Scene002->Scene003). Add scene004Registered flag. In init(), call this.initScene004(). Pass connection data to Scene004 during transition (store connected particle indices from Scene003's ConnectionManager before Scene003 leaves).",
+    "Step 10: Verify all files pass node --check syntax validation."
+  ],
+  "acceptance_criteria": [
+    "All new files pass NODE_OPTIONS='' node --check without errors",
+    "All modified files (Engine.js, constants.js, settings.js) pass NODE_OPTIONS='' node --check without errors",
+    "InfluenceEngine follows zero-allocation pattern with pre-allocated result objects",
+    "RipplePropagation uses object pooling with no per-frame allocations",
+    "CuriosityBehavior implements apply(particle, dt, elapsed, ctx) interface compatible with BehaviorSystem",
+    "SynchronizationSystem uses pre-allocated Int32Array groups",
+    "Scene004_Ripple follows exact same lifecycle pattern as Scene003_FirstConnection",
+    "Scene004Phases has 5 emotional phases with proper timing",
+    "Engine.js has Scene003->Scene004 completion-based transition",
+    "No class exceeds ~400 lines, no function exceeds ~60 lines",
+    "Only ONE visible connection line - no additional visible connections created",
+    "All settings use Object.freeze",
+    "All constants use Object.freeze",
+    "Reduced motion accessibility handled in SynchronizationSystem and camera"
+  ],
+  "verification": [
+    "NODE_OPTIONS='' node --check js/engine/universe/InfluenceEngine.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/RipplePropagation.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/CuriosityBehavior.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/SynchronizationSystem.js",
+    "NODE_OPTIONS='' node --check js/scenes/Scene004_Ripple.js",
+    "NODE_OPTIONS='' node --check js/scenes/scene004/Scene004Phases.js",
+    "NODE_OPTIONS='' node --check js/config/constants.js",
+    "NODE_OPTIONS='' node --check js/config/settings.js",
+    "NODE_OPTIONS='' node --check js/engine/Engine.js"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

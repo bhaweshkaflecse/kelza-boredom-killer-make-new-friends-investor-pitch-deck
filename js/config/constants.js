@@ -166,7 +166,8 @@ export const BEHAVIOR_IDS = Object.freeze({
   REPEL: 'repel',
   IDLE: 'idle',
   FOLLOW: 'follow',
-  ORGANIZE: 'organize'
+  ORGANIZE: 'organize',
+  CURIOSITY: 'curiosity'
 });
 
 export const CLUSTER_EVENTS = Object.freeze({
@@ -197,5 +198,28 @@ export const TIMELINE_CHAPTERS = Object.freeze({
   AWAKENING: 'awakening',
   DISCOVERY: 'discovery',
   CONNECTION: 'connection',
+  RIPPLE: 'ripple',
   COMMUNITY: 'community'
+});
+
+export const INFLUENCE_TYPES = Object.freeze({
+  CONNECTION: 'connection',
+  CONVERSATION: 'conversation',
+  CREATOR: 'creator',
+  COMMUNITY: 'community',
+  MARKETPLACE: 'marketplace',
+  TRUST: 'trust'
+});
+
+export const CURIOSITY_STATES = Object.freeze({
+  IDLE: 'idle',
+  SEARCHING: 'searching',
+  ATTRACTED: 'attracted',
+  SATISFIED: 'satisfied'
+});
+
+export const SYNC_STATES = Object.freeze({
+  INDEPENDENT: 'independent',
+  SYNCHRONIZING: 'synchronizing',
+  DIVERGING: 'diverging'
 });
