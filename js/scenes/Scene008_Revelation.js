@@ -3,7 +3,6 @@
  * The defining cinematic moment. The audience realizes what they have been
  * watching, without being explicitly told. Everything becomes calmer.
  * Gravity emerges. Rotational coherence builds. Camera becomes still.
- *
  * RecognitionConfidence: 0.35 -> 0.55 (never higher).
  * ConstellationHints: max 4, <8% opacity, temporary, gravitationally aligned.
  * Duration: 38 seconds across 5 phases.
@@ -75,6 +74,7 @@ export class Scene008_Revelation {
     this.motionReductionLevel = 0;
     this.confidenceProgress = 0;
     this._graphMetrics = { nodes: 0, edges: 0, neighborhoods: 0, trend: 0 };
+    this._lastDeltaTime = 0.016;
   }
 
   getId() { return this.id; }
@@ -225,6 +225,7 @@ export class Scene008_Revelation {
   update(deltaTime) {
     if (this.state !== SCENE_STATES.ACTIVE) return;
     this.elapsedTime += deltaTime;
+    this._lastDeltaTime = deltaTime;
     this.director.update(deltaTime);
     this.updateSubsystems(deltaTime);
   }
@@ -235,6 +236,13 @@ export class Scene008_Revelation {
 
     this.influenceEngine.update(deltaTime);
     this.networkEngine.update(pool, activeCount, deltaTime, this.influenceEngine);
+
+    if (this.memoryEngine) {
+      this.memoryEngine.update(deltaTime, pool, activeCount);
+    }
+    if (this.echoSystem) {
+      this.echoSystem.update(deltaTime, pool, activeCount);
+    }
 
     if (this.gravityActive) {
       updateGravityInfluence(this.gravityCenter, pool, activeCount, deltaTime);
@@ -288,19 +296,13 @@ export class Scene008_Revelation {
   }
 
   // --- Phase callbacks ---
-
   activateGravity() {
     this.gravityActive = true;
     this.audioArchitecture.emit('gravity_engaged');
   }
 
-  activateNegativeSpaceCalm() {
-    this.negativeSpaceCalmActive = true;
-  }
-
-  activateMemoryReinforcement() {
-    this.memoryReinforcementActive = true;
-  }
+  activateNegativeSpaceCalm() { this.negativeSpaceCalmActive = true; }
+  activateMemoryReinforcement() { this.memoryReinforcementActive = true; }
 
   activateConstellationAlignment() {
     this.constellationAlignmentActive = true;
@@ -352,7 +354,7 @@ export class Scene008_Revelation {
   updateConfidenceAdvancement(progress) {
     this.confidenceProgress = progress;
     if (this.gravityCenter) {
-      advanceConfidence(this.gravityCenter, 0.016, progress);
+      advanceConfidence(this.gravityCenter, this._lastDeltaTime, progress);
     }
   }
 

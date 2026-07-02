@@ -25,12 +25,8 @@ export class GravityCenter {
     this.halfH = 0;
     this.elapsedTime = 0;
     this.rotationalCoherence = 0;
-    // Pre-allocated direction vector
-    this._dx = 0;
-    this._dy = 0;
-    this._dist = 0;
-    this._tangentX = 0;
-    this._tangentY = 0;
+    // Pre-allocated center object (returned by getCenter, mutated in update)
+    this._center = { x: 0, y: 0 };
   }
 
   /**
@@ -65,6 +61,8 @@ export class GravityCenter {
 
     this.centerX = this.halfW + nx;
     this.centerY = this.halfH + ny;
+    this._center.x = this.centerX;
+    this._center.y = this.centerY;
 
     // Advance rotational coherence toward maxCoherence
     const target = CFG.maxCoherence;
@@ -89,30 +87,30 @@ export class GravityCenter {
       const p = pool[i];
       if (!p || !p.active) continue;
 
-      this._dx = p.x - cx;
-      this._dy = p.y - cy;
-      this._dist = Math.sqrt(this._dx * this._dx + this._dy * this._dy);
+      let dx = p.x - cx;
+      let dy = p.y - cy;
+      let dist = Math.sqrt(dx * dx + dy * dy);
 
-      if (this._dist < 1) continue;
+      if (dist < 1) continue;
 
       // Tangential force (perpendicular to radial direction)
-      const invDist = 1 / this._dist;
-      this._tangentX = -this._dy * invDist;
-      this._tangentY = this._dx * invDist;
+      let invDist = 1 / dist;
+      let tangentX = -dy * invDist;
+      let tangentY = dx * invDist;
 
       // Apply diminishing force with distance (inverse, not inverse-square)
-      const distanceFactor = 200 / (this._dist + 200);
-      p.vx += this._tangentX * force * distanceFactor;
-      p.vy += this._tangentY * force * distanceFactor;
+      let distanceFactor = 200 / (dist + 200);
+      p.vx += tangentX * force * distanceFactor;
+      p.vy += tangentY * force * distanceFactor;
     }
   }
 
   /**
-   * Get the current center position.
+   * Get the current center position (pre-allocated, do not cache reference).
    * @returns {{x: number, y: number}} Center coordinates
    */
   getCenter() {
-    return { x: this.centerX, y: this.centerY };
+    return this._center;
   }
 
   /**

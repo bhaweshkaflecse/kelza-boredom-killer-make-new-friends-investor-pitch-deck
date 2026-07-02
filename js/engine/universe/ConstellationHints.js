@@ -41,7 +41,10 @@ function createHint() {
     lifetime: 0,
     maxLifetime: 0,
     active: false,
-    fadePhase: 'in'
+    fadePhase: 'in',
+    biasCX: 0,
+    biasCY: 0,
+    biasWeight: 0
   };
 }
 
@@ -286,7 +289,7 @@ export class ConstellationHints {
         continue;
       }
 
-      this.renderFilament(ctx, pA, pB, hint.opacity, reducedMotion);
+      this.renderFilament(ctx, pA, pB, hint.opacity, reducedMotion, hint.biasWeight, hint.biasCX, hint.biasCY);
     }
   }
 
@@ -297,8 +300,11 @@ export class ConstellationHints {
    * @param {Object} pB - Second particle
    * @param {number} opacity - Current opacity
    * @param {boolean} reducedMotion - Reduced motion flag
+   * @param {number} biasWeight - Gravitational bias weight (0-1)
+   * @param {number} biasCX - Bias center X
+   * @param {number} biasCY - Bias center Y
    */
-  renderFilament(ctx, pA, pB, opacity, reducedMotion) {
+  renderFilament(ctx, pA, pB, opacity, reducedMotion, biasWeight, biasCX, biasCY) {
     const clamped = clamp(opacity, 0, MAX_OPACITY);
     if (clamped <= 0) return;
 
@@ -317,6 +323,12 @@ export class ConstellationHints {
       this.cpY = this.midY - n * 7;
     }
 
+    // Apply gravitational bias to control point
+    if (biasWeight > 0) {
+      this.cpX += (biasCX - this.cpX) * biasWeight;
+      this.cpY += (biasCY - this.cpY) * biasWeight;
+    }
+
     ctx.beginPath();
     ctx.moveTo(pA.x, pA.y);
     ctx.quadraticCurveTo(this.cpX, this.cpY, pB.x, pB.y);
@@ -324,6 +336,25 @@ export class ConstellationHints {
     ctx.lineWidth = 0.8;
     ctx.lineCap = 'round';
     ctx.stroke();
+  }
+
+  /**
+   * Bias active hint filament positions toward a gravitational center.
+   * Shifts particle anchor weighting so constellations drift toward the center.
+   * @param {number} cx - Gravity center X
+   * @param {number} cy - Gravity center Y
+   * @param {number} weight - Bias strength (0-1)
+   */
+  biasTowardCenter(cx, cy, weight) {
+    if (weight <= 0) return;
+    for (let i = 0; i < MAX_FILAMENTS; i++) {
+      const hint = this.hints[i];
+      if (!hint.active) continue;
+      // Bias the control point toward the gravity center for rendering
+      hint.biasCX = cx;
+      hint.biasCY = cy;
+      hint.biasWeight = weight;
+    }
   }
 
   /**
