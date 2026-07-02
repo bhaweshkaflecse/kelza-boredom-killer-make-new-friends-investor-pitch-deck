@@ -254,3 +254,11 @@ export const MEMORY_STATES = Object.freeze({
   REMEMBERING: 'remembering',
   ANTICIPATING: 'anticipating'
 });
+
+export const REVELATION_STATES = Object.freeze({
+  CALM: 'calm',
+  MEMORY: 'memory',
+  ALIGNMENT: 'alignment',
+  REALIZATION: 'realization',
+  STILLNESS: 'stillness'
+});

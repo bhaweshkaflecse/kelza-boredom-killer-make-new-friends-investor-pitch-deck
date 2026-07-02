@@ -425,5 +425,53 @@ export const settings = Object.freeze({
       echoStrength: 0.03,
       consistencyRate: 0.02
     })
+  }),
+
+  scene008: Object.freeze({
+    recognition: Object.freeze({
+      confidenceStart: 0.35,
+      confidenceTarget: 0.55,
+      confidenceRate: 0.005,
+      coherenceThreshold: 0.2,
+      paceSpeed: 0.05
+    }),
+    gravity: Object.freeze({
+      strength: 0.008,
+      noiseScale: 0.002,
+      noiseSpeed: 0.03,
+      coherenceRate: 0.01,
+      maxCoherence: 0.6,
+      seed: 1201
+    }),
+    negativeSpace: Object.freeze({
+      calmFactor: 0.6,
+      intentionalityRate: 0.02
+    }),
+    constellationAlignment: Object.freeze({
+      gravitationalWeight: 0.2,
+      maxOpacity: 0.07
+    }),
+    phases: Object.freeze({
+      calm: Object.freeze({ start: 0, duration: 8 }),
+      memory: Object.freeze({ start: 8, duration: 7 }),
+      alignment: Object.freeze({ start: 15, duration: 8 }),
+      realization: Object.freeze({ start: 23, duration: 7 }),
+      stillness: Object.freeze({ start: 30, duration: 8 })
+    }),
+    environment: Object.freeze({
+      warmthIncrease: 0.02,
+      motionReduction: 0.35,
+      coherenceTarget: 0.6
+    }),
+    camera: Object.freeze({
+      driftMultiplier: 0.15,
+      compositionWeight: 0.08,
+      stillnessRate: 0.02,
+      reducedMotionFactor: 0.2
+    }),
+    lighting: Object.freeze({
+      warmthTarget: 0.07,
+      consistencyRate: 0.015
+    })
   })
 });
