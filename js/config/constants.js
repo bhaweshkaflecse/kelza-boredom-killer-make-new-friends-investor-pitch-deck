@@ -157,3 +157,37 @@ export const LIGHT_SOURCE_IDS = Object.freeze({
   SECONDARY: 'secondary',
   ACCENT: 'accent'
 });
+
+export const BEHAVIOR_IDS = Object.freeze({
+  WANDER: 'wander',
+  DRIFT: 'drift',
+  ATTRACT: 'attract',
+  ORBIT: 'orbit',
+  REPEL: 'repel',
+  IDLE: 'idle',
+  FOLLOW: 'follow',
+  ORGANIZE: 'organize'
+});
+
+export const CLUSTER_EVENTS = Object.freeze({
+  FORMED: 'cluster:formed',
+  DISSOLVED: 'cluster:dissolved',
+  REFORMED: 'cluster:reformed'
+});
+
+export const SCENE_DIRECTOR_PHASES = Object.freeze({
+  DORMANT: 'dormant',
+  AWAKENING: 'awakening',
+  EXPLORING: 'exploring',
+  CONNECTING: 'connecting',
+  FLOURISHING: 'flourishing'
+});
+
+export const TIMELINE_CHAPTERS = Object.freeze({
+  VOID: 'void',
+  FIRST_BREATH: 'firstBreath',
+  AWAKENING: 'awakening',
+  DISCOVERY: 'discovery',
+  CONNECTION: 'connection',
+  COMMUNITY: 'community'
+});

@@ -260,6 +260,55 @@ export class UniverseEngine {
     return map[name];
   }
 
+  /**
+   * Get the particle pool array for external subsystem access.
+   * @returns {Object[]} Particle pool
+   */
+  getParticlePool() {
+    return this.particleEngine.pool;
+  }
+
+  /**
+   * Get the active particle count.
+   * @returns {number} Active particle count
+   */
+  getActiveCount() {
+    return this.particleEngine.activeCount;
+  }
+
+  /**
+   * Get the canvas width.
+   * @returns {number} Width in pixels
+   */
+  getWidth() {
+    return this.canvasManager.width;
+  }
+
+  /**
+   * Get the canvas height.
+   * @returns {number} Height in pixels
+   */
+  getHeight() {
+    return this.canvasManager.height;
+  }
+
+  /**
+   * Apply an external behavior system to particles during update.
+   * Called by scenes that manage their own behavior subsystems.
+   * @param {Object} behaviorSystem - BehaviorSystem instance
+   * @param {number} deltaTime - Frame delta
+   * @param {number} elapsedTime - Elapsed time
+   */
+  applyBehaviors(behaviorSystem, deltaTime, elapsedTime) {
+    if (!behaviorSystem) return;
+    behaviorSystem.update(
+      this.particleEngine.pool,
+      this.particleEngine.activeCount,
+      deltaTime,
+      elapsedTime
+    );
+  }
+
   /** Destroy the universe engine and all subsystems. */
   destroy() {
     this.layerManager.destroy();

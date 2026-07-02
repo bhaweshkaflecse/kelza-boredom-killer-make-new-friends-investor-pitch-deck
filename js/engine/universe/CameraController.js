@@ -6,6 +6,7 @@
  */
 
 import { MANAGER_STATES } from '../../config/constants.js';
+import { settings } from '../../config/settings.js';
 import { Noise } from '../../utils/Noise.js';
 import { lerp } from '../../utils/helpers.js';
 
@@ -20,6 +21,8 @@ const ZOOM_AMPLITUDE = 0.002;
 const ZOOM_SPEED = 0.01;
 const TARGET_LERP_SPEED = 2.0;
 const REDUCED_MOTION_FACTOR = 0.2;
+const CLUSTER_BIAS_STRENGTH = settings.scene002.cameraIntelligence.clusterBias;
+const CLUSTER_BIAS_SPEED = settings.scene002.cameraIntelligence.biasSpeed;
 
 export class CameraController {
   constructor() {
@@ -33,6 +36,9 @@ export class CameraController {
     this._parallaxResult = { x: 0, y: 0 };
     this.reducedMotion = false;
     this.motionFactor = 1;
+    this.clusterBiasX = 0;
+    this.clusterBiasY = 0;
+    this.hasClusterBias = false;
   }
 
   /**
@@ -95,13 +101,15 @@ export class CameraController {
   }
 
   /**
-   * Smoothly lerp toward a target position.
+   * Smoothly lerp toward a target position, incorporating cluster bias.
    * @param {number} deltaTime - Frame delta in seconds
    */
   updateTargetLerp(deltaTime) {
+    const baseX = this.hasClusterBias ? this.clusterBiasX : 0;
+    const baseY = this.hasClusterBias ? this.clusterBiasY : 0;
     const lerpFactor = Math.min(1, TARGET_LERP_SPEED * deltaTime);
-    this.targetPosition.x = lerp(this.targetPosition.x, 0, lerpFactor);
-    this.targetPosition.y = lerp(this.targetPosition.y, 0, lerpFactor);
+    this.targetPosition.x = lerp(this.targetPosition.x, baseX, lerpFactor);
+    this.targetPosition.y = lerp(this.targetPosition.y, baseY, lerpFactor);
   }
 
   /**
@@ -164,10 +172,58 @@ export class CameraController {
   }
 
   /**
+   * Set cluster bias - gently bias camera drift toward the weighted center
+   * of current particle clusters. Extremely subtle; visitors should never
+   * consciously notice the bias.
+   * @param {{centerX: number, centerY: number, strength: number}[]} clusters - Active clusters
+   * @param {number} count - Number of valid clusters in the array
+   * @param {number} canvasWidth - Canvas width for normalization
+   * @param {number} canvasHeight - Canvas height for normalization
+   */
+  setClusterBias(clusters, count, canvasWidth, canvasHeight) {
+    if (!clusters || count === 0) {
+      this.clearClusterBias();
+      return;
+    }
+
+    let totalWeight = 0;
+    let weightedX = 0;
+    let weightedY = 0;
+
+    for (let i = 0; i < count; i++) {
+      const cluster = clusters[i];
+      const w = cluster.strength;
+      weightedX += cluster.centerX * w;
+      weightedY += cluster.centerY * w;
+      totalWeight += w;
+    }
+
+    if (totalWeight > 0) {
+      // Normalize relative to canvas center so bias is in -1..1 range
+      const cx = (weightedX / totalWeight - canvasWidth * 0.5) / (canvasWidth * 0.5);
+      const cy = (weightedY / totalWeight - canvasHeight * 0.5) / (canvasHeight * 0.5);
+      // Scale to a maximum of DRIFT_AMPLITUDE_X/Y pixels of bias
+      this.clusterBiasX = cx * CLUSTER_BIAS_STRENGTH * DRIFT_AMPLITUDE_X;
+      this.clusterBiasY = cy * CLUSTER_BIAS_STRENGTH * DRIFT_AMPLITUDE_Y;
+      this.hasClusterBias = true;
+    }
+  }
+
+  /**
+   * Clear the cluster bias and return camera to normal center drift.
+   */
+  clearClusterBias() {
+    this.clusterBiasX = 0;
+    this.clusterBiasY = 0;
+    this.hasClusterBias = false;
+  }
+
+  /**
    * Destroy the camera controller.
    */
   destroy() {
     this.reset();
+    this.clearClusterBias();
     this.state = MANAGER_STATES.DESTROYED;
   }
 }

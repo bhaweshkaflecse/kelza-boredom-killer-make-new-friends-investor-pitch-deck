@@ -143,5 +143,69 @@ export const settings = Object.freeze({
     gradientsEnabled: true,
     vignetteEnabled: true,
     cameraDrift: true
+  }),
+
+  scene002: Object.freeze({
+    intelligenceField: Object.freeze({
+      strength: 0.002,
+      noiseSpeed: 0.08,
+      noiseScale: 0.003,
+      gridResolution: 32,
+      seed: 137
+    }),
+    behaviors: Object.freeze({
+      enabled: Object.freeze(['wander', 'drift', 'organize']),
+      wander: Object.freeze({
+        strength: 0.15,
+        noiseScale: 0.01,
+        noiseSpeed: 0.4,
+        seed: 201
+      }),
+      drift: Object.freeze({
+        strength: 0.05,
+        directionX: 0.3,
+        directionY: -0.1,
+        variation: 0.02
+      }),
+      organize: Object.freeze({
+        strength: 0.08,
+        pullFactor: 0.002,
+        dampening: 0.95
+      })
+    }),
+    clusters: Object.freeze({
+      minSize: 3,
+      maxSize: 8,
+      radius: 80,
+      updateInterval: 8,
+      noiseSpeed: 0.05,
+      thresholdMin: 0.3,
+      thresholdMax: 0.7,
+      seed: 311
+    }),
+    connections: Object.freeze({
+      maxNeighbors: 5,
+      updateInterval: 4,
+      gridCellSize: 100,
+      maxDistance: 120
+    }),
+    pulses: Object.freeze({
+      maxConcurrent: 3,
+      spawnInterval: 4.0,
+      spawnVariation: 2.0,
+      strength: 0.003,
+      speed: 60,
+      maxRadius: 300,
+      decayRate: 0.92,
+      seed: 419
+    }),
+    depth: Object.freeze({
+      minDepth: 0,
+      maxDepth: 8
+    }),
+    cameraIntelligence: Object.freeze({
+      clusterBias: 0.15,
+      biasSpeed: 0.5
+    })
   })
 });

@@ -1,0 +1,37 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement core behavioral intelligence systems: BehaviorSystem (plug-and-play behavior modules), IntelligenceField (shared gravitational force), ConnectionPrediction (nearest-neighbor tracking), ClusterDetection (noise-driven temporary grouping), and EnergyPulseSystem (motion-only pulses). These are the foundational systems Scene002 will orchestrate.",
+  "status": "completed",
+  "steps": [
+    "Create js/engine/universe/BehaviorSystem.js - A plug-and-play behavior module system. Define a BehaviorModule base interface with apply(particle, deltaTime, elapsedTime, context) signature. Implement concrete behaviors: WanderBehavior (noise-driven random movement), DriftBehavior (slow directional float with slight variation), OrganizeBehavior (particles respond to cluster centers, gently pulling toward them), AttractBehavior (unused but registered), OrbitBehavior (unused but registered), RepelBehavior (unused but registered), IdleBehavior (unused but registered), FollowBehavior (unused but registered). Each behavior is a small class. BehaviorSystem owns a registry of behaviors by name, applies active behaviors to particles in update(). Zero allocations in apply loops. Use pre-allocated vectors for force calculations. Only Wander, Drift, Organize are enabled for Scene002.",
+    "Create js/engine/universe/IntelligenceField.js - An invisible force field providing shared gravity-like influence on all particles. Uses 2D simplex noise to create a slowly evolving vector field. Particles query the field at their position to get a subtle force vector. Field strength configurable (very weak - think gravity not magnetism). update(deltaTime, elapsedTime) evolves the field. getForce(x, y) returns pre-allocated {fx, fy}. Field resolution is coarse (grid-based lookup with interpolation) for performance. No visual output.",
+    "Create js/engine/universe/ConnectionPrediction.js - Tracks nearest neighbors for each particle without rendering anything. Uses spatial hashing (grid cells) to efficiently find neighbors. Maintains a neighbor list per active particle (max 3-5 neighbors). Update runs every N frames (not every frame) for performance. Provides getNeighbors(particleIndex) and getCandidateConnections() APIs. No rendering. Future scenes will use this data.",
+    "Create js/engine/universe/ClusterDetection.js - Detects temporary particle clusters using spatial proximity. Clusters are groups of 3-8 particles within a configurable radius. Noise-driven: cluster formation thresholds vary over time using simplex noise so clusters appear, dissolve, and reform naturally. Provides getClusters() returning array of {centerX, centerY, particleIndices, strength}. getClusters() returns from a pre-built list (updated every N frames). No rendering. Emits events (architecture only) when clusters form/dissolve.",
+    "Create js/engine/universe/EnergyPulseSystem.js - Manages soft energy pulses that travel through the particle field. Pulses are invisible - they only influence particle motion. A pulse has: origin (x,y), radius (expanding), strength (decaying), speed. When a pulse passes a particle, it adds a small outward velocity. Pulses spawn at random intervals (noise-timed). Very subtle - 'almost impossible to notice'. Max concurrent pulses capped. Object-pooled. update(deltaTime) expands and decays pulses. applyToParticle(particle) adds force if within radius.",
+    "Add new constants to js/config/constants.js: BEHAVIOR_IDS (WANDER, DRIFT, ATTRACT, ORBIT, REPEL, IDLE, FOLLOW, ORGANIZE), CLUSTER_EVENTS (FORMED, DISSOLVED, REFORMED), SCENE_DIRECTOR_PHASES, TIMELINE_CHAPTERS.",
+    "Add scene002 settings block to js/config/settings.js with configuration for: intelligence field (strength, noiseSpeed, noiseScale), behaviors (enabled list, per-behavior params), clusters (minSize:3, maxSize:8, radius, updateInterval), connections (maxNeighbors:5, updateInterval), pulses (maxConcurrent:3, interval, strength, speed, radius), depth (minDepth:0, maxDepth:8), camera intelligence (clusterBias:0.15, biasSpeed:0.5)."
+  ],
+  "acceptance_criteria": [
+    "All new files pass NODE_OPTIONS='' node --check without syntax errors",
+    "BehaviorSystem exports a class with register(), enable(), disable(), update() methods",
+    "IntelligenceField exports a class with init(), update(), getForce(x,y), destroy() methods",
+    "ConnectionPrediction exports a class with init(), update(), getNeighbors(), getCandidateConnections(), destroy() methods",
+    "ClusterDetection exports a class with init(), update(), getClusters(), destroy() methods",
+    "EnergyPulseSystem exports a class with init(), update(), applyToParticle(), spawn(), destroy() methods",
+    "No function exceeds 60 lines, no class exceeds 400 lines",
+    "Zero allocations in update/apply loops (pre-allocated vectors and pools)",
+    "All public methods have JSDoc comments"
+  ],
+  "verification": [
+    "Run NODE_OPTIONS='' node --check js/engine/universe/BehaviorSystem.js",
+    "Run NODE_OPTIONS='' node --check js/engine/universe/IntelligenceField.js",
+    "Run NODE_OPTIONS='' node --check js/engine/universe/ConnectionPrediction.js",
+    "Run NODE_OPTIONS='' node --check js/engine/universe/ClusterDetection.js",
+    "Run NODE_OPTIONS='' node --check js/engine/universe/EnergyPulseSystem.js",
+    "Run NODE_OPTIONS='' node --check js/config/constants.js",
+    "Run NODE_OPTIONS='' node --check js/config/settings.js"
+  ],
+  "blocked_reason": null,
+  "findings": "All 7 files pass node --check. BehaviorSystem.js is 284 lines (largest), well under 400. All functions under 60 lines. Zero allocations in update/apply loops - pre-allocated pools, reused objects, typed arrays. ClusterDetection uses Uint8Array for visited tracking which allocates per-update call but only in the low-frequency detectClusters path (every N frames). ConnectionPrediction uses getCandidateConnections() which returns a slice() - this allocates but is for consumer API access, not in the hot loop."
+}

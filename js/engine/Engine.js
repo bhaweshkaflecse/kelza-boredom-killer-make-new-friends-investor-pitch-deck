@@ -17,6 +17,7 @@ import { PerformanceManager } from './PerformanceManager.js';
 import { AudioManager } from './AudioManager.js';
 import { UniverseEngine } from './universe/UniverseEngine.js';
 import { Scene001_FirstBreath } from '../scenes/Scene001_FirstBreath.js';
+import { Scene002_Awakening } from '../scenes/Scene002_Awakening.js';
 
 export class Engine {
   constructor() {
@@ -27,6 +28,9 @@ export class Engine {
     this.lastTime = 0;
     this.isRunning = false;
     this.reducedMotion = false;
+    this.scene001Duration = 10;
+    this.scene001Elapsed = 0;
+    this.scene002Registered = false;
   }
 
   /**
@@ -55,6 +59,7 @@ export class Engine {
     this.start();
 
     await this.initScene001();
+    this.initScene002();
     this.state = MANAGER_STATES.READY;
   }
 
@@ -71,6 +76,19 @@ export class Engine {
     sceneManager.registerScene(scene.getId(), scene);
     await sceneManager.loadScene(scene.getId());
     await sceneManager.enterScene(scene.getId());
+  }
+
+  /**
+   * Register Scene002_Awakening for later transition.
+   */
+  initScene002() {
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    const scene = new Scene002_Awakening();
+    scene.setUniverse(this.universe);
+    sceneManager.registerScene(scene.getId(), scene);
+    this.scene002Registered = true;
   }
 
   /**
@@ -164,8 +182,39 @@ export class Engine {
     if (lighting) lighting.update(deltaTime);
 
     this.universe.update(deltaTime);
+    this.checkSceneTransition(deltaTime);
 
     this.rafId = requestAnimationFrame(this.tick.bind(this));
+  }
+
+  /**
+   * Check if Scene001 has elapsed and transition to Scene002.
+   * @param {number} deltaTime - Frame delta in seconds
+   */
+  checkSceneTransition(deltaTime) {
+    if (!this.scene002Registered) return;
+
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    if (sceneManager.currentScene === 'scene001_firstBreath') {
+      this.scene001Elapsed += deltaTime;
+      if (this.scene001Elapsed >= this.scene001Duration) {
+        this.transitionToScene002();
+      }
+    }
+  }
+
+  /**
+   * Transition from Scene001 to Scene002.
+   */
+  async transitionToScene002() {
+    this.scene002Registered = false;
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    await sceneManager.loadScene('scene002_awakening');
+    await sceneManager.enterScene('scene002_awakening');
   }
 
   /**

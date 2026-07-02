@@ -1,0 +1,41 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Implement SceneDirector (emotional pacing orchestration), CinematicTimeline (master timeline for all chapters), adaptive camera intelligence, depth evolution, audio event hooks, and the Scene002_Awakening scene class that orchestrates the full emotional timeline (0s-15s).",
+  "status": "completed",
+  "steps": [
+    "Create js/engine/SceneDirector.js - An orchestration layer managing emotional pacing, timing, camera cues, lighting cues, and future sound cues. SceneManager manages lifecycle; SceneDirector manages emotion. Has a phase system (phases advance based on elapsed time). Each phase can trigger: lighting theme changes, camera targets, behavior mode switches, particle family transitions. Provides setPhases(phaseArray), update(deltaTime), getCurrentPhase(), onPhaseChange(callback). Does NOT own subsystems - it issues commands to them via a reference to UniverseEngine.",
+    "Create js/engine/CinematicTimeline.js - A master internal timeline system (not GSAP-dependent). Tracks chapters: FirstBreath, Awakening, Connection, Earth, Phone, Marketplace, AI, Infrastructure, Vision, Founder, Investment. Each chapter has: id, duration, startTime (relative to experience start), onEnter callback, onUpdate(progress) callback, onLeave callback. Timeline advances based on scroll or time. Provides addChapter(), start(), update(deltaTime), getCurrentChapter(), getProgress(). Only FirstBreath and Awakening are active now.",
+    "Extend js/engine/universe/CameraController.js - Add adaptive camera intelligence. New method: setClusterBias(clusters) that receives cluster data from ClusterDetection. Camera drift target gently favors the weighted center of current clusters. Bias is extremely subtle (configurable strength ~0.15). When no clusters exist, camera returns to center drift. Add method clearClusterBias(). Visitors should never consciously notice the bias.",
+    "Extend depth system in ParticleEngine - Update to support depthMax of 8 (was 5). Add a subtle size reduction for deeper particles and opacity reduction for depth, creating blur-like depth separation. Modify render method to apply depth-based alpha and size multipliers. This makes the universe feel deeper.",
+    "Extend js/engine/universe/AudioArchitecture.js - Add new event hook architecture for Scene002 events: 'cluster:formed', 'cluster:dissolved', 'connection:created', 'globe:revealed', 'phone:assembled', 'conversation:started'. These are event registrations only - no actual audio playback. Add registerEvent(eventName) and emit(eventName, data) methods. Muted state prevents any future playback.",
+    "Create js/scenes/Scene002_Awakening.js - The scene class following Scene001_FirstBreath pattern. Lifecycle: enter() initializes all Scene002 systems (BehaviorSystem, IntelligenceField, ConnectionPrediction, ClusterDetection, EnergyPulseSystem). update(deltaTime) advances the emotional timeline: 0-3s universe exists (Scene001 atmosphere continues), 3-6s subtle energy increase (field strength ramps, particles begin responding to shared force), 6-8s particles slowly organize (Organize behavior activates gently), 8-10s invisible forces pull particles (field strength increases, drift becomes intentional), 10-12s tiny clusters form (ClusterDetection active, 3-5-8 particle groups), 12-14s clusters dissolve (field weakens, Organize reduces), 14-15s one brighter particle appears (single particle gets elevated targetOpacity, not dramatic, just more alive). Uses SceneDirector for phase management. Connects camera intelligence to cluster data. Sets lighting theme transition from dark toward purple (very subtle). leave() cleans up all systems.",
+    "Update js/engine/Engine.js - Import and instantiate SceneDirector and CinematicTimeline. Wire SceneDirector.update() into the tick loop after scene update. Register Awakening chapter in CinematicTimeline. Import Scene002_Awakening and add transition logic (after Scene001, transition to Scene002 based on time or scroll).",
+    "Update js/engine/universe/UniverseEngine.js - Add getters/methods for Scene002 to access subsystems it needs: getParticlePool() for direct particle manipulation by BehaviorSystem, expose width/height for spatial systems. Add integration point for BehaviorSystem to apply forces during particle update."
+  ],
+  "acceptance_criteria": [
+    "All new and modified files pass NODE_OPTIONS='' node --check without syntax errors",
+    "SceneDirector exports a class with setPhases(), update(), getCurrentPhase(), destroy() methods",
+    "CinematicTimeline exports a class with addChapter(), start(), update(), getCurrentChapter(), destroy() methods",
+    "Scene002_Awakening exports a class matching Scene001 interface: getId(), setUniverse(), load(), enter(), update(), leave(), destroy()",
+    "Scene002 emotional timeline progresses through all phases (0s-15s) in update()",
+    "CameraController.setClusterBias() accepts cluster data and subtly biases drift target",
+    "AudioArchitecture supports event registration and emission",
+    "No function exceeds 60 lines, no class exceeds 400 lines (split large classes into helper modules if needed)",
+    "Zero allocations in update loops",
+    "All public methods have JSDoc comments",
+    "Engine.js integrates Scene002 into the experience flow"
+  ],
+  "verification": [
+    "Run NODE_OPTIONS='' node --check js/engine/SceneDirector.js",
+    "Run NODE_OPTIONS='' node --check js/engine/CinematicTimeline.js",
+    "Run NODE_OPTIONS='' node --check js/scenes/Scene002_Awakening.js",
+    "Run NODE_OPTIONS='' node --check js/engine/universe/CameraController.js",
+    "Run NODE_OPTIONS='' node --check js/engine/universe/AudioArchitecture.js",
+    "Run NODE_OPTIONS='' node --check js/engine/universe/ParticleEngine.js",
+    "Run NODE_OPTIONS='' node --check js/engine/universe/UniverseEngine.js",
+    "Run NODE_OPTIONS='' node --check js/engine/Engine.js"
+  ],
+  "blocked_reason": null,
+  "findings": "All 8 steps implemented successfully. SceneDirector and CinematicTimeline are independent modules. Scene002 split into Scene002_Awakening.js (344 lines) and scene002/Scene002Phases.js (187 lines) helper module to stay under 400-line limit. CameraController cluster bias uses settings.scene002.cameraIntelligence.clusterBias (0.15). ParticleEngine depth rendering uses MAX_DEPTH_LAYERS=8 with per-particle alpha and size reduction. AudioArchitecture event system uses Map-based registration. Engine.js transitions from Scene001 to Scene002 after 10s elapsed."
+}

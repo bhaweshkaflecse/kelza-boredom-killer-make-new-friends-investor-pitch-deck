@@ -11,6 +11,9 @@ import { randomRange } from '../../utils/helpers.js';
 
 const REDUCED_MOTION_UPDATE_DIVISOR = 3;
 const OPACITY_BUCKET_COUNT = 10;
+const MAX_DEPTH_LAYERS = 8;
+const DEPTH_SIZE_REDUCTION = 0.08;
+const DEPTH_ALPHA_REDUCTION = 0.1;
 
 export class ParticleEngine {
   constructor() {
@@ -215,9 +218,13 @@ export class ParticleEngine {
       for (let i = start; i < end && i < this.activeCount; i++) {
         const p = this.pool[i];
         if (!p.active || p.opacity <= 0) continue;
-        const norm = p.opacity / maxOp;
+        const depthFactor = p.depth / MAX_DEPTH_LAYERS;
+        const depthAlpha = 1 - depthFactor * DEPTH_ALPHA_REDUCTION;
+        const effectiveOpacity = p.opacity * depthAlpha;
+        const norm = effectiveOpacity / maxOp;
         if (norm <= bMin || norm > bMax) continue;
-        const ds = 1 - (p.depth / this.depthLayers) * 0.6;
+        const depthSize = 1 - depthFactor * DEPTH_SIZE_REDUCTION;
+        const ds = depthSize * (1 - depthFactor * 0.5);
         const sz = p.scale * ds;
         const px = p.x + ox * (p.depth * 0.15);
         const py = p.y + oy * (p.depth * 0.15);
