@@ -22,6 +22,7 @@ import { Scene003_FirstConnection } from '../scenes/Scene003_FirstConnection.js'
 import { Scene004_Ripple } from '../scenes/Scene004_Ripple.js';
 import { Scene005_LivingNetwork } from '../scenes/Scene005_LivingNetwork.js';
 import { Scene006_Recognition } from '../scenes/Scene006_Recognition.js';
+import { Scene007_Memory } from '../scenes/Scene007_Memory.js';
 
 export class Engine {
   constructor() {
@@ -45,6 +46,8 @@ export class Engine {
     this.scene005Instance = null;
     this.scene006Registered = false;
     this.scene006Instance = null;
+    this.scene007Registered = false;
+    this.scene007Instance = null;
     this.connectionDataForScene004 = null;
   }
 
@@ -79,6 +82,7 @@ export class Engine {
     this.initScene004();
     this.initScene005();
     this.initScene006();
+    this.initScene007();
     this.state = MANAGER_STATES.READY;
   }
 
@@ -266,6 +270,13 @@ export class Engine {
         this.transitionToScene006();
       }
     }
+
+    // Scene006 -> Scene007 transition (completion-based)
+    if (this.scene007Registered && sceneManager.currentScene === 'scene006_recognition') {
+      if (this.scene006Instance && this.scene006Instance.isCompleted()) {
+        this.transitionToScene007();
+      }
+    }
   }
 
   /**
@@ -405,6 +416,44 @@ export class Engine {
 
     await sceneManager.loadScene('scene006_recognition');
     await sceneManager.enterScene('scene006_recognition');
+  }
+
+  /**
+   * Register Scene007_Memory for later transition.
+   */
+  initScene007() {
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    const scene = new Scene007_Memory();
+    scene.setUniverse(this.universe);
+    sceneManager.registerScene(scene.getId(), scene);
+    this.scene007Instance = scene;
+    this.scene007Registered = true;
+  }
+
+  /**
+   * Transition from Scene006 to Scene007.
+   * Passes the persistent connection data forward.
+   */
+  async transitionToScene007() {
+    this.scene007Registered = false;
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    // Pass connection data to Scene007 (same persistent connection)
+    if (this.connectionDataForScene004 && this.scene007Instance) {
+      const cd = this.connectionDataForScene004;
+      this.scene007Instance.setConnectionData(cd.midX, cd.midY, cd.indexA, cd.indexB);
+    }
+
+    // Prevent frame-gap flash: tell Scene006 to skip environment teardown
+    if (this.scene006Instance) {
+      this.scene006Instance.skipEnvironmentTeardown = true;
+    }
+
+    await sceneManager.loadScene('scene007_memory');
+    await sceneManager.enterScene('scene007_memory');
   }
 
   /**

@@ -1,0 +1,37 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Create the Memory architecture (MemoryEngine, PatternMemory, EchoSystem), Scene007 config/constants, Scene007 main class with phases, and integrate into Engine.js for Scene006->007 transition.",
+  "status": "in_progress",
+  "steps": [
+    "1. Add MEMORY_STATES constant to js/config/constants.js: { DORMANT: 'dormant', FORMING: 'forming', ECHOING: 'echoing', REMEMBERING: 'remembering', ANTICIPATING: 'anticipating' }",
+    "2. Add scene007 config block to js/config/settings.js with sub-objects: memory (maxMemories:32, reinforceRate:0.01, decayRate:0.995, strengthTarget:0.25, formationThreshold:0.1, seed:967), echo (maxEchos:4, recallAccuracy:0.7, noiseModulation:0.3, minInterval:5, maxInterval:10, seed:1031), patternMemory (maxPatterns:16, matchThreshold:0.6, approximationNoise:0.2, seed:1103), constellationMemory (repeatChance:0.3, approximationFactor:0.15, maxOpacity:0.07), phases (wonder:{start:0,duration:8}, familiarity:{start:8,duration:8}, echo:{start:16,duration:8}, memory:{start:24,duration:7}, expectation:{start:31,duration:7}), environment (warmthIncrease:0.025, motionReduction:0.2, coherenceIncrease:0.1), camera (memoryWeight:0.1, revisitSpeed:0.06, preferenceDecay:0.98, reducedMotionFactor:0.2), lighting (echoStrength:0.03, consistencyRate:0.02)",
+    "3. Create js/engine/universe/MemoryEngine.js: Reusable memory system. Pre-allocated pool of memory objects (maxMemories). Each memory has: x, y, strength (0-1), age, pattern signature (stored as simple numeric hash), reinforceCount, active flag. Methods: init(width,height,seed), createMemory(x,y,signature), reinforceMemory(index), update(deltaTime) which decays unused memories and caps strength at strengthTarget, getStrongestMemories(count) returns top N by strength, getMemoryStrength() returns average strength of active memories (the global MemoryStrength 0->0.25 value), resize(width,height), destroy(). Zero per-frame allocations. Noise-driven decay variation so memories don't fade uniformly.",
+    "4. Create js/engine/universe/PatternMemory.js: Records constellation arrangements for later approximate recall. Pre-allocated pool (maxPatterns). Each pattern stores: pairs of relative positions (dx,dy normalized), timestamp, recallCount, active. Methods: init(seed), recordPattern(particles, indexA, indexB), findSimilarPattern(particles, indexA, indexB) returns approximate match or null, getRecallablePatterns() returns active patterns sorted by recallCount, destroy(). Uses noise to add approximationNoise when recalling so patterns are never identical.",
+    "5. Create js/engine/universe/EchoSystem.js: Occasionally triggers approximate repetition of previously observed arrangements. Methods: init(seed, memoryEngine, patternMemory), update(deltaTime, elapsedTime) checks noise-driven intervals and decides whether to trigger an echo, getActiveEcho() returns current echo target or null (pre-allocated result object with targetX, targetY, strength, pattern reference), isEchoActive(), destroy(). Echo timing controlled by noise modulation over minInterval/maxInterval. recallAccuracy determines how close the echo is to the original.",
+    "6. Create js/scenes/scene007/Scene007Phases.js following Scene006Phases.js pattern exactly. 5 phases: Wonder(0-8s), Familiarity(8-16s), Echo(16-24s), Memory(24-31s), Expectation(31-38s). Total SCENE007_DURATION = 38. Phase callbacks: Wonder->activateMemoryFormation, Familiarity->activatePatternRecording+activateEchoSystem, Echo->activateConstellationMemory+activateEchoLighting, Memory->activateEnvironmentalConfidence+activateCameraPreference, Expectation->markCompleted on leave. onUpdate callbacks for progressive warmth, camera preference, and memory strength growth.",
+    "7. Create js/scenes/Scene007_Memory.js following Scene006_Recognition.js pattern exactly. Same lifecycle: constructor, getId (scene007_memory), setUniverse, setConnectionData, load, enter, update, leave, destroy, isCompleted. Subsystems: MemoryEngine, PatternMemory, EchoSystem, RecognitionEngine (continues from Scene006 state at confidence ~0.35), PatternSuggestion, NegativeSpaceDirector, NetworkEngine, InfluenceEngine, ConstellationHints, BehaviorSystem, CuriosityBehavior, SynchronizationSystem, ConnectionRenderer, AudioArchitecture, SceneDirector. Register audio events: memory_created, memory_strengthened, pattern_recalled, anticipation_increased. The update loop: updates all subsystems, creates memories from constellation hint positions when they spawn, reinforces memories when constellations spawn near existing memories, feeds PatternMemory, triggers EchoSystem. ConstellationHints behavior: when EchoSystem has an active echo, bias the next spawn toward the echo target position (approximate, noise-modulated). Camera: develops preference for remembered composition regions (weighted average of strongest memories). Lighting: echoStrength applied via setWarmthOffset consistency. Environmental: motion reduction increases slightly, coherence via reduced particle randomness.",
+    "8. Modify js/engine/Engine.js: import Scene007_Memory, add scene007Registered/scene007Instance fields in constructor, add initScene007() method (same pattern as initScene006), add transitionToScene007() method (same pattern as transitionToScene006 - passes connection data, sets skipEnvironmentTeardown on Scene006), add Scene006->Scene007 transition check in checkSceneTransition (completion-based: scene006Instance.isCompleted()), call initScene007() in init() after initScene006().",
+    "9. Add setDriftMultiplier(value) method to js/engine/universe/CameraController.js if it does not exist already. This method sets this.motionFactor = value (clamped 0-1). Scene006 already calls it but it was missing - Scene007 also needs it for further motion reduction."
+  ],
+  "acceptance_criteria": [
+    "All new files pass node --check syntax validation",
+    "js/engine/Engine.js imports Scene007_Memory and has initScene007/transitionToScene007 methods",
+    "Scene006->Scene007 transition is completion-based in checkSceneTransition",
+    "MemoryEngine has zero per-frame allocations, uses pre-allocated pool",
+    "PatternMemory never returns identical patterns (noise modulation on recall)",
+    "EchoSystem uses noise-driven timing, never deterministic repetition",
+    "Scene007 duration is 38 seconds with 5 invisible phases",
+    "MemoryStrength caps at 0.25 (independent of RecognitionConfidence)",
+    "ConstellationHints still max 4, opacity < 0.07, temporary",
+    "No function exceeds ~60 lines, no class exceeds ~400 lines",
+    "Audio events registered but not played (muted architecture)",
+    "No Earth, globe, continents, maps, labels, typography, logo, product, UI, Hero in any file"
+  ],
+  "verification": [
+    "Run NODE_OPTIONS='' node --check on all new and modified JS files to confirm zero syntax errors",
+    "Grep for 'Earth|globe|continent|map|label|typography|logo|product|Hero|phone' in new files to confirm none present"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

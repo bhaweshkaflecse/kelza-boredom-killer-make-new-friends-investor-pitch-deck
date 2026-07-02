@@ -246,3 +246,11 @@ export const RECOGNITION_STATES = Object.freeze({
   REFLECTION: 'reflection',
   MYSTERY: 'mystery'
 });
+
+export const MEMORY_STATES = Object.freeze({
+  DORMANT: 'dormant',
+  FORMING: 'forming',
+  ECHOING: 'echoing',
+  REMEMBERING: 'remembering',
+  ANTICIPATING: 'anticipating'
+});

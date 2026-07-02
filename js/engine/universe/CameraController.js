@@ -172,6 +172,15 @@ export class CameraController {
   }
 
   /**
+   * Set the drift multiplier to control camera motion intensity.
+   * Used by scenes to progressively reduce movement.
+   * @param {number} value - Motion factor (0 = no motion, 1 = full motion)
+   */
+  setDriftMultiplier(value) {
+    this.motionFactor = Math.min(Math.max(value, 0), 1);
+  }
+
+  /**
    * Set cluster bias - gently bias camera drift toward the weighted center
    * of current particle clusters. Extremely subtle; visitors should never
    * consciously notice the bias.

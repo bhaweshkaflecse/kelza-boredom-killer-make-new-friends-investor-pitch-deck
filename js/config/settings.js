@@ -373,5 +373,57 @@ export const settings = Object.freeze({
       negativeSpaceWeight: 0.15,
       reducedMotionFactor: 0.2
     })
+  }),
+
+  scene007: Object.freeze({
+    memory: Object.freeze({
+      maxMemories: 32,
+      reinforceRate: 0.01,
+      decayRate: 0.995,
+      strengthTarget: 0.25,
+      formationThreshold: 0.1,
+      seed: 967
+    }),
+    echo: Object.freeze({
+      maxEchos: 4,
+      recallAccuracy: 0.7,
+      noiseModulation: 0.3,
+      minInterval: 5,
+      maxInterval: 10,
+      seed: 1031
+    }),
+    patternMemory: Object.freeze({
+      maxPatterns: 16,
+      matchThreshold: 0.6,
+      approximationNoise: 0.2,
+      seed: 1103
+    }),
+    constellationMemory: Object.freeze({
+      repeatChance: 0.3,
+      approximationFactor: 0.15,
+      maxOpacity: 0.07
+    }),
+    phases: Object.freeze({
+      wonder: Object.freeze({ start: 0, duration: 8 }),
+      familiarity: Object.freeze({ start: 8, duration: 8 }),
+      echo: Object.freeze({ start: 16, duration: 8 }),
+      memory: Object.freeze({ start: 24, duration: 7 }),
+      expectation: Object.freeze({ start: 31, duration: 7 })
+    }),
+    environment: Object.freeze({
+      warmthIncrease: 0.025,
+      motionReduction: 0.2,
+      coherenceIncrease: 0.1
+    }),
+    camera: Object.freeze({
+      memoryWeight: 0.1,
+      revisitSpeed: 0.06,
+      preferenceDecay: 0.98,
+      reducedMotionFactor: 0.2
+    }),
+    lighting: Object.freeze({
+      echoStrength: 0.03,
+      consistencyRate: 0.02
+    })
   })
 });
