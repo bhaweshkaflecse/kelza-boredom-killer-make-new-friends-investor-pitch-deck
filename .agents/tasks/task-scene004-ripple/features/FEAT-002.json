@@ -2,7 +2,7 @@
   "id": "FEAT-002",
   "type": "fix",
   "description": "Address 6 review issues: CONSTELLATIONS layer re-registration, setWarmthOffset implementation, frame-rate-independent decay, frame-gap flash prevention, RipplePropagation integration, and CuriosityBehavior reduced-motion fallback.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Step 1: Fix CONSTELLATIONS layer - Scene004 must re-register a render function using a ConnectionRenderer instance and the captured particle indices.",
     "Step 2: Add setWarmthOffset method to LightingEngine that blends warmth into the current color.",
@@ -31,5 +31,5 @@
     "NODE_OPTIONS='' node --check js/scenes/Scene003_FirstConnection.js"
   ],
   "blocked_reason": null,
-  "findings": null
+  "findings": "All 7 modified files pass node --check. Scene004_Ripple.js reduced to 347 lines (from 384, with new ConnectionRenderer integration). LightingEngine.setWarmthOffset blends toward gold at max 15% shift per call. Frame-gap flash prevented by skipEnvironmentTeardown flag on Scene003 set by Engine before transition. CuriosityBehavior now queries RipplePropagation wavefront and adds up to 50% bonus weight. Reduced motion in CuriosityBehavior applies only velocity dampening with no directional force."
 }
