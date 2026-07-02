@@ -90,6 +90,41 @@ export const settings = Object.freeze({
       baseColor: '#0a0a0f',
       layerCount: 7
     }),
+    camera: Object.freeze({
+      driftSpeed: 0.02,
+      driftAmplitudeX: 3,
+      driftAmplitudeY: 2,
+      rotationAmplitude: 0.0005,
+      zoomBase: 1,
+      zoomAmplitude: 0.002,
+      reducedMotionFactor: 0.2
+    }),
+    fog: Object.freeze({
+      layerCount: 3,
+      baseOpacity: 0.015,
+      driftSpeed: 0.008,
+      reducedMotionSpeedFactor: 0.3
+    }),
+    vignette: Object.freeze({
+      intensity: 0.4,
+      innerRadiusRatio: 0.3,
+      outerRadiusRatio: 0.85
+    }),
+    gradients: Object.freeze({
+      layerCount: 4,
+      baseOpacity: 0.025,
+      driftSpeed: 0.005,
+      reducedMotionSpeedFactor: 0.3
+    }),
+    audioArchitecture: Object.freeze({
+      muted: true,
+      channels: Object.freeze([
+        'ambientDrones',
+        'particleWhispers',
+        'glassInteractions',
+        'environmentalSounds'
+      ])
+    }),
     debug: Object.freeze({
       enabled: false,
       showFPS: false,
@@ -99,5 +134,14 @@ export const settings = Object.freeze({
       showMemory: false,
       showRenderer: false
     })
+  }),
+
+  scene001: Object.freeze({
+    particleFamilies: Object.freeze(['ambientDust', 'stars']),
+    lightingTheme: 'dark',
+    fogEnabled: true,
+    gradientsEnabled: true,
+    vignetteEnabled: true,
+    cameraDrift: true
   })
 });

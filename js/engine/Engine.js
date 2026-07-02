@@ -16,6 +16,7 @@ import { LightingManager } from './LightingManager.js';
 import { PerformanceManager } from './PerformanceManager.js';
 import { AudioManager } from './AudioManager.js';
 import { UniverseEngine } from './universe/UniverseEngine.js';
+import { Scene001_FirstBreath } from '../scenes/Scene001_FirstBreath.js';
 
 export class Engine {
   constructor() {
@@ -52,7 +53,24 @@ export class Engine {
     this.initUniverse();
     this.setupEventListeners();
     this.start();
+
+    await this.initScene001();
     this.state = MANAGER_STATES.READY;
+  }
+
+  /**
+   * Initialize and enter Scene001_FirstBreath.
+   * @returns {Promise<void>}
+   */
+  async initScene001() {
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    const scene = new Scene001_FirstBreath();
+    scene.setUniverse(this.universe);
+    sceneManager.registerScene(scene.getId(), scene);
+    await sceneManager.loadScene(scene.getId());
+    await sceneManager.enterScene(scene.getId());
   }
 
   /**

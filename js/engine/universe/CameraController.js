@@ -1,0 +1,173 @@
+/**
+ * CameraController
+ * Virtual 2D camera abstraction providing drift, parallax, and transform.
+ * No Three.js. Coordinates other layers can query for positional offsets.
+ * Movement is nearly invisible - slow noise-driven drift only.
+ */
+
+import { MANAGER_STATES } from '../../config/constants.js';
+import { settings } from '../../config/settings.js';
+import { Noise } from '../../utils/Noise.js';
+import { lerp } from '../../utils/helpers.js';
+
+const CAMERA_NOISE_SEED = 99;
+const DRIFT_SPEED = 0.02;
+const DRIFT_AMPLITUDE_X = 3;
+const DRIFT_AMPLITUDE_Y = 2;
+const ROTATION_AMPLITUDE = 0.0005;
+const ROTATION_SPEED = 0.015;
+const ZOOM_BASE = 1;
+const ZOOM_AMPLITUDE = 0.002;
+const ZOOM_SPEED = 0.01;
+const TARGET_LERP_SPEED = 0.01;
+const REDUCED_MOTION_FACTOR = 0.2;
+
+export class CameraController {
+  constructor() {
+    this.state = MANAGER_STATES.UNINITIALIZED;
+    this.noise = new Noise(CAMERA_NOISE_SEED);
+    this.position = { x: 0, y: 0 };
+    this.rotation = 0;
+    this.zoom = ZOOM_BASE;
+    this.targetPosition = { x: 0, y: 0 };
+    this.driftOffset = { x: 0, y: 0 };
+    this.reducedMotion = false;
+    this.motionFactor = 1;
+  }
+
+  /**
+   * Initialize the camera controller.
+   * @param {boolean} reducedMotion - Whether reduced motion is preferred
+   */
+  init(reducedMotion = false) {
+    this.reducedMotion = reducedMotion;
+    this.motionFactor = reducedMotion ? REDUCED_MOTION_FACTOR : 1;
+    this.state = MANAGER_STATES.READY;
+  }
+
+  /**
+   * Update camera drift and parameters each frame.
+   * @param {number} deltaTime - Frame delta in seconds
+   * @param {number} elapsedTime - Total elapsed time from TimeEngine
+   */
+  update(deltaTime, elapsedTime) {
+    if (this.state !== MANAGER_STATES.READY) return;
+
+    this.updateDrift(elapsedTime);
+    this.updateRotation(elapsedTime);
+    this.updateZoom(elapsedTime);
+    this.updateTargetLerp(deltaTime);
+  }
+
+  /**
+   * Update noise-driven positional drift.
+   * @param {number} elapsedTime - Elapsed time in seconds
+   */
+  updateDrift(elapsedTime) {
+    const t = elapsedTime * DRIFT_SPEED * this.motionFactor;
+    const nx = this.noise.noise2D(t, 0);
+    const ny = this.noise.noise2D(0, t * 1.3);
+
+    this.driftOffset.x = nx * DRIFT_AMPLITUDE_X * this.motionFactor;
+    this.driftOffset.y = ny * DRIFT_AMPLITUDE_Y * this.motionFactor;
+
+    this.position.x = this.targetPosition.x + this.driftOffset.x;
+    this.position.y = this.targetPosition.y + this.driftOffset.y;
+  }
+
+  /**
+   * Update noise-driven rotation.
+   * @param {number} elapsedTime - Elapsed time in seconds
+   */
+  updateRotation(elapsedTime) {
+    const t = elapsedTime * ROTATION_SPEED * this.motionFactor;
+    this.rotation = this.noise.noise2D(t, t * 0.7) * ROTATION_AMPLITUDE * this.motionFactor;
+  }
+
+  /**
+   * Update noise-driven zoom.
+   * @param {number} elapsedTime - Elapsed time in seconds
+   */
+  updateZoom(elapsedTime) {
+    const t = elapsedTime * ZOOM_SPEED * this.motionFactor;
+    const nz = this.noise.noise2D(t * 0.5, t * 0.8);
+    this.zoom = ZOOM_BASE + nz * ZOOM_AMPLITUDE * this.motionFactor;
+  }
+
+  /**
+   * Smoothly lerp toward a target position.
+   * @param {number} deltaTime - Frame delta in seconds
+   */
+  updateTargetLerp(deltaTime) {
+    const lerpFactor = Math.min(1, TARGET_LERP_SPEED * deltaTime);
+    this.targetPosition.x = lerp(this.targetPosition.x, 0, lerpFactor);
+    this.targetPosition.y = lerp(this.targetPosition.y, 0, lerpFactor);
+  }
+
+  /**
+   * Get the current camera transform for rendering.
+   * @returns {{x: number, y: number, rotation: number, zoom: number}}
+   */
+  getTransform() {
+    return {
+      x: this.position.x,
+      y: this.position.y,
+      rotation: this.rotation,
+      zoom: this.zoom
+    };
+  }
+
+  /**
+   * Get parallax offset for a given depth layer.
+   * @param {number} depth - Depth value (0 = closest, higher = further)
+   * @returns {{x: number, y: number}} Parallax offset
+   */
+  getParallaxOffset(depth) {
+    const factor = depth * 0.15 * this.motionFactor;
+    return {
+      x: this.driftOffset.x * factor,
+      y: this.driftOffset.y * factor
+    };
+  }
+
+  /**
+   * Set a target position for the camera to drift toward.
+   * @param {number} x - Target X coordinate
+   * @param {number} y - Target Y coordinate
+   */
+  setTarget(x, y) {
+    this.targetPosition.x = x;
+    this.targetPosition.y = y;
+  }
+
+  /**
+   * Reset camera to center position.
+   */
+  reset() {
+    this.position.x = 0;
+    this.position.y = 0;
+    this.targetPosition.x = 0;
+    this.targetPosition.y = 0;
+    this.driftOffset.x = 0;
+    this.driftOffset.y = 0;
+    this.rotation = 0;
+    this.zoom = ZOOM_BASE;
+  }
+
+  /**
+   * Set reduced motion preference.
+   * @param {boolean} enabled - Whether reduced motion is enabled
+   */
+  setReducedMotion(enabled) {
+    this.reducedMotion = enabled;
+    this.motionFactor = enabled ? REDUCED_MOTION_FACTOR : 1;
+  }
+
+  /**
+   * Destroy the camera controller.
+   */
+  destroy() {
+    this.reset();
+    this.state = MANAGER_STATES.DESTROYED;
+  }
+}

@@ -13,6 +13,8 @@
 @import './background.css';
 @import './particles.css';
 @import './lighting.css';
+@import './fog.css';
+@import './vignette.css';
 @import './components.css';
 
 /**

@@ -113,3 +113,47 @@ export const LIGHTING_THEMES = Object.freeze({
   gold: Object.freeze({ r: 140, g: 110, b: 40 }),
   white: Object.freeze({ r: 200, g: 200, b: 220 })
 });
+
+export const PARTICLE_FAMILY_IDS = Object.freeze({
+  AMBIENT_DUST: 'ambientDust',
+  STARS: 'stars',
+  ENERGY: 'energy',
+  CONNECTIONS: 'connections',
+  AI: 'ai',
+  REVENUE: 'revenue',
+  TRUST: 'trust'
+});
+
+export const CAMERA_DEFAULTS = Object.freeze({
+  DRIFT_SPEED: 0.02,
+  DRIFT_AMPLITUDE_X: 3,
+  DRIFT_AMPLITUDE_Y: 2,
+  ROTATION_AMPLITUDE: 0.0005,
+  ZOOM_BASE: 1,
+  ZOOM_AMPLITUDE: 0.002
+});
+
+export const FOG_CONFIG = Object.freeze({
+  LAYER_COUNT: 3,
+  BASE_OPACITY: 0.015,
+  DRIFT_SPEED: 0.008
+});
+
+export const AUDIO_CHANNEL_IDS = Object.freeze({
+  AMBIENT_DRONES: 'ambientDrones',
+  PARTICLE_WHISPERS: 'particleWhispers',
+  GLASS_INTERACTIONS: 'glassInteractions',
+  ENVIRONMENTAL_SOUNDS: 'environmentalSounds'
+});
+
+export const LAYER_CATEGORIES = Object.freeze({
+  ENVIRONMENT: 'environment',
+  CONTENT: 'content',
+  UI: 'ui'
+});
+
+export const LIGHT_SOURCE_IDS = Object.freeze({
+  PRIMARY: 'primary',
+  SECONDARY: 'secondary',
+  ACCENT: 'accent'
+});

@@ -1,0 +1,14 @@
+/**
+ * Fog Layer Styles
+ * Styles for any DOM-based fog overlays (currently canvas-rendered).
+ * Reserved for future DOM fog elements if needed.
+ */
+
+.universe-fog {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.015;
+  mix-blend-mode: screen;
+  z-index: var(--z-fog, 4);
+}
