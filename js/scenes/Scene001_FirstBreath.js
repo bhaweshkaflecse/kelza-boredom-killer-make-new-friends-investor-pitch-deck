@@ -84,6 +84,8 @@ export class Scene001_FirstBreath {
 
   /**
    * Leave the scene - deactivate environment systems.
+   * Note: Particle families persist across scene transitions as they form the
+   * base environment. The next scene is responsible for setting its own families.
    * @returns {Promise<void>}
    */
   async leave() {
@@ -92,6 +94,8 @@ export class Scene001_FirstBreath {
     if (this.universe) {
       this.universe.setFogActive(false);
       this.universe.setVignetteActive(false);
+      this.universe.setGradientsActive(false);
+      this.universe.setCameraDriftActive(false);
     }
 
     this.state = SCENE_STATES.CLEANUP;

@@ -6,7 +6,6 @@
  */
 
 import { MANAGER_STATES } from '../../config/constants.js';
-import { settings } from '../../config/settings.js';
 import { Noise } from '../../utils/Noise.js';
 import { lerp } from '../../utils/helpers.js';
 
@@ -19,7 +18,7 @@ const ROTATION_SPEED = 0.015;
 const ZOOM_BASE = 1;
 const ZOOM_AMPLITUDE = 0.002;
 const ZOOM_SPEED = 0.01;
-const TARGET_LERP_SPEED = 0.01;
+const TARGET_LERP_SPEED = 2.0;
 const REDUCED_MOTION_FACTOR = 0.2;
 
 export class CameraController {
@@ -31,6 +30,7 @@ export class CameraController {
     this.zoom = ZOOM_BASE;
     this.targetPosition = { x: 0, y: 0 };
     this.driftOffset = { x: 0, y: 0 };
+    this._parallaxResult = { x: 0, y: 0 };
     this.reducedMotion = false;
     this.motionFactor = 1;
   }
@@ -119,15 +119,15 @@ export class CameraController {
 
   /**
    * Get parallax offset for a given depth layer.
+   * Returns a pre-allocated object - do not store the reference across frames.
    * @param {number} depth - Depth value (0 = closest, higher = further)
-   * @returns {{x: number, y: number}} Parallax offset
+   * @returns {{x: number, y: number}} Parallax offset (reused object)
    */
   getParallaxOffset(depth) {
     const factor = depth * 0.15 * this.motionFactor;
-    return {
-      x: this.driftOffset.x * factor,
-      y: this.driftOffset.y * factor
-    };
+    this._parallaxResult.x = this.driftOffset.x * factor;
+    this._parallaxResult.y = this.driftOffset.y * factor;
+    return this._parallaxResult;
   }
 
   /**

@@ -70,7 +70,8 @@ export class UniverseEngine {
     const deviceTier = this.getDeviceTier();
     this.timeEngine.init();
     this.canvasManager.init(this.container);
-    const { width, height } = this.canvasManager.getDimensions();
+    const width = this.canvasManager.width;
+    const height = this.canvasManager.height;
     this.backgroundRenderer.init(width, height);
     this.particleEngine.init(width, height, deviceTier, this.reducedMotion);
     this.lightingEngine.init(this.reducedMotion);
@@ -85,17 +86,15 @@ export class UniverseEngine {
     this.state = MANAGER_STATES.READY;
   }
 
-  /** Wire up renderers to the background layer system. */
+  /** Wire up renderers to the background layer system. Zero per-frame allocations. */
   setupLayerRenderers() {
     const self = this;
     this.backgroundRenderer.setLayerRenderer(UNIVERSE_LAYERS.GRADIENTS, (ctx, time) => {
       if (!self.gradientsActive) return;
-      const d = self.canvasManager.getDimensions();
-      self.gradientRenderer.render(ctx, d.width, d.height, time);
+      self.gradientRenderer.render(ctx, self.canvasManager.width, self.canvasManager.height, time);
     });
     this.backgroundRenderer.setLayerRenderer(UNIVERSE_LAYERS.AMBIENT_LIGHTING, (ctx) => {
-      const d = self.canvasManager.getDimensions();
-      self.lightingEngine.render(ctx, d.width, d.height);
+      self.lightingEngine.render(ctx, self.canvasManager.width, self.canvasManager.height);
     });
     this.backgroundRenderer.setLayerRenderer(UNIVERSE_LAYERS.PARTICLE_FIELD, (ctx) => {
       const offset = self.cameraController.getParallaxOffset(1);
@@ -104,14 +103,12 @@ export class UniverseEngine {
     this.backgroundRenderer.setLayerActive(UNIVERSE_LAYERS.DEPTH_FOG, true);
     this.backgroundRenderer.setLayerRenderer(UNIVERSE_LAYERS.DEPTH_FOG, (ctx, time) => {
       if (!self.fogActive) return;
-      const d = self.canvasManager.getDimensions();
-      self.fogRenderer.render(ctx, d.width, d.height, time);
+      self.fogRenderer.render(ctx, self.canvasManager.width, self.canvasManager.height, time);
     });
     this.backgroundRenderer.setLayerActive(UNIVERSE_LAYERS.SCENE_OVERLAYS, true);
     this.backgroundRenderer.setLayerRenderer(UNIVERSE_LAYERS.SCENE_OVERLAYS, (ctx) => {
       if (!self.vignetteActive) return;
-      const d = self.canvasManager.getDimensions();
-      self.vignetteRenderer.render(ctx, d.width, d.height);
+      self.vignetteRenderer.render(ctx, self.canvasManager.width, self.canvasManager.height);
     });
   }
 
@@ -153,16 +150,20 @@ export class UniverseEngine {
     this.render();
   }
 
-  /** Apply star twinkle brightness to star-family particles. */
+  /** Apply star twinkle brightness to star-family particles. Gated on fade-in completion. */
   applyStarTwinkle() {
     const starSlot = this.particleEngine.getStarSlot();
     if (!starSlot) return;
+    const starFamily = this.particleEngine.families[starSlot.familyIndex];
+    const fadeInThreshold = starFamily ? starFamily.fadeInDuration : 0.2;
     this.starTwinkleSystem.setActiveCount(starSlot.count);
     const pool = this.particleEngine.pool;
     const end = Math.min(starSlot.start + starSlot.count, pool.length);
     for (let i = starSlot.start; i < end; i++) {
       const p = pool[i];
       if (!p.active) continue;
+      const lifeRatio = p.lifetime / p.maxLifetime;
+      if (lifeRatio < fadeInThreshold) continue;
       const twinkle = this.starTwinkleSystem.getBrightness(i - starSlot.start);
       if (twinkle > 0) {
         p.opacity = Math.min(p.targetOpacity, p.opacity + twinkle * p.targetOpacity);
