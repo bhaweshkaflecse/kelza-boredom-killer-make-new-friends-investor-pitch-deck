@@ -1,0 +1,51 @@
+/**
+ * Main Stylesheet
+ * Imports all CSS modules in correct cascade order.
+ */
+
+@import './reset.css';
+@import './variables.css';
+@import './typography.css';
+@import './layout.css';
+@import './utilities.css';
+@import './animations.css';
+@import './components.css';
+
+/**
+ * Global application styles
+ */
+html {
+  background-color: var(--color-bg-primary);
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  overflow-x: hidden;
+}
+
+#main-content:focus {
+  outline: none;
+}
+
+::selection {
+  background-color: var(--color-brand-primary);
+  color: var(--color-neutral-0);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-700);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-600);
+}

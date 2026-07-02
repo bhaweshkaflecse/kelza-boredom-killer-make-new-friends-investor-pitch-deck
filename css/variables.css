@@ -1,0 +1,289 @@
+/**
+ * Design Token System
+ * Complete CSS custom property architecture for the Kelza Experience Platform.
+ * All values are defined here - no hardcoded values elsewhere.
+ */
+
+:root {
+  /* ========================================
+   * COLORS - Brand
+   * ======================================== */
+  --color-brand-primary: #6366f1;
+  --color-brand-primary-light: #818cf8;
+  --color-brand-primary-dark: #4f46e5;
+  --color-brand-secondary: #06b6d4;
+  --color-brand-secondary-light: #22d3ee;
+  --color-brand-secondary-dark: #0891b2;
+  --color-brand-accent: #f59e0b;
+  --color-brand-accent-light: #fbbf24;
+  --color-brand-accent-dark: #d97706;
+
+  /* ========================================
+   * COLORS - Neutral
+   * ======================================== */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f4f4f5;
+  --color-neutral-200: #e4e4e7;
+  --color-neutral-300: #d4d4d8;
+  --color-neutral-400: #a1a1aa;
+  --color-neutral-500: #71717a;
+  --color-neutral-600: #52525b;
+  --color-neutral-700: #3f3f46;
+  --color-neutral-800: #27272a;
+  --color-neutral-900: #18181b;
+  --color-neutral-950: #09090b;
+  --color-neutral-1000: #0a0a0f;
+
+  /* ========================================
+   * COLORS - Semantic
+   * ======================================== */
+  --color-success: #10b981;
+  --color-success-light: #34d399;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fbbf24;
+  --color-error: #ef4444;
+  --color-error-light: #f87171;
+  --color-info: #3b82f6;
+  --color-info-light: #60a5fa;
+
+  /* ========================================
+   * COLORS - Glass / Transparency
+   * ======================================== */
+  --color-glass-light: rgba(255, 255, 255, 0.05);
+  --color-glass-medium: rgba(255, 255, 255, 0.1);
+  --color-glass-heavy: rgba(255, 255, 255, 0.15);
+  --color-glass-dark: rgba(0, 0, 0, 0.3);
+  --color-glass-darker: rgba(0, 0, 0, 0.5);
+  --color-glass-darkest: rgba(0, 0, 0, 0.8);
+  --color-glass-brand: rgba(99, 102, 241, 0.1);
+  --color-glass-brand-medium: rgba(99, 102, 241, 0.2);
+
+  /* ========================================
+   * COLORS - Lighting / Glow
+   * ======================================== */
+  --color-glow-primary: rgba(99, 102, 241, 0.4);
+  --color-glow-secondary: rgba(6, 182, 212, 0.4);
+  --color-glow-accent: rgba(245, 158, 11, 0.4);
+  --color-glow-white: rgba(255, 255, 255, 0.2);
+
+  /* ========================================
+   * COLORS - Background / Surface
+   * ======================================== */
+  --color-bg-primary: #0a0a0f;
+  --color-bg-secondary: #111118;
+  --color-bg-tertiary: #1a1a24;
+  --color-bg-elevated: #222230;
+  --color-surface-primary: rgba(255, 255, 255, 0.03);
+  --color-surface-secondary: rgba(255, 255, 255, 0.06);
+  --color-surface-hover: rgba(255, 255, 255, 0.08);
+  --color-surface-active: rgba(255, 255, 255, 0.12);
+
+  /* ========================================
+   * COLORS - Text
+   * ======================================== */
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-tertiary: #71717a;
+  --color-text-disabled: #52525b;
+  --color-text-inverse: #09090b;
+  --color-text-link: #818cf8;
+  --color-text-link-hover: #a5b4fc;
+
+  /* ========================================
+   * SPACING - 4px base scale
+   * ======================================== */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --space-40: 10rem;
+  --space-48: 12rem;
+  --space-64: 16rem;
+  --space-80: 20rem;
+  --space-96: 24rem;
+
+  /* ========================================
+   * BORDER RADIUS
+   * ======================================== */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-full: 9999px;
+
+  /* ========================================
+   * ELEVATION / SHADOWS
+   * ======================================== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  --shadow-glow-primary: 0 0 20px var(--color-glow-primary);
+  --shadow-glow-secondary: 0 0 20px var(--color-glow-secondary);
+  --shadow-glow-accent: 0 0 20px var(--color-glow-accent);
+
+  /* ========================================
+   * TYPOGRAPHY - Font Families
+   * ======================================== */
+  --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+
+  /* ========================================
+   * TYPOGRAPHY - Font Sizes (fluid scale)
+   * ======================================== */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --font-size-7xl: 4.5rem;
+  --font-size-8xl: 6rem;
+  --font-size-9xl: 8rem;
+
+  /* ========================================
+   * TYPOGRAPHY - Font Weights
+   * ======================================== */
+  --font-weight-thin: 100;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* ========================================
+   * TYPOGRAPHY - Line Heights
+   * ======================================== */
+  --line-height-none: 1;
+  --line-height-tight: 1.1;
+  --line-height-snug: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* ========================================
+   * TYPOGRAPHY - Letter Spacing
+   * ======================================== */
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+
+  /* ========================================
+   * MOTION - Durations
+   * ======================================== */
+  --duration-instant: 50ms;
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 700ms;
+  --duration-slowest: 1000ms;
+  --duration-cinematic: 1500ms;
+  --duration-epic: 2500ms;
+
+  /* ========================================
+   * MOTION - Easing
+   * ======================================== */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-cinematic: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* ========================================
+   * BLUR VALUES
+   * ======================================== */
+  --blur-none: 0;
+  --blur-sm: 4px;
+  --blur-md: 8px;
+  --blur-lg: 16px;
+  --blur-xl: 24px;
+  --blur-2xl: 40px;
+  --blur-3xl: 64px;
+
+  /* ========================================
+   * Z-INDEX SYSTEM
+   * ======================================== */
+  --z-below: -1;
+  --z-base: 0;
+  --z-above: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-header: 300;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-notification: 800;
+  --z-cursor: 900;
+  --z-max: 9999;
+
+  /* ========================================
+   * CONTAINER WIDTHS
+   * ======================================== */
+  --container-xs: 20rem;
+  --container-sm: 30rem;
+  --container-md: 48rem;
+  --container-lg: 64rem;
+  --container-xl: 80rem;
+  --container-2xl: 96rem;
+  --container-full: 100%;
+
+  /* ========================================
+   * RESPONSIVE BREAKPOINTS (as custom properties for reference)
+   * Actual media queries use fixed values
+   * ======================================== */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* ========================================
+   * BORDERS
+   * ======================================== */
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  --border-width-thick: 4px;
+  --border-color-default: rgba(255, 255, 255, 0.08);
+  --border-color-hover: rgba(255, 255, 255, 0.16);
+  --border-color-active: rgba(255, 255, 255, 0.24);
+  --border-color-brand: rgba(99, 102, 241, 0.3);
+
+  /* ========================================
+   * TRANSITIONS
+   * ======================================== */
+  --transition-fast: all var(--duration-fast) var(--ease-out);
+  --transition-normal: all var(--duration-normal) var(--ease-out);
+  --transition-slow: all var(--duration-slow) var(--ease-out);
+  --transition-colors: color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
