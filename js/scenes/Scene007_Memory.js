@@ -31,7 +31,7 @@ import { SceneDirector } from '../engine/SceneDirector.js';
 import { buildScene007Phases } from './scene007/Scene007Phases.js';
 import {
   updateMemorySystems, updateEchoInfluence,
-  applySubsystemForces, findMemoryIndex
+  applySubsystemForces, findMemoryIndex, resetMemoryTimers
 } from './scene007/Scene007MemoryUpdater.js';
 
 const SCENE_ID = 'scene007_memory';
@@ -99,6 +99,7 @@ export class Scene007_Memory {
     this.environmentalConfidenceActive = false;
     this.cameraPreferenceActive = false;
     this.reducedMotion = isReducedMotion();
+    resetMemoryTimers();
 
     if (this.universe) {
       this.initSubsystems();

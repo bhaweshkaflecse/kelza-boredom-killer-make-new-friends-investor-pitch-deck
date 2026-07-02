@@ -111,7 +111,9 @@ export class EchoSystem {
 
   /** Attempt to trigger an echo from strongest memories. */
   tryTriggerEcho() {
-    if (!this.memoryEngine || this.echoCount >= CFG.maxEchos) return;
+    // Treat maxEchos as a concurrent limit, not a lifetime total.
+    // echoCount tracks total for interval noise variation, but does not cap.
+    if (!this.memoryEngine) return;
 
     const memories = this.memoryEngine.getStrongestMemories(4);
     let target = null;

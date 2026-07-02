@@ -104,10 +104,13 @@ export class MemoryEngine {
 
   /**
    * Update all active memories: noise-driven decay and age tracking.
+   * Decay is normalized to 60 FPS reference rate via Math.pow so that
+   * behavior is consistent regardless of actual framerate.
    * @param {number} deltaTime - Frame delta in seconds
    */
   update(deltaTime) {
     this.elapsedTime += deltaTime;
+    const dtNorm = deltaTime * 60; // Normalize to 60 FPS reference
 
     for (let i = 0; i < this.maxMemories; i++) {
       const mem = this.pool[i];
@@ -122,7 +125,8 @@ export class MemoryEngine {
       const decayVariation = 0.99 + noiseVal * 0.01;
       const effectiveDecay = CFG.decayRate * decayVariation;
 
-      mem.strength *= effectiveDecay;
+      // Frame-rate independent decay: pow(rate, dt * refFPS)
+      mem.strength *= Math.pow(effectiveDecay, dtNorm);
 
       // Cap strength at target
       if (mem.strength > CFG.strengthTarget) {

@@ -24,6 +24,8 @@ export class PatternMemory {
     this._matchResult = { pattern: null, similarity: 0 };
     // Pre-allocated array for getRecallablePatterns
     this._recallable = [];
+    // Pre-allocated result for getApproximateRecall
+    this._approximateResult = { dx: 0, dy: 0 };
   }
 
   /**
@@ -172,11 +174,16 @@ export class PatternMemory {
   /**
    * Get a recalled pattern with noise-modulated approximation.
    * Never returns exact original values.
+   * Returns pre-allocated result object - do not store across frames.
    * @param {Object} pattern - Pattern from pool
-   * @returns {{dx: number, dy: number}} Approximate direction (reuses pattern object fields)
+   * @returns {{dx: number, dy: number}} Approximate direction (pre-allocated, reused)
    */
   getApproximateRecall(pattern) {
-    if (!pattern) return { dx: 0, dy: 0 };
+    if (!pattern) {
+      this._approximateResult.dx = 0;
+      this._approximateResult.dy = 0;
+      return this._approximateResult;
+    }
 
     const noiseX = this.noise.noise2D(
       pattern.angle * 2, this.elapsedTime * 0.2
@@ -186,10 +193,9 @@ export class PatternMemory {
     );
 
     const approx = CFG.approximationNoise;
-    return {
-      dx: pattern.dx + noiseX * pattern.distance * approx,
-      dy: pattern.dy + noiseY * pattern.distance * approx
-    };
+    this._approximateResult.dx = pattern.dx + noiseX * pattern.distance * approx;
+    this._approximateResult.dy = pattern.dy + noiseY * pattern.distance * approx;
+    return this._approximateResult;
   }
 
   /**

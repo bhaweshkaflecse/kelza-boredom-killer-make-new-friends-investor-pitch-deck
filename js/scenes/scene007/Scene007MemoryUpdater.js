@@ -12,9 +12,17 @@ import { settings } from '../../config/settings.js';
 
 const SCENE007 = settings.scene007;
 const REINFORCE_DISTANCE = 100;
+const MEMORY_CREATION_COOLDOWN = 2.5; // seconds between memory creations
+const PATTERN_RECORD_COOLDOWN = 3.0; // seconds between pattern recordings
+
+// Module-level timers to avoid per-frame allocations
+let _memoryCreationTimer = 0;
+let _patternRecordTimer = 0;
 
 /**
  * Update all memory subsystems for the frame.
+ * Memory creation and pattern recording are throttled via cooldown timers
+ * to prevent per-frame flooding of the pools.
  * @param {Object} scene - Scene007_Memory instance
  * @param {number} deltaTime - Frame delta in seconds
  * @param {Object[]} pool - Particle pool
@@ -30,14 +38,24 @@ export function updateMemorySystems(scene, deltaTime, pool, activeCount) {
     scene.echoSystem.update(deltaTime, scene.elapsedTime);
   }
 
+  // Throttle memory creation with cooldown (issue: was called every frame)
   if (scene.constellationMemoryActive && scene.constellationHints) {
-    createMemoriesFromHints(scene, pool);
+    _memoryCreationTimer += deltaTime;
+    if (_memoryCreationTimer >= MEMORY_CREATION_COOLDOWN) {
+      _memoryCreationTimer = 0;
+      createMemoriesFromHints(scene, pool);
+    }
   }
 
+  // Throttle pattern recording with cooldown (issue: was called every frame)
   if (scene.patternRecordingActive && scene.connectionIndexA >= 0) {
-    scene.patternMemory.recordPattern(
-      pool, scene.connectionIndexA, scene.connectionIndexB
-    );
+    _patternRecordTimer += deltaTime;
+    if (_patternRecordTimer >= PATTERN_RECORD_COOLDOWN) {
+      _patternRecordTimer = 0;
+      scene.patternMemory.recordPattern(
+        pool, scene.connectionIndexA, scene.connectionIndexB
+      );
+    }
   }
 }
 
@@ -89,6 +107,8 @@ function tryReinforceNearby(scene, x, y) {
 
 /**
  * Bias constellation hints toward echo targets when echo is active.
+ * Uses pattern recall from PatternMemory to bias echo targets based
+ * on pattern geometry, connecting the recall pipeline to the echo mechanism.
  * @param {Object} scene - Scene007_Memory instance
  */
 export function updateEchoInfluence(scene) {
@@ -96,8 +116,27 @@ export function updateEchoInfluence(scene) {
   const echo = scene.echoSystem.getActiveEcho();
   if (!echo || !echo.active) return;
 
-  const modX = echo.targetX + echo.patternDx * 50;
-  const modY = echo.targetY + echo.patternDy * 50;
+  // Use pattern recall to bias echo target position via pattern geometry
+  let patternBiasX = 0;
+  let patternBiasY = 0;
+
+  if (scene.patternMemory && scene.connectionIndexA >= 0) {
+    const particles = scene.universe ? scene.universe.particleEngine.pool : [];
+    const match = scene.patternMemory.findSimilarPattern(
+      particles,
+      scene.connectionIndexA,
+      scene.connectionIndexB
+    );
+
+    if (match.pattern) {
+      const recall = scene.patternMemory.getApproximateRecall(match.pattern);
+      patternBiasX = recall.dx * 0.3;
+      patternBiasY = recall.dy * 0.3;
+    }
+  }
+
+  const modX = echo.targetX + echo.patternDx * 50 + patternBiasX;
+  const modY = echo.targetY + echo.patternDy * 50 + patternBiasY;
   scene.influenceEngine.addSource(
     modX, modY, INFLUENCE_TYPES.CONNECTION, echo.strength * 0.3
   );
@@ -149,4 +188,12 @@ export function findMemoryIndex(scene, memRef) {
     if (scene.memoryEngine.pool[i] === memRef) return i;
   }
   return -1;
+}
+
+/**
+ * Reset module-level cooldown timers. Call on scene enter.
+ */
+export function resetMemoryTimers() {
+  _memoryCreationTimer = 0;
+  _patternRecordTimer = 0;
 }

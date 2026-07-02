@@ -36,6 +36,7 @@ export class CameraController {
     this._parallaxResult = { x: 0, y: 0 };
     this.reducedMotion = false;
     this.motionFactor = 1;
+    this.driftMultiplier = 1;
     this.clusterBiasX = 0;
     this.clusterBiasY = 0;
     this.hasClusterBias = false;
@@ -47,6 +48,7 @@ export class CameraController {
    */
   init(reducedMotion = false) {
     this.reducedMotion = reducedMotion;
+    this.driftMultiplier = 1;
     this.motionFactor = reducedMotion ? REDUCED_MOTION_FACTOR : 1;
     this.state = MANAGER_STATES.READY;
   }
@@ -164,20 +166,27 @@ export class CameraController {
 
   /**
    * Set reduced motion preference.
+   * Composes with driftMultiplier so accessibility override is never lost.
    * @param {boolean} enabled - Whether reduced motion is enabled
    */
   setReducedMotion(enabled) {
     this.reducedMotion = enabled;
-    this.motionFactor = enabled ? REDUCED_MOTION_FACTOR : 1;
+    this.motionFactor = enabled
+      ? REDUCED_MOTION_FACTOR * this.driftMultiplier
+      : this.driftMultiplier;
   }
 
   /**
    * Set the drift multiplier to control camera motion intensity.
    * Used by scenes to progressively reduce movement.
-   * @param {number} value - Motion factor (0 = no motion, 1 = full motion)
+   * Composes with reduced-motion setting so accessibility is never overwritten.
+   * @param {number} value - Drift factor (0 = no motion, 1 = full motion)
    */
   setDriftMultiplier(value) {
-    this.motionFactor = Math.min(Math.max(value, 0), 1);
+    this.driftMultiplier = Math.min(Math.max(value, 0), 1);
+    this.motionFactor = this.reducedMotion
+      ? REDUCED_MOTION_FACTOR * this.driftMultiplier
+      : this.driftMultiplier;
   }
 
   /**
