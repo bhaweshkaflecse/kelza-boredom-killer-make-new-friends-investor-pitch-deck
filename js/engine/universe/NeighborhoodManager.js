@@ -312,7 +312,7 @@ export class NeighborhoodManager {
 
       if (this.reducedMotion) {
         // Reduced motion: only opacity coordination
-        p.alpha = Math.min(1, p.alpha + strength * 0.3);
+        p.opacity = Math.min(p.targetOpacity, p.opacity + strength * 0.3);
       } else {
         // Normal: gentle velocity alignment
         p.vx += (hood.avgVx - p.vx) * strength;

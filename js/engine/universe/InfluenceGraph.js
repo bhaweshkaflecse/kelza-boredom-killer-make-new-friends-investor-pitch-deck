@@ -106,7 +106,6 @@ export class InfluenceGraph {
    * @returns {number} Edge index or -1 if pool full
    */
   addEdge(nodeA, nodeB, weight) {
-    if (this.edgeCount >= this.maxEdges) return -1;
     if (nodeA < 0 || nodeB < 0) return -1;
     if (nodeA >= this.nodeCount || nodeB >= this.nodeCount) return -1;
 
@@ -121,14 +120,32 @@ export class InfluenceGraph {
       }
     }
 
-    const edge = this.edges[this.edgeCount];
-    edge.nodeA = nodeA;
-    edge.nodeB = nodeB;
-    edge.weight = weight;
-    edge.age = 0;
-    edge.active = true;
-    this.edgeCount++;
-    return this.edgeCount - 1;
+    // Try to append if pool not fully consumed
+    if (this.edgeCount < this.maxEdges) {
+      const edge = this.edges[this.edgeCount];
+      edge.nodeA = nodeA;
+      edge.nodeB = nodeB;
+      edge.weight = weight;
+      edge.age = 0;
+      edge.active = true;
+      this.edgeCount++;
+      return this.edgeCount - 1;
+    }
+
+    // Pool exhausted - scan for an inactive slot to reuse
+    for (let i = 0; i < this.edgeCount; i++) {
+      if (!this.edges[i].active) {
+        const edge = this.edges[i];
+        edge.nodeA = nodeA;
+        edge.nodeB = nodeB;
+        edge.weight = weight;
+        edge.age = 0;
+        edge.active = true;
+        return i;
+      }
+    }
+
+    return -1;
   }
 
   /**

@@ -15,6 +15,9 @@ import { NeighborhoodManager } from './NeighborhoodManager.js';
 
 const CONFIG = settings.scene005.network;
 const EDGE_FORMATION_THRESHOLD = CONFIG.edgeFormationThreshold;
+const EDGE_PROXIMITY = 150;
+const EDGE_PROXIMITY_SQ = EDGE_PROXIMITY * EDGE_PROXIMITY;
+const RECENT_NODE_LIMIT = 16;
 
 export class NetworkEngine {
   constructor() {
@@ -48,6 +51,10 @@ export class NetworkEngine {
 
     // Pre-allocated metrics result
     this._metrics = { nodes: 0, edges: 0, neighborhoods: 0, trend: 0 };
+
+    // Pre-allocated buffer for recent influenced node indices (for edge creation)
+    this._recentNodes = new Int32Array(RECENT_NODE_LIMIT);
+    this._recentNodeCount = 0;
   }
 
   /**
@@ -133,6 +140,8 @@ export class NetworkEngine {
 
   /**
    * Discover new candidate edges from particles within influence.
+   * Adds nodes for strongly influenced particles and creates edges
+   * between recently-added nodes that are within proximity.
    * @param {Object[]} particles - Particle pool
    * @param {number} activeCount - Active particle count
    * @param {Object} influenceEngine - InfluenceEngine
@@ -141,6 +150,7 @@ export class NetworkEngine {
     if (!influenceEngine || influenceEngine.getActiveCount() === 0) return;
 
     const limit = Math.min(activeCount, this.maxParticles, 200);
+    this._recentNodeCount = 0;
 
     for (let i = 0; i < limit; i++) {
       const p = particles[i];
@@ -155,6 +165,42 @@ export class NetworkEngine {
 
       // Update node influence weight
       this.graph.nodes[nodeIdx].influenceWeight = inf.strength;
+
+      // Check proximity against recent nodes and create edges
+      this.createProximityEdges(nodeIdx, p, particles, inf.strength);
+
+      // Track as recent node
+      if (this._recentNodeCount < RECENT_NODE_LIMIT) {
+        this._recentNodes[this._recentNodeCount] = nodeIdx;
+        this._recentNodeCount++;
+      }
+    }
+  }
+
+  /**
+   * Create edges between a new node and nearby recent nodes.
+   * @param {number} nodeIdx - Newly added node index
+   * @param {Object} p - Particle for the new node
+   * @param {Object[]} particles - Particle pool
+   * @param {number} strength - Influence strength for edge weight
+   */
+  createProximityEdges(nodeIdx, p, particles, strength) {
+    for (let j = 0; j < this._recentNodeCount; j++) {
+      const otherNodeIdx = this._recentNodes[j];
+      if (otherNodeIdx === nodeIdx) continue;
+
+      const otherNode = this.graph.nodes[otherNodeIdx];
+      if (!otherNode.active) continue;
+
+      const otherP = particles[otherNode.particleIndex];
+      if (!otherP || !otherP.active) continue;
+
+      const dx = p.x - otherP.x;
+      const dy = p.y - otherP.y;
+      if (dx * dx + dy * dy < EDGE_PROXIMITY_SQ) {
+        const weight = strength * 0.5;
+        this.graph.addEdge(nodeIdx, otherNodeIdx, weight);
+      }
     }
   }
 
