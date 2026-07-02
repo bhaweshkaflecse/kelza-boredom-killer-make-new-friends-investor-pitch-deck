@@ -183,6 +183,14 @@ export const SCENE_DIRECTOR_PHASES = Object.freeze({
   FLOURISHING: 'flourishing'
 });
 
+export const CONNECTION_STATES = Object.freeze({
+  CANDIDATE: 'candidate',
+  PENDING: 'pending',
+  CONNECTED: 'connected',
+  DORMANT: 'dormant',
+  BROKEN: 'broken'
+});
+
 export const TIMELINE_CHAPTERS = Object.freeze({
   VOID: 'void',
   FIRST_BREATH: 'firstBreath',

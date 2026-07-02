@@ -1,0 +1,7 @@
+{
+  "task_id": "task-scene003-first-connection",
+  "task_description": "Implement Scene003 - The First Connection: the first emotional milestone where two particles discover each other and form a single living connection. Includes connection architecture (state machine, renderer, pulse, manager), emotional phase timeline, camera attention, environmental ripple, audio hooks (muted), and accessibility support.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001", "FEAT-002"],
+  "blocked_reason": null
+}

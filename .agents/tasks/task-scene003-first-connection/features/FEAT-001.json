@@ -1,0 +1,36 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Create the Connection Engine architecture: ConnectionState (state machine), ConnectionEvents (event constants), ConnectionRenderer (canvas filament drawing), PulseRenderer (single traveling pulse), and ConnectionManager (manages one connection lifecycle). Also add scene003 settings to config/settings.js and new constants to config/constants.js.",
+  "status": "in_progress",
+  "steps": [
+    "Create js/engine/universe/ConnectionState.js - A state machine class supporting states: CANDIDATE, PENDING, CONNECTED, DORMANT, BROKEN (implemented), plus future placeholders TRUSTED, VERIFIED, CONVERSATION, COMMUNITY (documented but NOT implemented). The state machine should have transition(newState), getState(), onTransition(callback) methods. Pre-allocate the connection data object {indexA, indexB, state, progress, age, lineOpacity, lineWidth, pulseProgress, pauseElapsed}.",
+    "Create js/engine/universe/ConnectionEvents.js - Frozen object of event name constants: CONNECTION_DISCOVERED, CONNECTION_PENDING, CONNECTION_CREATED, CONNECTION_DORMANT, CONNECTION_BROKEN, PULSE_STARTED, PULSE_FINISHED. Just constants, no logic.",
+    "Create js/engine/universe/ConnectionRenderer.js - Renders ONE living filament line on canvas between two particle positions. The line must breathe (opacity oscillates via noise), max opacity 0.18 (under 20%), max width 1.4px (under 1.5). Uses quadratic bezier with subtle noise-displaced control point for organic feel. Has init(), render(ctx, particleA, particleB, progress, reducedMotion), destroy() methods. Zero allocations in render loop - pre-allocate all temp objects.",
+    "Create js/engine/universe/PulseRenderer.js - Renders a single tiny pulse dot traveling along the connection filament from particle A to B. Uses the same bezier path as ConnectionRenderer. Has init(), render(ctx, particleA, particleB, pulseProgress, reducedMotion), destroy(). Pulse is a small bright dot (radius ~2px, opacity 0.4-0.6) that travels once and never repeats. In reduced motion mode, the pulse becomes a fade (opacity swell at midpoint instead of travel).",
+    "Create js/engine/universe/ConnectionManager.js - Orchestrates exactly ONE connection for Scene003. Has init(universe), update(deltaTime, elapsedTime), render(ctx), destroy(). Internally uses ConnectionState, ConnectionRenderer, PulseRenderer. Manages the full lifecycle: discovery (using ConnectionPrediction candidates), approach (gentle force toward each other), pause (1-2s stillness), connection (draw filament), pulse (one-time travel), and completion. Exposes getConnectionState(), getConnectedParticles() for camera/audio hooks. Implements the 'Connection Director' - guarantees exactly one connection, never two.",
+    "Add CONNECTION_STATES constant to js/config/constants.js with CANDIDATE, PENDING, CONNECTED, DORMANT, BROKEN values.",
+    "Add scene003 section to js/config/settings.js with connection timing parameters: discoveryMinTime (3.0), approachDuration (4.0), pauseDuration (1.5), filamentFadeInDuration (2.0), pulseDuration (2.5), pulseSize (2.0), filamentMaxOpacity (0.18), filamentMaxWidth (1.4), filamentBreathSpeed (0.3), filamentNoiseScale (0.01), approachForce (0.08), pauseRadius (25), discoveryRadius (100), rippleStrength (0.002), rippleRadius (200), cameraEaseSpeed (0.8)."
+  ],
+  "acceptance_criteria": [
+    "All 5 new files in js/engine/universe/ pass node --check syntax validation",
+    "ConnectionState supports transitions between CANDIDATE, PENDING, CONNECTED only (active states for Scene003)",
+    "ConnectionRenderer line opacity never exceeds 0.18 and width never exceeds 1.4px",
+    "PulseRenderer travels once and has reduced motion fallback",
+    "ConnectionManager guarantees exactly one connection via internal flag",
+    "Constants and settings are properly frozen/immutable",
+    "No function exceeds 60 lines, no class exceeds 400 lines",
+    "Zero allocations in render/update hot paths"
+  ],
+  "verification": [
+    "NODE_OPTIONS='' node --check js/engine/universe/ConnectionState.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/ConnectionEvents.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/ConnectionRenderer.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/PulseRenderer.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/ConnectionManager.js",
+    "NODE_OPTIONS='' node --check js/config/constants.js",
+    "NODE_OPTIONS='' node --check js/config/settings.js"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

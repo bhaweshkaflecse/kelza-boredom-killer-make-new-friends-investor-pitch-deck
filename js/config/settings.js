@@ -145,6 +145,25 @@ export const settings = Object.freeze({
     cameraDrift: true
   }),
 
+  scene003: Object.freeze({
+    discoveryMinTime: 3.0,
+    approachDuration: 4.0,
+    pauseDuration: 1.5,
+    filamentFadeInDuration: 2.0,
+    pulseDuration: 2.5,
+    pulseSize: 2.0,
+    filamentMaxOpacity: 0.18,
+    filamentMaxWidth: 1.4,
+    filamentBreathSpeed: 0.3,
+    filamentNoiseScale: 0.01,
+    approachForce: 0.08,
+    pauseRadius: 25,
+    discoveryRadius: 100,
+    rippleStrength: 0.002,
+    rippleRadius: 200,
+    cameraEaseSpeed: 0.8
+  }),
+
   scene002: Object.freeze({
     intelligenceField: Object.freeze({
       strength: 0.002,
