@@ -2,7 +2,7 @@
   "id": "FEAT-001",
   "type": "feat",
   "description": "Create the Memory architecture (MemoryEngine, PatternMemory, EchoSystem), Scene007 config/constants, Scene007 main class with phases, and integrate into Engine.js for Scene006->007 transition.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "1. Add MEMORY_STATES constant to js/config/constants.js: { DORMANT: 'dormant', FORMING: 'forming', ECHOING: 'echoing', REMEMBERING: 'remembering', ANTICIPATING: 'anticipating' }",
     "2. Add scene007 config block to js/config/settings.js with sub-objects: memory (maxMemories:32, reinforceRate:0.01, decayRate:0.995, strengthTarget:0.25, formationThreshold:0.1, seed:967), echo (maxEchos:4, recallAccuracy:0.7, noiseModulation:0.3, minInterval:5, maxInterval:10, seed:1031), patternMemory (maxPatterns:16, matchThreshold:0.6, approximationNoise:0.2, seed:1103), constellationMemory (repeatChance:0.3, approximationFactor:0.15, maxOpacity:0.07), phases (wonder:{start:0,duration:8}, familiarity:{start:8,duration:8}, echo:{start:16,duration:8}, memory:{start:24,duration:7}, expectation:{start:31,duration:7}), environment (warmthIncrease:0.025, motionReduction:0.2, coherenceIncrease:0.1), camera (memoryWeight:0.1, revisitSpeed:0.06, preferenceDecay:0.98, reducedMotionFactor:0.2), lighting (echoStrength:0.03, consistencyRate:0.02)",
@@ -33,5 +33,5 @@
     "Grep for 'Earth|globe|continent|map|label|typography|logo|product|Hero|phone' in new files to confirm none present"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "Scene007_Memory.js was split into main class (373 lines) and Scene007MemoryUpdater.js (152 lines) to stay under the ~400 line class limit. All 11 files pass node --check syntax validation. CameraController.setDriftMultiplier added using Math.min/Math.max (clamp not imported to keep minimal). The scene007 settings block was added after scene006 in settings.js with all required sub-objects."
 }
