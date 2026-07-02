@@ -1,0 +1,30 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Add Scene006 configuration to settings.js and constants.js, then create the three new engine subsystems: RecognitionEngine, PatternSuggestion, and NegativeSpaceDirector.",
+  "status": "completed",
+  "steps": [
+    "Add RECOGNITION_STATES constant to js/config/constants.js: { WONDER: 'wonder', SUSPICION: 'suspicion', RECOGNITION: 'recognition', REFLECTION: 'reflection', MYSTERY: 'mystery' }. Also add RECOGNITION_PHASES to SCENE_DIRECTOR_PHASES if needed (or reuse existing phase IDs).",
+    "Add scene006 settings block to js/config/settings.js (Object.freeze). Include: recognition (confidenceTarget: 0.35, confidenceRate, coherenceThreshold, paceSpeed), patternSuggestion (maskCount: 6, maxInfluence: 0.12, fadeInDuration, noiseScale, seed), negativeSpace (preservationStrength: 0.8, minVoidRadius: 80, maxVoids: 5, importanceWeight: 0.6), constellationEvolution (meaningfulPlacementWeight: 0.3, maxOpacity: 0.07), phases (wonder: {start:0, duration:8}, suspicion: {start:8, duration:8}, recognition: {start:16, duration:8}, reflection: {start:24, duration:6}, mystery: {start:30, duration:5}), environment (warmthIncrease: 0.02, motionReduction: 0.15), camera (compositionWeight: 0.12, balanceSeekSpeed: 0.08, symmetryWeight: 0.1, negativeSpaceWeight: 0.15, reducedMotionFactor: 0.2).",
+    "Create js/engine/universe/RecognitionEngine.js: Class that evaluates overall network coherence, tracks RecognitionConfidence (0.0 to max ~0.35), controls recognition pacing. Methods: init(width, height), update(deltaTime, graphMetrics, neighborhoodCount), getConfidence(), getCoherence(), getPaceMultiplier(), destroy(). Uses pre-allocated result objects. No per-frame allocations. Noise-driven pacing. Never exposes exact geometry. Future-ready for Earth emergence.",
+    "Create js/engine/universe/PatternSuggestion.js: Class that creates influence masks (NOT continent meshes). Masks gently encourage density, alignment, spacing, and negative space. Methods: init(width, height, seed), update(deltaTime, recognitionConfidence), getInfluenceAt(x, y) returns {density, alignment, spacing} as pre-allocated result, getMaskCount(), destroy(). Uses Noise for organic mask shapes. Masks are soft radial gradients that fade in based on recognitionConfidence. Max 6 masks. Results feel organic, not generated.",
+    "Create js/engine/universe/NegativeSpaceDirector.js: Class that intentionally preserves empty regions. Tracks void positions (max 5). Methods: init(width, height, seed), update(deltaTime, particles, activeCount, recognitionConfidence), getRepulsionAt(x, y) returns pre-allocated {strength, directionX, directionY}, getVoidCount(), isInVoid(x, y), destroy(). Uses noise-driven void placement that evolves slowly. Voids are as important as filled regions. Future scenes will use these voids."
+  ],
+  "acceptance_criteria": [
+    "js/config/constants.js exports RECOGNITION_STATES with 5 states",
+    "js/config/settings.js includes a scene006 frozen settings block with all sub-configs",
+    "RecognitionEngine.js is under 400 lines, no function over 60 lines, zero allocations in update",
+    "PatternSuggestion.js uses Noise for organic mask shapes, returns pre-allocated results",
+    "NegativeSpaceDirector.js tracks max 5 voids, returns pre-allocated repulsion results",
+    "All three engine files pass NODE_OPTIONS='' node --check"
+  ],
+  "verification": [
+    "NODE_OPTIONS='' node --check js/config/constants.js",
+    "NODE_OPTIONS='' node --check js/config/settings.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/RecognitionEngine.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/PatternSuggestion.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/NegativeSpaceDirector.js"
+  ],
+  "blocked_reason": null,
+  "findings": "All 5 files pass node --check. RecognitionEngine is 186 lines, PatternSuggestion is 271 lines, NegativeSpaceDirector is 283 lines. All use MANAGER_STATES lifecycle, pre-allocated results, noise-driven procedural values, and zero per-frame allocations."
+}

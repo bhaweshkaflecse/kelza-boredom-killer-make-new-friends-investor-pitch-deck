@@ -1,0 +1,32 @@
+{
+  "id": "FEAT-003",
+  "type": "fix",
+  "description": "Address 5 review issues: wire PatternSuggestion/NegativeSpaceDirector outputs into particle loop, remove empty updateRecognitionProgress, add skipEnvironmentTeardown guard to Scene005, add resize() to Scene006.",
+  "status": "completed",
+  "steps": [
+    "Wire PatternSuggestion.getInfluenceAt() into particle update loop as subtle velocity bias in updateSubsystems.",
+    "Wire NegativeSpaceDirector.getRepulsionAt() into particle update loop as subtle displacement in updateSubsystems.",
+    "Remove the empty updateRecognitionProgress method and all phase calls to it in Scene006Phases.js.",
+    "Add skipEnvironmentTeardown field and conditional guard in Scene005_LivingNetwork.js leave() method.",
+    "Add resize() method to Scene006_Recognition.js that propagates to subsystems."
+  ],
+  "acceptance_criteria": [
+    "PatternSuggestion.getInfluenceAt() is called per-particle and affects velocity",
+    "NegativeSpaceDirector.getRepulsionAt() is called per-particle and displaces particles away from voids",
+    "No updateRecognitionProgress method exists in Scene006_Recognition.js",
+    "No updateRecognitionProgress calls exist in Scene006Phases.js",
+    "Scene005_LivingNetwork.leave() checks skipEnvironmentTeardown before camera/environment teardown",
+    "Scene006_Recognition.resize() propagates to recognitionEngine, patternSuggestion, negativeSpaceDirector",
+    "Scene006_Recognition.js stays under 400 lines",
+    "Zero per-frame allocations maintained",
+    "All modified files pass NODE_OPTIONS='' node --check"
+  ],
+  "verification": [
+    "NODE_OPTIONS='' node --check js/scenes/Scene006_Recognition.js",
+    "NODE_OPTIONS='' node --check js/scenes/scene006/Scene006Phases.js",
+    "NODE_OPTIONS='' node --check js/scenes/Scene005_LivingNetwork.js",
+    "wc -l js/scenes/Scene006_Recognition.js (must be < 400)"
+  ],
+  "blocked_reason": null,
+  "findings": "All 5 review issues addressed. Scene006_Recognition.js is 391 lines (under 400). applySubsystemForces uses pre-allocated result objects from getInfluenceAt/getRepulsionAt - zero per-frame allocations maintained. Scene005 now checks skipEnvironmentTeardown matching the pattern from Scene003. Empty onUpdate handlers replaced with null (SceneDirector already guards with if check). Settings extended with velocityBias (0.15) and repulsionScale (0.2) for configurable force magnitudes."
+}

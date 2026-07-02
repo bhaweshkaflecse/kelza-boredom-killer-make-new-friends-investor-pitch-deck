@@ -63,6 +63,7 @@ export class Scene005_LivingNetwork {
     this.warmthActive = false;
     this.cameraBroadenProgress = 0;
     this.reducedMotion = false;
+    this.skipEnvironmentTeardown = false;
   }
 
   /** @returns {string} Scene identifier */
@@ -361,7 +362,7 @@ export class Scene005_LivingNetwork {
     this.state = SCENE_STATES.LEAVING;
     this.destroySubsystems();
 
-    if (this.universe) {
+    if (this.universe && !this.skipEnvironmentTeardown) {
       this.universe.cameraController.clearClusterBias();
       this.universe.cameraController.setTarget(0, 0);
     }

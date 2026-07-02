@@ -327,5 +327,51 @@ export const settings = Object.freeze({
       maxBroadenRadius: 6,
       reducedMotionFactor: 0.2
     })
+  }),
+
+  scene006: Object.freeze({
+    recognition: Object.freeze({
+      confidenceTarget: 0.35,
+      confidenceRate: 0.008,
+      coherenceThreshold: 0.2,
+      paceSpeed: 0.05
+    }),
+    patternSuggestion: Object.freeze({
+      maskCount: 6,
+      maxInfluence: 0.12,
+      fadeInDuration: 4.0,
+      noiseScale: 0.003,
+      seed: 853,
+      velocityBias: 0.15
+    }),
+    negativeSpace: Object.freeze({
+      preservationStrength: 0.8,
+      minVoidRadius: 80,
+      maxVoids: 5,
+      importanceWeight: 0.6,
+      repulsionScale: 0.2
+    }),
+    constellationEvolution: Object.freeze({
+      meaningfulPlacementWeight: 0.3,
+      maxOpacity: 0.07
+    }),
+    phases: Object.freeze({
+      wonder: Object.freeze({ start: 0, duration: 8 }),
+      suspicion: Object.freeze({ start: 8, duration: 8 }),
+      recognition: Object.freeze({ start: 16, duration: 8 }),
+      reflection: Object.freeze({ start: 24, duration: 6 }),
+      mystery: Object.freeze({ start: 30, duration: 5 })
+    }),
+    environment: Object.freeze({
+      warmthIncrease: 0.02,
+      motionReduction: 0.15
+    }),
+    camera: Object.freeze({
+      compositionWeight: 0.12,
+      balanceSeekSpeed: 0.08,
+      symmetryWeight: 0.1,
+      negativeSpaceWeight: 0.15,
+      reducedMotionFactor: 0.2
+    })
   })
 });

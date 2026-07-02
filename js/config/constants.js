@@ -238,3 +238,11 @@ export const SYNC_STATES = Object.freeze({
   SYNCHRONIZING: 'synchronizing',
   DIVERGING: 'diverging'
 });
+
+export const RECOGNITION_STATES = Object.freeze({
+  WONDER: 'wonder',
+  SUSPICION: 'suspicion',
+  RECOGNITION: 'recognition',
+  REFLECTION: 'reflection',
+  MYSTERY: 'mystery'
+});
