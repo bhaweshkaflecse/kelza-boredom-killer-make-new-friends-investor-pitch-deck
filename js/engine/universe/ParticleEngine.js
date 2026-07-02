@@ -9,16 +9,8 @@ import { MANAGER_STATES, PARTICLE_LIMITS } from '../../config/constants.js';
 import { settings } from '../../config/settings.js';
 import { randomRange } from '../../utils/helpers.js';
 
-const PARTICLE_ALPHA_MIN = 0.1;
-const PARTICLE_ALPHA_MAX = 0.6;
-const PARTICLE_SIZE_MIN = 0.3;
-const PARTICLE_SIZE_MAX = 1.5;
-const PARTICLE_SPEED_MIN = -8;
-const PARTICLE_SPEED_MAX = 8;
-const PARTICLE_LIFETIME_MIN = 8;
-const PARTICLE_LIFETIME_MAX = 25;
-const DEPTH_LAYERS = 5;
 const REDUCED_MOTION_UPDATE_DIVISOR = 3;
+const OPACITY_BUCKET_COUNT = 10;
 
 export class ParticleEngine {
   constructor() {
@@ -34,6 +26,18 @@ export class ParticleEngine {
     this.cursorX = 0;
     this.cursorY = 0;
     this.cursorInfluence = 0;
+
+    this.alphaMin = settings.universe.particles.alphaMin;
+    this.alphaMax = settings.universe.particles.alphaMax;
+    this.sizeMin = settings.universe.particles.sizeMin;
+    this.sizeMax = settings.universe.particles.sizeMax;
+    this.speedMin = settings.universe.particles.speedMin;
+    this.speedMax = settings.universe.particles.speedMax;
+    this.lifetimeMin = settings.universe.particles.lifetimeMin;
+    this.lifetimeMax = settings.universe.particles.lifetimeMax;
+    this.depthLayers = settings.universe.particles.depthLayers;
+    this.fadeInDuration = settings.universe.particles.fadeInDuration;
+    this.fadeOutStart = settings.universe.particles.fadeOutStart;
   }
 
   /**
@@ -115,24 +119,24 @@ export class ParticleEngine {
     const p = this.pool[index];
     p.x = randomRange(0, this.width);
     p.y = randomRange(0, this.height);
-    p.z = randomRange(0, DEPTH_LAYERS);
-    p.vx = randomRange(PARTICLE_SPEED_MIN, PARTICLE_SPEED_MAX);
-    p.vy = randomRange(PARTICLE_SPEED_MIN, PARTICLE_SPEED_MAX);
+    p.z = randomRange(0, this.depthLayers);
+    p.vx = randomRange(this.speedMin, this.speedMax);
+    p.vy = randomRange(this.speedMin, this.speedMax);
     p.vz = 0;
     p.ax = 0;
     p.ay = 0;
     p.az = 0;
-    p.scale = randomRange(PARTICLE_SIZE_MIN, PARTICLE_SIZE_MAX);
+    p.scale = randomRange(this.sizeMin, this.sizeMax);
     p.rotation = randomRange(0, Math.PI * 2);
     p.mass = p.scale;
     p.r = 255;
     p.g = 255;
     p.b = 255;
     p.depth = Math.floor(p.z);
-    p.maxLifetime = randomRange(PARTICLE_LIFETIME_MIN, PARTICLE_LIFETIME_MAX);
+    p.maxLifetime = randomRange(this.lifetimeMin, this.lifetimeMax);
     p.lifetime = scattered ? randomRange(0, p.maxLifetime) : 0;
     p.opacity = scattered
-      ? randomRange(PARTICLE_ALPHA_MIN, PARTICLE_ALPHA_MAX)
+      ? randomRange(this.alphaMin, this.alphaMax)
       : 0;
     p.active = true;
   }
@@ -197,17 +201,14 @@ export class ParticleEngine {
    * @returns {number} Opacity value
    */
   calculateOpacity(lifeRatio) {
-    const fadeInEnd = 0.1;
-    const fadeOutStart = 0.8;
-
-    if (lifeRatio < fadeInEnd) {
-      return (lifeRatio / fadeInEnd) * PARTICLE_ALPHA_MAX;
+    if (lifeRatio < this.fadeInDuration) {
+      return (lifeRatio / this.fadeInDuration) * this.alphaMax;
     }
-    if (lifeRatio > fadeOutStart) {
-      const fadeProgress = (lifeRatio - fadeOutStart) / (1 - fadeOutStart);
-      return PARTICLE_ALPHA_MAX * (1 - fadeProgress);
+    if (lifeRatio > this.fadeOutStart) {
+      const fadeProgress = (lifeRatio - this.fadeOutStart) / (1 - this.fadeOutStart);
+      return this.alphaMax * (1 - fadeProgress);
     }
-    return PARTICLE_ALPHA_MAX;
+    return this.alphaMax;
   }
 
   /**
@@ -222,31 +223,50 @@ export class ParticleEngine {
   }
 
   /**
-   * Render all active particles to the canvas.
+   * Render all active particles to the canvas using batched draw calls.
+   * Groups particles by opacity bucket for efficient path batching.
    * @param {CanvasRenderingContext2D} ctx - Canvas context
    */
   render(ctx) {
-    for (let i = 0; i < this.activeCount; i++) {
-      const p = this.pool[i];
-      if (!p.active || p.opacity <= 0) continue;
-      this.renderParticle(ctx, p);
+    ctx.fillStyle = 'rgb(255, 255, 255)';
+
+    for (let bucket = 1; bucket <= OPACITY_BUCKET_COUNT; bucket++) {
+      this.renderOpacityBucket(ctx, bucket);
     }
   }
 
   /**
-   * Render a single particle as a small circle.
+   * Render a batch of particles sharing the same opacity bucket.
    * @param {CanvasRenderingContext2D} ctx - Canvas context
-   * @param {Object} p - Particle object
+   * @param {number} bucket - Opacity bucket index (1 to OPACITY_BUCKET_COUNT)
    */
-  renderParticle(ctx, p) {
-    const depthScale = 1 - (p.depth / DEPTH_LAYERS) * 0.6;
-    const size = p.scale * depthScale;
+  renderOpacityBucket(ctx, bucket) {
+    const bucketMin = (bucket - 1) / OPACITY_BUCKET_COUNT;
+    const bucketMax = bucket / OPACITY_BUCKET_COUNT;
+    const bucketAlpha = (bucketMin + bucketMax) * 0.5;
 
-    ctx.globalAlpha = p.opacity * depthScale;
-    ctx.fillStyle = `rgb(${p.r}, ${p.g}, ${p.b})`;
+    let hasParticles = false;
     ctx.beginPath();
-    ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-    ctx.fill();
+
+    for (let i = 0; i < this.activeCount; i++) {
+      const p = this.pool[i];
+      if (!p.active || p.opacity <= 0) continue;
+
+      const normalizedOpacity = p.opacity / this.alphaMax;
+      if (normalizedOpacity <= bucketMin || normalizedOpacity > bucketMax) continue;
+
+      const depthScale = 1 - (p.depth / this.depthLayers) * 0.6;
+      const size = p.scale * depthScale;
+
+      ctx.moveTo(p.x + size, p.y);
+      ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+      hasParticles = true;
+    }
+
+    if (hasParticles) {
+      ctx.globalAlpha = bucketAlpha;
+      ctx.fill();
+    }
   }
 
   /**

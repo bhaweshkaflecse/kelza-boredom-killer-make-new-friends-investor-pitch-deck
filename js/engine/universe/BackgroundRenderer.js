@@ -7,6 +7,7 @@
  */
 
 import { MANAGER_STATES, UNIVERSE_LAYERS } from '../../config/constants.js';
+import { settings } from '../../config/settings.js';
 
 export class BackgroundRenderer {
   constructor() {
@@ -179,7 +180,7 @@ export class BackgroundRenderer {
    * @param {CanvasRenderingContext2D} ctx - Canvas context
    */
   renderDeepSpace(ctx) {
-    ctx.fillStyle = '#0a0a0f';
+    ctx.fillStyle = settings.universe.background.baseColor;
     ctx.fillRect(0, 0, this.width, this.height);
   }
 

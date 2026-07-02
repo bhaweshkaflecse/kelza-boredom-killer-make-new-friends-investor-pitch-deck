@@ -68,13 +68,23 @@ export const settings = Object.freeze({
       baseSpeed: 8,
       depthLayers: 5,
       fadeInDuration: 0.1,
-      fadeOutStart: 0.8
+      fadeOutStart: 0.8,
+      alphaMin: 0.1,
+      alphaMax: 0.6,
+      sizeMin: 0.3,
+      sizeMax: 1.5,
+      speedMin: -8,
+      speedMax: 8,
+      lifetimeMin: 8,
+      lifetimeMax: 25
     }),
     lighting: Object.freeze({
       defaultTheme: 'dark',
       breathSpeed: 0.15,
       breathAmplitude: 0.03,
-      transitionSpeed: 0.8
+      transitionSpeed: 0.8,
+      minOpacity: 0.02,
+      maxOpacity: 0.08
     }),
     background: Object.freeze({
       baseColor: '#0a0a0f',

@@ -2,14 +2,13 @@
  * CanvasManager
  * Creates and manages the fullscreen rendering canvas for the universe.
  * Handles resize, pixel ratio awareness, and GPU-friendly rendering setup.
+ * Resize is driven externally by UniverseEngine (via Engine.js).
  */
 
 import { MANAGER_STATES } from '../../config/constants.js';
 import { settings } from '../../config/settings.js';
-import { debounce } from '../../utils/helpers.js';
 
 const MAX_PIXEL_RATIO = 2;
-const RESIZE_DEBOUNCE_MS = 100;
 
 export class CanvasManager {
   constructor() {
@@ -20,7 +19,6 @@ export class CanvasManager {
     this.height = 0;
     this.pixelRatio = 1;
     this.container = null;
-    this.handleResize = null;
   }
 
   /**
@@ -43,9 +41,6 @@ export class CanvasManager {
 
     this.container.appendChild(this.canvas);
     this.updateSize();
-
-    this.handleResize = debounce(this.updateSize.bind(this), RESIZE_DEBOUNCE_MS);
-    window.addEventListener('resize', this.handleResize);
 
     this.state = MANAGER_STATES.READY;
   }
@@ -121,10 +116,6 @@ export class CanvasManager {
    * Destroy the canvas manager and clean up resources.
    */
   destroy() {
-    if (this.handleResize) {
-      window.removeEventListener('resize', this.handleResize);
-    }
-
     if (this.canvas && this.container) {
       this.container.removeChild(this.canvas);
     }

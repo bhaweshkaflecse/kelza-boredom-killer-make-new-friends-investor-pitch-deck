@@ -10,12 +10,6 @@ import { settings } from '../../config/settings.js';
 import { Noise } from '../../utils/Noise.js';
 import { lerp } from '../../utils/helpers.js';
 
-const NOISE_SPEED = 0.15;
-const BREATH_AMPLITUDE = 0.03;
-const TRANSITION_SPEED = 0.8;
-const MIN_OPACITY = 0.02;
-const MAX_OPACITY = 0.08;
-
 export class LightingEngine {
   constructor() {
     this.state = MANAGER_STATES.UNINITIALIZED;
@@ -23,11 +17,18 @@ export class LightingEngine {
     this.currentTheme = 'dark';
     this.targetTheme = 'dark';
     this.currentColor = { r: 0, g: 0, b: 0 };
+    this.startColor = { r: 0, g: 0, b: 0 };
     this.targetColor = { r: 0, g: 0, b: 0 };
-    this.opacity = MIN_OPACITY;
+    this.opacity = settings.universe.lighting.minOpacity;
     this.breathValue = 0;
     this.transitionProgress = 1;
     this.reducedMotion = false;
+
+    this.noiseSpeed = settings.universe.lighting.breathSpeed;
+    this.breathAmplitude = settings.universe.lighting.breathAmplitude;
+    this.transitionSpeed = settings.universe.lighting.transitionSpeed;
+    this.minOpacity = settings.universe.lighting.minOpacity;
+    this.maxOpacity = settings.universe.lighting.maxOpacity;
   }
 
   /**
@@ -38,6 +39,7 @@ export class LightingEngine {
     this.reducedMotion = reducedMotion;
     const themeColors = LIGHTING_THEMES[this.currentTheme];
     this.currentColor = { ...themeColors };
+    this.startColor = { ...themeColors };
     this.targetColor = { ...themeColors };
     this.state = MANAGER_STATES.READY;
   }
@@ -51,6 +53,7 @@ export class LightingEngine {
     if (themeName === this.currentTheme && this.transitionProgress >= 1) return;
 
     this.targetTheme = themeName;
+    this.startColor = { ...this.currentColor };
     this.targetColor = { ...LIGHTING_THEMES[themeName] };
     this.transitionProgress = 0;
   }
@@ -97,13 +100,13 @@ export class LightingEngine {
 
     this.transitionProgress = Math.min(
       1,
-      this.transitionProgress + deltaTime * TRANSITION_SPEED
+      this.transitionProgress + deltaTime * this.transitionSpeed
     );
 
     const t = this.transitionProgress;
-    this.currentColor.r = lerp(this.currentColor.r, this.targetColor.r, t);
-    this.currentColor.g = lerp(this.currentColor.g, this.targetColor.g, t);
-    this.currentColor.b = lerp(this.currentColor.b, this.targetColor.b, t);
+    this.currentColor.r = lerp(this.startColor.r, this.targetColor.r, t);
+    this.currentColor.g = lerp(this.startColor.g, this.targetColor.g, t);
+    this.currentColor.b = lerp(this.startColor.b, this.targetColor.b, t);
 
     if (this.transitionProgress >= 1) {
       this.currentTheme = this.targetTheme;
@@ -116,18 +119,18 @@ export class LightingEngine {
    */
   updateBreathing(elapsedTime) {
     if (this.reducedMotion) {
-      this.opacity = MIN_OPACITY;
+      this.opacity = this.minOpacity;
       return;
     }
 
     this.breathValue = this.noise.noise2D(
-      elapsedTime * NOISE_SPEED,
-      elapsedTime * NOISE_SPEED * 0.7
+      elapsedTime * this.noiseSpeed,
+      elapsedTime * this.noiseSpeed * 0.7
     );
 
     const normalizedBreath = (this.breathValue + 1) * 0.5;
-    this.opacity = MIN_OPACITY + normalizedBreath * BREATH_AMPLITUDE;
-    this.opacity = Math.max(MIN_OPACITY, Math.min(MAX_OPACITY, this.opacity));
+    this.opacity = this.minOpacity + normalizedBreath * this.breathAmplitude;
+    this.opacity = Math.max(this.minOpacity, Math.min(this.maxOpacity, this.opacity));
   }
 
   /**
