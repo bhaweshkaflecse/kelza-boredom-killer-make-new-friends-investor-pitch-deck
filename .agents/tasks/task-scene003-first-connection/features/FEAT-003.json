@@ -2,7 +2,7 @@
   "id": "FEAT-003",
   "type": "fix",
   "description": "Address 5 review issues: pulse/filament bezier mismatch, per-frame allocation in discovery, phase timing desync, implicit coupling via universe.connectionPrediction, and dual discoveryRadius semantics.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Fix PulseRenderer to accept and use the ConnectionRenderer's noise-displaced control point instead of raw midpoint",
     "Fix getCandidateConnections() to expose backing array and count without .slice() allocation",
@@ -27,5 +27,5 @@
     "NODE_OPTIONS='' node --check js/scenes/scene003/Scene003Phases.js"
   ],
   "blocked_reason": null,
-  "findings": null
+  "findings": "All 5 review issues resolved. ConnectionManager dropped from 394 to 383 lines by compacting constructor. getCandidateConnections uses pre-allocated result object - zero allocations in hot path. Phase callbacks in Scene003Phases now have null onEnter since camera/ripple are event-driven via ConnectionManager.on(). PulseRenderer accepts controlX/controlY params and no longer computes its own midpoint. Unused imports (lerp from ConnectionManager, settings from Scene003Phases) removed."
 }
