@@ -55,6 +55,7 @@ export class Scene003_FirstConnection {
     this.rippleApplied = false;
     this.cameraAttentionActive = false;
     this.reducedMotion = false;
+    this.skipEnvironmentTeardown = false;
   }
 
   /**
@@ -342,7 +343,7 @@ export class Scene003_FirstConnection {
     this.deactivateConstellationsLayer();
     this.destroySubsystems();
 
-    if (this.universe) {
+    if (this.universe && !this.skipEnvironmentTeardown) {
       this.universe.cameraController.clearClusterBias();
       this.universe.cameraController.setTarget(0, 0);
       this.universe.setFogActive(false);

@@ -1,0 +1,35 @@
+{
+  "id": "FEAT-002",
+  "type": "fix",
+  "description": "Address 6 review issues: CONSTELLATIONS layer re-registration, setWarmthOffset implementation, frame-rate-independent decay, frame-gap flash prevention, RipplePropagation integration, and CuriosityBehavior reduced-motion fallback.",
+  "status": "in_progress",
+  "steps": [
+    "Step 1: Fix CONSTELLATIONS layer - Scene004 must re-register a render function using a ConnectionRenderer instance and the captured particle indices.",
+    "Step 2: Add setWarmthOffset method to LightingEngine that blends warmth into the current color.",
+    "Step 3: Fix frame-rate-dependent decay in InfluenceEngine and RipplePropagation using Math.pow(decayRate, deltaTime * 60).",
+    "Step 4: Fix frame-gap flash by having Engine.js activate environment on Scene004 before Scene003 leaves, or have Scene003 skip deactivation when transitioning forward.",
+    "Step 5: Integrate RipplePropagation wavefront into CuriosityBehavior so it has behavioral effect.",
+    "Step 6: Add reduced-motion fallback to CuriosityBehavior (dampen forces when reduced motion is active)."
+  ],
+  "acceptance_criteria": [
+    "Scene004 re-registers a CONSTELLATIONS layer renderer using ConnectionRenderer + captured particles",
+    "LightingEngine has setWarmthOffset(value) method that blends warmth into current color",
+    "InfluenceEngine.update uses time-based decay: Math.pow(decayRate, deltaTime * 60)",
+    "RipplePropagation.update uses time-based decay",
+    "No frame-gap flash between Scene003 and Scene004",
+    "CuriosityBehavior queries RipplePropagation wavefront for additional influence",
+    "CuriosityBehavior has reduced-motion fallback that reduces force vectors",
+    "All modified files pass NODE_OPTIONS='' node --check"
+  ],
+  "verification": [
+    "NODE_OPTIONS='' node --check js/scenes/Scene004_Ripple.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/LightingEngine.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/InfluenceEngine.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/RipplePropagation.js",
+    "NODE_OPTIONS='' node --check js/engine/universe/CuriosityBehavior.js",
+    "NODE_OPTIONS='' node --check js/engine/Engine.js",
+    "NODE_OPTIONS='' node --check js/scenes/Scene003_FirstConnection.js"
+  ],
+  "blocked_reason": null,
+  "findings": null
+}

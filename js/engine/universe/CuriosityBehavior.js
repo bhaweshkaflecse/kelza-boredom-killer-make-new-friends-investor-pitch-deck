@@ -8,6 +8,9 @@
  * States: idle (outside influence), searching (inside, gentle seeking),
  * attracted (near another particle, no connection).
  *
+ * Integrates RipplePropagation wavefront for additional behavioral weight.
+ * Reduced motion: reduces force vectors significantly (opacity-only influence).
+ *
  * Zero per-frame allocations. Pre-allocated noise instance.
  */
 
@@ -16,6 +19,7 @@ import { settings } from '../../config/settings.js';
 import { Noise } from '../../utils/Noise.js';
 
 const CONFIG = settings.scene004.curiosity;
+const REDUCED_MOTION_FORCE_SCALE = 0.15;
 
 export class CuriosityBehavior {
   constructor() {
@@ -26,6 +30,7 @@ export class CuriosityBehavior {
     this.activationThreshold = CONFIG.activationThreshold;
     this.deactivationRadiusSq = CONFIG.deactivationRadius * CONFIG.deactivationRadius;
     this.enabled = false;
+    this.reducedMotion = false;
   }
 
   /**
@@ -43,16 +48,25 @@ export class CuriosityBehavior {
   }
 
   /**
+   * Set reduced motion preference.
+   * @param {boolean} enabled - Whether reduced motion is preferred
+   */
+  setReducedMotion(enabled) {
+    this.reducedMotion = enabled;
+  }
+
+  /**
    * Apply curiosity force to a particle.
    * Compatible with BehaviorSystem: apply(particle, dt, elapsed, ctx)
    *
    * ctx must contain:
    *   - influenceEngine: InfluenceEngine instance for region queries
+   *   - ripplePropagation: (optional) RipplePropagation for wavefront weight
    *
    * @param {Object} particle - Particle from pool
    * @param {number} deltaTime - Frame delta in seconds
    * @param {number} elapsedTime - Total elapsed time
-   * @param {Object} ctx - Context with influenceEngine reference
+   * @param {Object} ctx - Context with influenceEngine and ripplePropagation
    */
   apply(particle, deltaTime, elapsedTime, ctx) {
     if (!this.enabled) return;
@@ -63,8 +77,22 @@ export class CuriosityBehavior {
     // Only activate inside influence regions above threshold
     if (influence.strength < this.activationThreshold) return;
 
-    // Scale searching force by influence strength (gentle, probability-based)
-    const influenceFactor = influence.strength;
+    // Combine influence with ripple wavefront for richer behavioral weight
+    let influenceFactor = influence.strength;
+    if (ctx.ripplePropagation) {
+      const rippleWeight = this.queryRippleWavefront(
+        particle, ctx.ripplePropagation
+      );
+      influenceFactor = Math.min(1, influenceFactor + rippleWeight * 0.5);
+    }
+
+    // Reduced motion: apply only subtle dampening, no directional force
+    if (this.reducedMotion) {
+      const dampen = 1 - (influenceFactor * 0.01);
+      particle.vx *= dampen;
+      particle.vy *= dampen;
+      return;
+    }
 
     // Noise-driven searching: organic orbiting motion
     const nx = particle.x * this.noiseScale;
@@ -84,6 +112,34 @@ export class CuriosityBehavior {
     const dampen = 1 - (influenceFactor * 0.02);
     particle.vx *= dampen;
     particle.vy *= dampen;
+  }
+
+  /**
+   * Query the ripple wavefront influence at a particle position.
+   * Checks all active ripples and returns the maximum weight.
+   * @param {Object} particle - Particle {x, y}
+   * @param {Object} ripplePropagation - RipplePropagation instance
+   * @returns {number} Wavefront weight (0-1)
+   */
+  queryRippleWavefront(particle, ripplePropagation) {
+    const view = ripplePropagation.getActiveRipples();
+    let maxWeight = 0;
+
+    for (let i = 0; i < view.count; i++) {
+      const ripple = view.ripples[i];
+      if (!ripple.active) continue;
+
+      const dx = particle.x - ripple.x;
+      const dy = particle.y - ripple.y;
+      const distSq = dx * dx + dy * dy;
+
+      const weight = ripplePropagation.getInfluenceAtDistance(distSq, i);
+      if (weight > maxWeight) {
+        maxWeight = weight;
+      }
+    }
+
+    return maxWeight;
   }
 
   /**

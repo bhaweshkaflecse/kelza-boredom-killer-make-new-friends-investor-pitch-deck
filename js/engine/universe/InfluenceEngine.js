@@ -112,9 +112,9 @@ export class InfluenceEngine {
         source.expansionProgress = source.radius / source.maxRadius;
       }
 
-      // Gentle decay once fully expanded
+      // Gentle decay once fully expanded (time-based, normalized to 60fps)
       if (source.radius >= source.maxRadius) {
-        source.strength *= decayRate;
+        source.strength *= Math.pow(decayRate, deltaTime * 60);
         if (source.strength < 0.001) {
           source.active = false;
           this.activeCount--;

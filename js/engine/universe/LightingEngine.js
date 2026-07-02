@@ -223,6 +223,20 @@ export class LightingEngine {
   }
 
   /**
+   * Apply a warmth offset that blends the current color toward gold.
+   * Used by Scene004 to subtly warm the environment as influence spreads.
+   * @param {number} value - Warmth factor (0 = no change, 1 = full gold blend)
+   */
+  setWarmthOffset(value) {
+    if (value <= 0) return;
+    const gold = LIGHTING_THEMES.gold;
+    const t = Math.min(value, 1) * 0.15; // Subtle blend, max 15% shift
+    this.currentColor.r = this.currentColor.r + (gold.r - this.currentColor.r) * t;
+    this.currentColor.g = this.currentColor.g + (gold.g - this.currentColor.g) * t;
+    this.currentColor.b = this.currentColor.b + (gold.b - this.currentColor.b) * t;
+  }
+
+  /**
    * Set reduced motion preference.
    * @param {boolean} enabled - Whether reduced motion is enabled
    */

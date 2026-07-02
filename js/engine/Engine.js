@@ -299,6 +299,12 @@ export class Engine {
       this.scene004Instance.setConnectionData(cd.midX, cd.midY, cd.indexA, cd.indexB);
     }
 
+    // Prevent frame-gap flash: tell Scene003 to skip environment teardown
+    // since Scene004 will immediately re-enable the same environment state
+    if (this.scene003Instance) {
+      this.scene003Instance.skipEnvironmentTeardown = true;
+    }
+
     await sceneManager.loadScene('scene004_ripple');
     await sceneManager.enterScene('scene004_ripple');
   }

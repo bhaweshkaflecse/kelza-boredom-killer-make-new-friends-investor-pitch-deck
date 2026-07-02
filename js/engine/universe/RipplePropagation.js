@@ -97,7 +97,8 @@ export class RipplePropagation {
 
       if (ripple.radius >= ripple.maxRadius) {
         ripple.radius = ripple.maxRadius;
-        ripple.strength *= decayRate;
+        // Time-based decay normalized to 60fps
+        ripple.strength *= Math.pow(decayRate, deltaTime * 60);
 
         if (ripple.strength < 0.001) {
           ripple.active = false;

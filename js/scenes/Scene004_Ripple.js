@@ -1,17 +1,8 @@
 /**
  * Scene004_Ripple
  * The first connection quietly changes the universe through influence.
- * One relationship inspires another -- not through magic, through influence.
- *
- * Emotional timeline: 0-25s
- * 1. (0-4s)   Silence - pause after the connection pulse. Anticipation.
- * 2. (4-10s)  Influence - InfluenceEngine activates, first particle changes.
- * 3. (10-16s) Ripple - RipplePropagation expands, more particles affected.
- * 4. (16-21s) Discovery - CuriosityBehavior + micro-sync begin.
- * 5. (21-25s) Hope - environment warms, scene marks completed.
- *
- * The ONE visible connection line persists (CONSTELLATIONS layer stays active).
- * No additional visible connections are created. Everything else is influence.
+ * Emotional timeline: Silence(0-4s), Influence(4-10s), Ripple(10-16s),
+ * Discovery(16-21s), Hope(21-25s). ONE connection line persists.
  */
 
 import {
@@ -24,6 +15,7 @@ import { InfluenceEngine } from '../engine/universe/InfluenceEngine.js';
 import { RipplePropagation } from '../engine/universe/RipplePropagation.js';
 import { CuriosityBehavior } from '../engine/universe/CuriosityBehavior.js';
 import { SynchronizationSystem } from '../engine/universe/SynchronizationSystem.js';
+import { ConnectionRenderer } from '../engine/universe/ConnectionRenderer.js';
 import { AudioArchitecture } from '../engine/universe/AudioArchitecture.js';
 import { SceneDirector } from '../engine/SceneDirector.js';
 import {
@@ -46,6 +38,7 @@ export class Scene004_Ripple {
     this.synchronizationSystem = null;
     this.behaviorSystem = null;
     this.audioArchitecture = null;
+    this.connectionRenderer = null;
     this.director = null;
 
     // Connection data passed from Engine
@@ -69,18 +62,11 @@ export class Scene004_Ripple {
   /** @returns {string} Scene identifier */
   getId() { return this.id; }
 
-  /**
-   * Set reference to the universe engine.
-   * @param {Object} universe - UniverseEngine instance
-   */
+  /** @param {Object} universe - UniverseEngine instance */
   setUniverse(universe) { this.universe = universe; }
 
   /**
    * Receive connection data from Engine (midpoint + indices).
-   * @param {number} midX - Connection midpoint X
-   * @param {number} midY - Connection midpoint Y
-   * @param {number} indexA - Connected particle A index
-   * @param {number} indexB - Connected particle B index
    */
   setConnectionData(midX, midY, indexA, indexB) {
     this.connectionMidX = midX;
@@ -89,15 +75,11 @@ export class Scene004_Ripple {
     this.connectionIndexB = indexB;
   }
 
-  /**
-   * Load scene assets (none required).
-   * @returns {Promise<void>}
-   */
+  /** @returns {Promise<void>} */
   async load() { this.state = SCENE_STATES.LOADING; }
 
   /**
    * Enter the scene - initialize all Scene004 subsystems.
-   * @returns {Promise<void>}
    */
   async enter() {
     this.state = SCENE_STATES.ENTERING;
@@ -140,6 +122,7 @@ export class Scene004_Ripple {
 
     // Curiosity behavior - searching motion inside influence
     this.curiosityBehavior = new CuriosityBehavior();
+    this.curiosityBehavior.setReducedMotion(this.reducedMotion);
 
     // Synchronization - micro-sync for small groups
     this.synchronizationSystem = new SynchronizationSystem();
@@ -150,12 +133,13 @@ export class Scene004_Ripple {
     this.behaviorSystem = new BehaviorSystem();
     this.behaviorSystem.init();
     this.behaviorSystem.register(BEHAVIOR_IDS.CURIOSITY, this.curiosityBehavior);
-    this.behaviorSystem.setContext({ influenceEngine: this.influenceEngine });
+    this.behaviorSystem.setContext({
+      influenceEngine: this.influenceEngine,
+      ripplePropagation: this.ripplePropagation
+    });
   }
 
-  /**
-   * Initialize audio architecture with scene-specific event hooks.
-   */
+  /** Initialize audio architecture with scene-specific event hooks. */
   initAudioHooks() {
     this.audioArchitecture = new AudioArchitecture();
     this.audioArchitecture.init();
@@ -166,9 +150,7 @@ export class Scene004_Ripple {
     this.audioArchitecture.registerEvent('synchronization_started');
   }
 
-  /**
-   * Initialize the SceneDirector with emotional phases.
-   */
+  /** Initialize the SceneDirector with emotional phases. */
   initDirector() {
     this.director = new SceneDirector();
     this.director.init(this.universe);
@@ -178,9 +160,7 @@ export class Scene004_Ripple {
     this.director.start();
   }
 
-  /**
-   * Activate the base environment for this scene.
-   */
+  /** Activate the base environment for this scene. */
   activateEnvironment() {
     this.universe.setFogActive(true);
     this.universe.setGradientsActive(true);
@@ -189,17 +169,36 @@ export class Scene004_Ripple {
   }
 
   /**
-   * Keep the CONSTELLATIONS layer active so the one connection line persists.
-   * Scene003 registered the layer renderer; we ensure it stays active.
+   * Re-register the CONSTELLATIONS layer with a new ConnectionRenderer.
+   * Scene003.leave() nulls the renderer, so we must re-create it here
+   * using the captured particle indices to keep the ONE connection line visible.
    */
   keepConstellationsLayer() {
     const bgRenderer = this.universe.backgroundRenderer;
+    const particles = this.universe.particleEngine.pool;
+    const indexA = this.connectionIndexA;
+    const indexB = this.connectionIndexB;
+
+    this.connectionRenderer = new ConnectionRenderer();
+    this.connectionRenderer.init(this.reducedMotion);
+
     bgRenderer.setLayerActive(UNIVERSE_LAYERS.CONSTELLATIONS, true);
+    bgRenderer.setLayerRenderer(
+      UNIVERSE_LAYERS.CONSTELLATIONS,
+      (ctx, time, deltaTime) => {
+        if (indexA < 0 || indexB < 0) return;
+        const pA = particles[indexA];
+        const pB = particles[indexB];
+        if (!pA || !pB) return;
+        this.connectionRenderer.render(
+          ctx, pA, pB, 1.0, this.reducedMotion, deltaTime
+        );
+      }
+    );
   }
 
   /**
    * Update the scene each frame.
-   * @param {number} deltaTime - Frame delta in seconds
    */
   update(deltaTime) {
     if (this.state !== SCENE_STATES.ACTIVE) return;
@@ -209,10 +208,7 @@ export class Scene004_Ripple {
     this.updateSubsystems(deltaTime);
   }
 
-  /**
-   * Update all active subsystems.
-   * @param {number} deltaTime - Frame delta in seconds
-   */
+  /** Update all active subsystems. */
   updateSubsystems(deltaTime) {
     if (this.influenceActive) {
       this.influenceEngine.update(deltaTime);
@@ -241,10 +237,7 @@ export class Scene004_Ripple {
 
   // --- Phase callbacks (called by Scene004Phases) ---
 
-  /**
-   * Activate the influence engine. Places source at connection midpoint.
-   * Called by Phase 2 onEnter.
-   */
+  /** Activate the influence engine. Places source at connection midpoint. */
   activateInfluence() {
     this.influenceActive = true;
     this.influenceEngine.addSource(
@@ -255,45 +248,30 @@ export class Scene004_Ripple {
     );
   }
 
-  /**
-   * Activate ripple propagation from connection midpoint.
-   * Called by Phase 3 onEnter.
-   */
+  /** Activate ripple propagation from connection midpoint. */
   activateRipple() {
     this.rippleActive = true;
     this.ripplePropagation.spawn(this.connectionMidX, this.connectionMidY);
   }
 
-  /**
-   * Activate curiosity behavior inside influence regions.
-   * Called by Phase 4 onEnter.
-   */
+  /** Activate curiosity behavior inside influence regions. */
   activateCuriosity() {
     this.curiosityActive = true;
     this.curiosityBehavior.activate();
     this.behaviorSystem.enable(BEHAVIOR_IDS.CURIOSITY);
   }
 
-  /**
-   * Activate synchronization system.
-   * Called by Phase 4 onEnter.
-   */
+  /** Activate synchronization system. */
   activateSynchronization() {
     this.syncActive = true;
   }
 
-  /**
-   * Begin environmental response (warmth, fog, density).
-   * Called by Phase 5 onEnter.
-   */
+  /** Begin environmental response (warmth, fog, density). */
   activateEnvironmentalResponse() {
     this.environmentActive = true;
   }
 
-  /**
-   * Update environmental warmth based on progress.
-   * @param {number} progress - Phase progress 0-1
-   */
+  /** Update environmental warmth based on phase progress (0-1). */
   updateEnvironmentalWarmth(progress) {
     if (!this.environmentActive || !this.universe) return;
 
@@ -305,10 +283,7 @@ export class Scene004_Ripple {
     }
   }
 
-  /**
-   * Update camera broadening - attention slowly widens away from connection.
-   * @param {number} progress - Overall broadening progress 0-1
-   */
+  /** Update camera broadening - attention slowly widens away from connection. */
   updateCameraBroaden(progress) {
     if (!this.universe) return;
     this.cameraBroadenProgress = progress;
@@ -325,10 +300,7 @@ export class Scene004_Ripple {
     cam.setTarget(targetX * factor, targetY * factor);
   }
 
-  /**
-   * Emit an audio event (muted but registered for future playback).
-   * @param {string} eventName - Event identifier
-   */
+  /** Emit an audio event (muted but registered for future playback). */
   emitAudioEvent(eventName) {
     if (this.audioArchitecture) {
       this.audioArchitecture.emit(eventName);
@@ -338,16 +310,10 @@ export class Scene004_Ripple {
   /** Mark the scene as completed. */
   markCompleted() { this.completed = true; }
 
-  /**
-   * Check if the scene has completed its timeline.
-   * @returns {boolean}
-   */
+  /** @returns {boolean} Whether the scene timeline has completed. */
   isCompleted() { return this.completed; }
 
-  /**
-   * Leave the scene - deactivate systems.
-   * @returns {Promise<void>}
-   */
+  /** Leave the scene - deactivate systems. */
   async leave() {
     this.state = SCENE_STATES.LEAVING;
     this.destroySubsystems();
@@ -360,9 +326,7 @@ export class Scene004_Ripple {
     this.state = SCENE_STATES.CLEANUP;
   }
 
-  /**
-   * Destroy all subsystems.
-   */
+  /** Destroy all subsystems. */
   destroySubsystems() {
     if (this.director) { this.director.destroy(); this.director = null; }
     if (this.behaviorSystem) { this.behaviorSystem.destroy(); this.behaviorSystem = null; }
@@ -370,12 +334,11 @@ export class Scene004_Ripple {
     if (this.ripplePropagation) { this.ripplePropagation.destroy(); this.ripplePropagation = null; }
     if (this.curiosityBehavior) { this.curiosityBehavior.destroy(); this.curiosityBehavior = null; }
     if (this.synchronizationSystem) { this.synchronizationSystem.destroy(); this.synchronizationSystem = null; }
+    if (this.connectionRenderer) { this.connectionRenderer.destroy(); this.connectionRenderer = null; }
     if (this.audioArchitecture) { this.audioArchitecture.destroy(); this.audioArchitecture = null; }
   }
 
-  /**
-   * Destroy the scene and release all references.
-   */
+  /** Destroy the scene and release all references. */
   destroy() {
     this.destroySubsystems();
     this.universe = null;
