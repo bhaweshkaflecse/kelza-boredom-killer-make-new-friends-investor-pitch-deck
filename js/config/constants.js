@@ -199,7 +199,22 @@ export const TIMELINE_CHAPTERS = Object.freeze({
   DISCOVERY: 'discovery',
   CONNECTION: 'connection',
   RIPPLE: 'ripple',
+  NETWORK: 'network',
   COMMUNITY: 'community'
+});
+
+export const NETWORK_STATES = Object.freeze({
+  SEED: 'seed',
+  GROWING: 'growing',
+  STABLE: 'stable',
+  EXPANDING: 'expanding'
+});
+
+export const NEIGHBORHOOD_STATES = Object.freeze({
+  FORMING: 'forming',
+  ALIGNED: 'aligned',
+  COORDINATED: 'coordinated',
+  DISPERSING: 'dispersing'
 });
 
 export const INFLUENCE_TYPES = Object.freeze({

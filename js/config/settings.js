@@ -281,5 +281,51 @@ export const settings = Object.freeze({
       clusterBias: 0.15,
       biasSpeed: 0.5
     })
+  }),
+
+  scene005: Object.freeze({
+    network: Object.freeze({
+      maxNodes: 64,
+      maxEdges: 128,
+      influenceDecay: 0.995,
+      edgeFormationThreshold: 0.15,
+      edgeMaxAge: 30
+    }),
+    neighborhood: Object.freeze({
+      maxNeighborhoods: 4,
+      alignmentRadius: 80,
+      coordinationThreshold: 0.3,
+      disperseTimeout: 8,
+      updateInterval: 12
+    }),
+    constellationHints: Object.freeze({
+      maxFilaments: 4,
+      avgVisible: 2,
+      maxOpacity: 0.07,
+      fadeInDuration: 2.0,
+      fadeOutDuration: 1.5,
+      minLifetime: 3,
+      maxLifetime: 6,
+      spawnInterval: 4,
+      seed: 739
+    }),
+    phases: Object.freeze({
+      isolation: Object.freeze({ start: 0, duration: 5 }),
+      influence: Object.freeze({ start: 5, duration: 7 }),
+      alignment: Object.freeze({ start: 12, duration: 6 }),
+      neighborhood: Object.freeze({ start: 18, duration: 7 }),
+      possibility: Object.freeze({ start: 25, duration: 5 })
+    }),
+    environment: Object.freeze({
+      warmthIncrease: 0.03,
+      fogBreathSpeedMult: 1.2,
+      densityLift: 0.03
+    }),
+    camera: Object.freeze({
+      broadenSpeed: 0.2,
+      patternTrackWeight: 0.05,
+      maxBroadenRadius: 6,
+      reducedMotionFactor: 0.2
+    })
   })
 });

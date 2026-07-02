@@ -1,0 +1,29 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Wire Scene005 into Engine.js: add initScene005(), transitionToScene005(), and Scene004->005 completion-based transition. Verify full integration.",
+  "status": "pending",
+  "steps": [
+    "In js/engine/Engine.js: Add import for Scene005_LivingNetwork from '../scenes/Scene005_LivingNetwork.js'.",
+    "Add instance properties in constructor: this.scene005Registered = false, this.scene005Instance = null.",
+    "Add initScene005() method following the exact pattern of initScene004(): create Scene005_LivingNetwork instance, call setUniverse(this.universe), register with sceneManager, store as this.scene005Instance, set this.scene005Registered = true.",
+    "Call this.initScene005() in the init() method after this.initScene004().",
+    "Add transitionToScene005() async method: set scene005Registered = false, get sceneManager. If connectionDataForScene004 exists, pass it to scene005Instance via setConnectionData(). If scene004Instance has any additional data to pass (like current influence state), capture it. Then await sceneManager.loadScene('scene005_livingNetwork'), await sceneManager.enterScene('scene005_livingNetwork').",
+    "In checkSceneTransition(): Add a new block after the Scene003->004 transition block. Pattern: if (this.scene005Registered && sceneManager.currentScene === 'scene004_ripple') { if (this.scene004Instance && this.scene004Instance.isCompleted()) { this.transitionToScene005(); } }.",
+    "Verify the complete transition chain: Scene004's markCompleted() (called by Phase5 Hope onLeave) triggers isCompleted() === true, which triggers checkSceneTransition to call transitionToScene005()."
+  ],
+  "acceptance_criteria": [
+    "Engine.js passes node --check syntax validation",
+    "Engine.js imports Scene005_LivingNetwork",
+    "initScene005() follows the exact pattern of initScene004()",
+    "transitionToScene005() passes connection data to scene005",
+    "checkSceneTransition has Scene004->005 completion-based transition block",
+    "No function in Engine.js exceeds 60 lines"
+  ],
+  "verification": [
+    "Run NODE_OPTIONS='' node --check js/engine/Engine.js",
+    "Verify the import path resolves correctly by checking file existence"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

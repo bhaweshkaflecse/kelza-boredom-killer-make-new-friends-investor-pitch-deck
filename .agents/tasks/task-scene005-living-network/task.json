@@ -1,0 +1,7 @@
+{
+  "task_id": "task-scene005-living-network",
+  "task_description": "Implement Scene005 Living Network - emergent relationship systems, invisible influence graph, neighborhood formation, constellation hints (max 4 faint temporary filaments), and Engine.js integration with Scene004->005 transition",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001", "FEAT-002"],
+  "blocked_reason": null
+}
