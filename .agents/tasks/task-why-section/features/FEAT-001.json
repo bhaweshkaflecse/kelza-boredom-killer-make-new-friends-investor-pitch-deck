@@ -2,7 +2,7 @@
   "id": "FEAT-001",
   "type": "feat",
   "description": "Implement the 'Why the world needs Kelza' section: HTML structure in index.html, CSS stylesheet (why-section.css imported in main.css), and JavaScript controller (WhySection.js) with IntersectionObserver-driven scroll reveals. Content covers: The Reality (loneliness/isolation stats), Platform Comparison (dating apps, social media, messaging, communities), Why Now (AI maturity, remote work, rising loneliness), and Bridge sentence to Meet Kelza.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Add semantic HTML section with id='why-section' inside <main> in index.html, after the insight-section. Structure: full-width opening statement (h2 + paragraph with loneliness stats), three-column problem grid (loneliness, superficial connections, fragmented communities), platform comparison (4-column grid: Dating Apps, Social Media, Messaging Apps, Communities - each with category name, arrow, optimization focus), Why Now section (grid of factors: AI maturity, Remote Work, Rising Loneliness, Digital Communities, Creator Economy, Global Connectivity), and bridge sentence. Use proper heading hierarchy (h2 for section, h3 for subsections). All content in placeholder brackets where real data would go.",
     "Create css/why-section.css following insight.css pattern: section hidden by default (opacity 0, transform translateY), revealed via .why-section--visible class toggle. Style sub-elements with progressive reveal delays using .why-section__element--revealed class. Use CSS Grid for platform comparison (4 columns desktop, 2 tablet, 1 mobile). Use CSS Grid for Why Now factors. Editorial typography with generous whitespace. All values from variables.css tokens. Include @media (prefers-reduced-motion: reduce) to disable animations.",
@@ -31,5 +31,5 @@
     "Count lines in WhySection.js to confirm <400 lines total and no function >60 lines"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All acceptance criteria met. JS syntax validates clean. No hardcoded colors or px values in CSS (only breakpoint media queries use px, which is standard). CSS is 342 lines, JS is 103 lines, both well within limits. IntersectionObserver uses data-reveal attribute on child divs for progressive reveal targeting."
 }
