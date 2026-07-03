@@ -2,7 +2,7 @@
   "id": "FEAT-001",
   "type": "feat",
   "description": "Implement The Insight transition: after Scene011 completes, bridge cinematic canvas to DOM-based product experience with a single premium editorial statement",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "1. Add insight section HTML to index.html: inside <main id='main-content'>, add <section id='insight-section' class='insight-section' aria-label='Core insight'> containing a single <p class='insight-statement'>[Core Insight Statement]</p>. Initially hidden via CSS (opacity: 0).",
     "2. Create css/insight.css with premium editorial styling: .insight-section is full viewport height, flexbox centered both axes, z-index above canvas (use --z-above or higher), position: relative. .insight-statement uses clamp() for responsive sizing (from --font-size-4xl to --font-size-8xl), --font-weight-light (300), --color-text-primary, --line-height-tight, --letter-spacing-tight, generous max-width (~20ch), text-align center. Opacity/transform transition for reveal: opacity 0 -> 1 with translateY(8px) -> 0 over ~2s ease-out. @media (prefers-reduced-motion: reduce) removes animation, text simply visible. Transition triggered by adding .insight-section--visible class.",
@@ -31,5 +31,5 @@
     "Verify HTML well-formedness with node -e to parse index.html"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All JS files pass node --check syntax validation. HTML well-formedness verified. InsightTransition reduces particle motion via per-particle vx/vy damping over 2s with cubic ease-out. ScrollManager locked during cinematic in init(), unlocked by InsightTransition after text settles. Reduced motion path skips all delays and immediately reveals text + unlocks scroll. No new animation engine. Universe canvas persists as quiet backdrop via skipEnvironmentTeardown on Scene011."
 }
