@@ -105,27 +105,27 @@
 
 /* Subtle visual differentiation for maturity stages */
 .status__column--built {
-  border-color: rgba(16, 185, 129, 0.2);
+  border-color: var(--color-glass-success);
 }
 
 .status__column--built:hover {
-  border-color: rgba(16, 185, 129, 0.4);
+  border-color: var(--color-success);
 }
 
 .status__column--building {
-  border-color: rgba(99, 102, 241, 0.2);
+  border-color: var(--color-glass-brand-medium);
 }
 
 .status__column--building:hover {
-  border-color: rgba(99, 102, 241, 0.4);
+  border-color: var(--color-glow-primary);
 }
 
 .status__column--future {
-  border-color: rgba(6, 182, 212, 0.2);
+  border-color: var(--color-glass-brand);
 }
 
 .status__column--future:hover {
-  border-color: rgba(6, 182, 212, 0.4);
+  border-color: var(--color-glow-secondary);
 }
 
 /* ========================================
