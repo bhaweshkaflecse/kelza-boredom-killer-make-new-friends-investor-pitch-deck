@@ -9,6 +9,7 @@ import { MeetKelzaSection } from './sections/MeetKelzaSection.js';
 import { WhatIsKelzaSection } from './sections/WhatIsKelzaSection.js';
 import { ProductWalkthrough } from './sections/ProductWalkthrough.js';
 import { RetentionSection } from './sections/RetentionSection.js';
+import { BusinessSection } from './sections/BusinessSection.js';
 import '../css/main.css';
 
 const engine = new Engine();
@@ -30,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const retentionSection = new RetentionSection();
   retentionSection.reveal();
+
+  const businessSection = new BusinessSection();
+  businessSection.reveal();
 });
 
 export { engine };

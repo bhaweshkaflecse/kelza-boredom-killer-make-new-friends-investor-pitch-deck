@@ -1,0 +1,32 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement the full Business section (investor question 7) with 5 sub-parts: Product-to-Platform evolution, Revenue Philosophy, Network Effects flywheel SVG, Defensibility, and Transition bridge. Create css/business.css, js/sections/BusinessSection.js, add HTML section after retention-section in index.html, wire up imports in css/main.css and js/app.js.",
+  "status": "in_progress",
+  "steps": [
+    "Create css/business.css with BEM-named styles for the business section. Include: .business-section base with --visible modifier, .business__container, Part 1 (.business__evolution) with vertical progression using CSS grid for the User->Connections->Communities->Creators->Marketplace->Revenue->Network Effects flow, Part 2 (.business__revenue) revenue philosophy with CSS grid pillars showing the 7 revenue concepts as an ecosystem, Part 3 (.business__flywheel) network effects with inline SVG circular/loop visualization, Part 4 (.business__defensibility) accumulated value concepts, Part 5 (.business__bridge) transition text. Use design tokens from variables.css. Include responsive breakpoints at 768px and 1024px. Include reduced-motion media query. Use opacity/transform transitions with --revealed class pattern matching retention.css.",
+    "Create js/sections/BusinessSection.js following the exact pattern of RetentionSection.js: constructor gets element by ID 'business-section', _setupObserver using IntersectionObserver on [data-reveal] children, reveal/hide/destroy lifecycle methods, adds 'business--visible' class on reveal, removes aria-hidden, progressive child reveals with 'business__element--revealed' class. Keep class under 400 lines, no function over 60 lines.",
+    "Add the business section HTML in index.html AFTER the closing </section> of retention-section and BEFORE </main>. Use id='business-section', class='business-section', aria-label='Why Kelza is a great business', aria-hidden='true'. Include all 5 sub-parts with data-reveal attributes on each. Part 1: vertical progression showing platform evolution stages. Part 2: revenue philosophy ecosystem with 7 pillars (creator subs, marketplace transactions, event ticketing, digital products, premium experiences, brand partnerships, enterprise). Part 3: inline SVG flywheel showing network effects cycle (New Users -> More Communities -> More Conversations -> More Creators -> More Marketplace Activity -> Better AI Recommendations -> Greater User Value -> loops back). Part 4: defensibility concepts (trust graph, community graph, relationship history, AI learning, creator ecosystem, marketplace liquidity). Part 5: bridge text placeholder '[Now let us look at how large this opportunity can become.]'. ALL COPY MUST BE PLACEHOLDER - wrapped in square brackets.",
+    "Add '@import ./business.css;' to css/main.css after the '@import ./retention.css;' line.",
+    "In js/app.js, add import for BusinessSection from './sections/BusinessSection.js' and instantiate it with .reveal() call after retentionSection.reveal(), following the same pattern as existing sections."
+  ],
+  "acceptance_criteria": [
+    "css/business.css exists with BEM naming, design tokens, responsive breakpoints (768px, 1024px), and reduced-motion support",
+    "js/sections/BusinessSection.js exists with reveal/hide/destroy methods, IntersectionObserver setup, class under 400 lines",
+    "index.html contains section#business-section after retention-section with all 5 sub-parts, data-reveal attributes, semantic headings, aria-label, and placeholder copy in square brackets",
+    "css/main.css imports business.css after retention.css",
+    "js/app.js imports and instantiates BusinessSection with .reveal() call",
+    "SVG flywheel is inline, accessible (has aria-label), and shows circular network effects loop",
+    "No Canvas, no Three.js, no heavy animation libraries used",
+    "All copy is placeholder (in square brackets), no invented financial numbers or projections"
+  ],
+  "verification": [
+    "Run 'NODE_OPTIONS=\"\" node --check js/sections/BusinessSection.js' to validate JS syntax",
+    "Grep index.html for 'business-section' to confirm section exists",
+    "Grep css/main.css for 'business.css' to confirm import exists",
+    "Grep js/app.js for 'BusinessSection' to confirm import and instantiation",
+    "Verify no references to Canvas, Three.js, or heavy animation libraries in new files"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
