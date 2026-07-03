@@ -11,8 +11,6 @@ export class WhySection {
     this.visible = false;
     this.observer = null;
     this.revealTargets = [];
-
-    this._setupObserver();
   }
 
   /**
@@ -66,6 +64,7 @@ export class WhySection {
     this.element.removeAttribute('aria-hidden');
     this.element.classList.add('why-section--visible');
     this.visible = true;
+    this._setupObserver();
   }
 
   /**
