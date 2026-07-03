@@ -268,7 +268,7 @@
 
 .business__flywheel-svg text {
   font-family: var(--font-family-primary);
-  font-size: 11px;
+  font-size: 9px;
   fill: var(--color-text-secondary);
 }
 
@@ -450,6 +450,10 @@
 
   .business__revenue-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .business__revenue-grid .business__revenue-pillar:last-child {
+    grid-column: 2;
   }
 
   .business__flywheel-svg {
