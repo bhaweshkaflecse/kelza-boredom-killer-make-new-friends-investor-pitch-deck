@@ -1,0 +1,36 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement the 'Why Now' investor section (section 8) with all five converging shifts, convergence statement, and bridge sentence. Create css/why-now.css, js/sections/WhyNowSection.js, add HTML to index.html after business-section, wire up in css/main.css and js/app.js.",
+  "status": "completed",
+  "steps": [
+    "Create css/why-now.css following the exact pattern from css/business.css: BEM naming with 'why-now' block, --visible modifier class for section reveal, data-reveal child elements with progressive reveal via 'why-now__element--revealed' class, opacity/transform transitions, responsive breakpoints at 768px and 1024px, reduced motion media query. Use only design tokens from variables.css.",
+    "Create js/sections/WhyNowSection.js following the exact pattern from js/sections/BusinessSection.js: class with constructor (getElementById 'why-now-section'), _setupObserver() using IntersectionObserver on [data-reveal] children, _handleIntersections() adding 'why-now__element--revealed' class, reveal()/hide()/isVisible()/destroy() methods. Keep functions under 60 lines, class under 400 lines.",
+    "Add HTML section to index.html AFTER the closing </section> of business-section and BEFORE </main>. Section id='why-now-section', aria-label, aria-hidden='true'. Structure: container div, sr-only h2, then 5 shift subsections + convergence + bridge. Each subsection uses data-reveal. Content is ALL PLACEHOLDER COPY in brackets. The 5 shifts are: Society Changed, Technology Changed, Creator Economy Changed, Human Expectations Changed, The Convergence. End with bridge text: '[Now let's understand how large this opportunity can become.]'",
+    "Add @import './why-now.css'; to css/main.css after the @import './business.css'; line.",
+    "In js/app.js: import { WhyNowSection } from './sections/WhyNowSection.js'; and inside DOMContentLoaded after businessSection.reveal(), add: const whyNowSection = new WhyNowSection(); whyNowSection.reveal();"
+  ],
+  "acceptance_criteria": [
+    "css/why-now.css exists with BEM classes, design tokens, responsive breakpoints, reduced motion support",
+    "js/sections/WhyNowSection.js exists with reveal/hide/destroy pattern matching BusinessSection.js",
+    "index.html contains section#why-now-section after business-section with all 5 shifts, convergence, and bridge",
+    "All HTML text content is placeholder copy in square brackets - no real statistics or market data",
+    "css/main.css imports why-now.css after business.css",
+    "js/app.js imports and instantiates WhyNowSection with reveal() call",
+    "HTML uses semantic headings (h2 sr-only, h3 for subsections), aria attributes, data-reveal",
+    "No Canvas, Three.js, or heavy animation frameworks used",
+    "CSS uses CSS Grid for layout where appropriate",
+    "Bridge sentence is exactly: '[Now let's understand how large this opportunity can become.]'"
+  ],
+  "verification": [
+    "Confirm css/why-now.css exists and contains .why-now-section, .why-now--visible, @media (prefers-reduced-motion: reduce)",
+    "Confirm js/sections/WhyNowSection.js exists and exports WhyNowSection class with reveal/hide/destroy methods",
+    "Confirm index.html has section#why-now-section with data-reveal attributes and all 5 shift subsections",
+    "Confirm css/main.css has @import './why-now.css' after business.css import",
+    "Confirm js/app.js imports WhyNowSection and calls reveal()",
+    "Run NODE_OPTIONS='' node --check js/sections/WhyNowSection.js to validate JS syntax (will fail on import but no parse errors)",
+    "Grep index.html for the bridge text to confirm it is present"
+  ],
+  "blocked_reason": null,
+  "findings": "All files created and wired up successfully. JS syntax passes node --check. HTML section inserted at line 859 (after business-section closing tag, before </main>). Bridge text exact match confirmed. BEM naming, data-reveal attributes, aria attributes, sr-only heading, and responsive/reduced-motion CSS all implemented per pattern."
+}

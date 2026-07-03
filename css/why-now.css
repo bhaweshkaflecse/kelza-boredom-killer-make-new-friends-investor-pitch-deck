@@ -1,0 +1,276 @@
+/**
+ * Why Now Section Styles
+ * Five converging shifts establishing timing: society, technology,
+ * creator economy, human expectations, and convergence.
+ * Triggered by .why-now--visible class toggle.
+ * Child elements revealed progressively via .why-now__element--revealed.
+ */
+
+.why-now-section {
+  position: relative;
+  z-index: var(--z-above);
+  padding: var(--space-24) var(--space-8);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slowest) var(--ease-out),
+    transform var(--duration-slowest) var(--ease-out);
+}
+
+.why-now--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Container
+ * ======================================== */
+.why-now__container {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Section Intro
+ * ======================================== */
+.why-now__intro {
+  text-align: center;
+  margin-bottom: var(--space-24);
+  padding: var(--space-12) 0;
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.why-now__element--revealed.why-now__intro {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.why-now__intro-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 0.5rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-4);
+}
+
+.why-now__intro-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: var(--container-sm);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Shift Block (shared styles for all 5 shifts)
+ * ======================================== */
+.why-now__shift {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-fast);
+}
+
+.why-now__element--revealed.why-now__shift {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.why-now__shift-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-xl), 2.5vw + 0.5rem, var(--font-size-3xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.why-now__shift-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: var(--container-sm);
+  margin: 0 auto var(--space-12);
+  line-height: var(--line-height-relaxed);
+}
+
+.why-now__shift-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  max-width: var(--container-lg);
+  margin: 0 auto;
+}
+
+.why-now__shift-item {
+  padding: var(--space-6);
+  background-color: var(--color-surface-primary);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--duration-normal) var(--ease-out);
+}
+
+.why-now__shift-item:hover {
+  border-color: var(--border-color-hover);
+}
+
+.why-now__shift-item-title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.why-now__shift-item-text {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Convergence
+ * ======================================== */
+.why-now__convergence {
+  text-align: center;
+  margin-bottom: var(--space-16);
+  padding: var(--space-12) 0;
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-fast);
+}
+
+.why-now__element--revealed.why-now__convergence {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.why-now__convergence-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-xl), 2.5vw + 0.5rem, var(--font-size-3xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-8);
+}
+
+.why-now__convergence-statement {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-lg), 2vw + 0.5rem, var(--font-size-2xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: var(--container-sm);
+  margin: 0 auto;
+}
+
+.why-now__convergence-emphasis {
+  display: block;
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 0.5rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-top: var(--space-6);
+}
+
+/* ========================================
+ * Bridge / Transition
+ * ======================================== */
+.why-now__bridge {
+  text-align: center;
+  padding-top: var(--space-16);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-slower);
+}
+
+.why-now__element--revealed.why-now__bridge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.why-now__bridge-text {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 1rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* ========================================
+ * Responsive Breakpoints
+ * ======================================== */
+@media (min-width: 768px) {
+  .why-now-section {
+    padding: var(--space-32) var(--space-12);
+  }
+
+  .why-now__intro {
+    margin-bottom: var(--space-32);
+    padding: var(--space-16) 0;
+  }
+
+  .why-now__shift {
+    margin-bottom: var(--space-32);
+  }
+
+  .why-now__shift-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .why-now__convergence {
+    padding: var(--space-16) 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .why-now-section {
+    padding: var(--space-40) var(--space-16);
+  }
+
+  .why-now__intro-heading {
+    font-size: clamp(var(--font-size-3xl), 3vw + 0.5rem, var(--font-size-5xl));
+  }
+
+}
+
+/* ========================================
+ * Reduced Motion
+ * ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .why-now-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .why-now__intro,
+  .why-now__shift,
+  .why-now__convergence,
+  .why-now__bridge {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
