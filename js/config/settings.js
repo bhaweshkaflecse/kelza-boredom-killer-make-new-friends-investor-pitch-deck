@@ -502,5 +502,37 @@ export const settings = Object.freeze({
       warmthTarget: 0.09,
       consistencyRate: 0.01
     })
+  }),
+
+  scene010: Object.freeze({
+    arrival: Object.freeze({
+      speed: 0.00015,
+      settlingDuration: 6,
+      compressionRate: 0.02,
+      reducedMotionFactor: 0.3
+    }),
+    phases: Object.freeze({
+      approach: Object.freeze({ start: 0, duration: 9 }),
+      presence: Object.freeze({ start: 9, duration: 9 }),
+      stillness: Object.freeze({ start: 18, duration: 9 }),
+      anticipation: Object.freeze({ start: 27, duration: 9 }),
+      arrival: Object.freeze({ start: 36, duration: 9 })
+    }),
+    environment: Object.freeze({
+      driftReduction: 0.85,
+      particleDamping: 0.4,
+      ambientFade: 0.5,
+      focusEnhancement: 0.6,
+      compressionTarget: 0.7
+    }),
+    lighting: Object.freeze({
+      warmthTarget: 0.12,
+      presenceGlow: 0.04
+    }),
+    connection: Object.freeze({
+      breathDepth: 0.3,
+      microVariation: 0.008,
+      meaningfulnessRate: 0.02
+    })
   })
 });

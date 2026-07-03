@@ -25,6 +25,7 @@ import { Scene006_Recognition } from '../scenes/Scene006_Recognition.js';
 import { Scene007_Memory } from '../scenes/Scene007_Memory.js';
 import { Scene008_Revelation } from '../scenes/Scene008_Revelation.js';
 import { Scene009_Descent } from '../scenes/Scene009_Descent.js';
+import { Scene010_Arrival } from '../scenes/Scene010_Arrival.js';
 
 export class Engine {
   constructor() {
@@ -54,6 +55,8 @@ export class Engine {
     this.scene008Instance = null;
     this.scene009Registered = false;
     this.scene009Instance = null;
+    this.scene010Registered = false;
+    this.scene010Instance = null;
     this.connectionDataForScene004 = null;
   }
 
@@ -91,6 +94,7 @@ export class Engine {
     this.initScene007();
     this.initScene008();
     this.initScene009();
+    this.initScene010();
     this.state = MANAGER_STATES.READY;
   }
 
@@ -297,6 +301,13 @@ export class Engine {
     if (this.scene009Registered && sceneManager.currentScene === 'scene008_revelation') {
       if (this.scene008Instance && this.scene008Instance.isCompleted()) {
         this.transitionToScene009();
+      }
+    }
+
+    // Scene009 -> Scene010 transition (completion-based)
+    if (this.scene010Registered && sceneManager.currentScene === 'scene009_descent') {
+      if (this.scene009Instance && this.scene009Instance.isCompleted()) {
+        this.transitionToScene010();
       }
     }
   }
@@ -552,6 +563,44 @@ export class Engine {
 
     await sceneManager.loadScene('scene009_descent');
     await sceneManager.enterScene('scene009_descent');
+  }
+
+  /**
+   * Register Scene010_Arrival for later transition.
+   */
+  initScene010() {
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    const scene = new Scene010_Arrival();
+    scene.setUniverse(this.universe);
+    sceneManager.registerScene(scene.getId(), scene);
+    this.scene010Instance = scene;
+    this.scene010Registered = true;
+  }
+
+  /**
+   * Transition from Scene009 to Scene010.
+   * Passes the persistent connection data forward.
+   */
+  async transitionToScene010() {
+    this.scene010Registered = false;
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    // Pass connection data to Scene010 (same persistent connection)
+    if (this.connectionDataForScene004 && this.scene010Instance) {
+      const cd = this.connectionDataForScene004;
+      this.scene010Instance.setConnectionData(cd.midX, cd.midY, cd.indexA, cd.indexB);
+    }
+
+    // Prevent frame-gap flash: tell Scene009 to skip environment teardown
+    if (this.scene009Instance) {
+      this.scene009Instance.skipEnvironmentTeardown = true;
+    }
+
+    await sceneManager.loadScene('scene010_arrival');
+    await sceneManager.enterScene('scene010_arrival');
   }
 
   /**

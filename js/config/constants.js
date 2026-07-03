@@ -270,3 +270,11 @@ export const JOURNEY_STATES = Object.freeze({
   JOURNEY: 'journey',
   APPROACH: 'approach'
 });
+
+export const ARRIVAL_STATES = Object.freeze({
+  APPROACH: 'approach',
+  PRESENCE: 'presence',
+  STILLNESS: 'stillness',
+  ANTICIPATION: 'anticipation',
+  ARRIVAL: 'arrival'
+});
