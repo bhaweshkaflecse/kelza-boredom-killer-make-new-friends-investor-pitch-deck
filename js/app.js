@@ -12,6 +12,7 @@ import { RetentionSection } from './sections/RetentionSection.js';
 import { BusinessSection } from './sections/BusinessSection.js';
 import { WhyNowSection } from './sections/WhyNowSection.js';
 import { CompetitiveSection } from './sections/CompetitiveSection.js';
+import { StatusSection } from './sections/StatusSection.js';
 import '../css/main.css';
 
 const engine = new Engine();
@@ -42,6 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const competitiveSection = new CompetitiveSection();
   competitiveSection.reveal();
+
+  const statusSection = new StatusSection();
+  statusSection.reveal();
 });
 
 export { engine };

@@ -1,0 +1,31 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement the 'What Exists Today' section (investor question 10) as a three-column maturity model showing Already Built, Currently Building, and Future Vision. This section goes after competitive-section in index.html.",
+  "status": "in_progress",
+  "steps": [
+    "Create css/status.css following the BEM pattern from css/competitive.css. The section uses class prefix 'status'. Include: .status-section (hidden by default, revealed via .status--visible), .status__container (max-width: --container-xl, margin auto), .status__intro with heading and description (data-reveal), .status__columns as a CSS Grid (1 column mobile, 3 columns at 1024px), three .status__column cards each with .status__column-header (heading + a subtle label like 'Completed'/'In Progress'/'Planned'), .status__column-items list, .status__item elements within each column. Add a .status__bridge at the bottom for the transition text. All child elements use opacity:0 + translateY with transition, revealed via .status__element--revealed. Include responsive breakpoints at 768px (2-column grid) and 1024px (3-column grid). Include reduced motion media query. Use design tokens from variables.css exclusively - no hardcoded values.",
+    "Create js/sections/StatusSection.js following the exact pattern from js/sections/CompetitiveSection.js. The class should: get element by id 'status-section', set up IntersectionObserver for [data-reveal] children, add 'status__element--revealed' class on intersection, implement reveal() (removes aria-hidden, adds status--visible, sets up observer), hide() (adds aria-hidden, removes status--visible, disconnects observer, removes revealed classes), isVisible(), destroy(). Keep methods under 60 lines, class under 400 lines.",
+    "Add the HTML section in index.html AFTER the closing </section> of competitive-section and BEFORE </main>. The section has id='status-section', class='status-section', aria-label='What exists today - current development status', aria-hidden='true'. Structure: intro with heading '[What Exists Today]' and description about transparency. Three columns: Column 1 'Already Built' with items: Product architecture, Design system, Technical foundation, Interactive investor experience, Research, AI exploration, MVP planning. Column 2 'Currently Building' with items: Consumer app, Creator app, Admin platform, Backend, AI Matching V1, Trust & Safety, Marketplace foundation. Column 3 'Future Vision' with items: Live Rooms, Creator monetization, AI Companion, Events, Multi-country expansion, Enterprise opportunities. Bridge text: '[Now let's look at where we're going next.]'. All content wrapped in brackets as placeholders per project convention.",
+    "Add @import './status.css'; in css/main.css after the @import './competitive.css'; line.",
+    "Add import { StatusSection } from './sections/StatusSection.js'; in js/app.js after the CompetitiveSection import. Add instantiation: const statusSection = new StatusSection(); statusSection.reveal(); after the competitiveSection.reveal(); call."
+  ],
+  "acceptance_criteria": [
+    "css/status.css exists with BEM-named classes, uses only design tokens, includes responsive breakpoints and reduced-motion support",
+    "js/sections/StatusSection.js exists with reveal/hide/destroy lifecycle, IntersectionObserver setup, no function >60 lines, no class >400 lines",
+    "index.html contains status-section after competitive-section with three columns of items matching the task specification",
+    "css/main.css imports status.css after competitive.css",
+    "js/app.js imports and instantiates StatusSection after CompetitiveSection",
+    "Bridge text reads '[Now let's look at where we're going next.]'",
+    "No fake checkmarks or inflated claims - items are presented as honest placeholders",
+    "Section is accessible with proper aria attributes"
+  ],
+  "verification": [
+    "Run node --check js/sections/StatusSection.js to validate JS syntax",
+    "Confirm status-section appears after competitive-section in index.html via grep",
+    "Confirm main.css has the status.css import after competitive.css",
+    "Confirm app.js has StatusSection import and instantiation"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
