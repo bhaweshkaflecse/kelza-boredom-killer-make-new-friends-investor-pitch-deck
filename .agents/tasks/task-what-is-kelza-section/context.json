@@ -1,0 +1,23 @@
+{
+  "project_type": "Investor pitch deck - static HTML/CSS/JS single page",
+  "language": "HTML, CSS, JavaScript (ES Modules)",
+  "build_system": "Vite (vite.config.js) - but npm registry blocked, so no npm install",
+  "test_framework": "None - no test files found",
+  "build_command": "Not available (npm registry blocked, INTEGRATIONS_ONLY network)",
+  "test_command": "Not available",
+  "verification_instructions": "Validate via manual file review and AST/grep checks. Confirm HTML structure is valid, JS follows existing patterns, CSS uses design tokens exclusively.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed - just edit files directly. No npm install available.",
+  "environment_constraints": "INTEGRATIONS_ONLY network - npm registry blocked. Cannot run npm install, npm build, or any network-dependent commands. Use NODE_OPTIONS='' prefix for any node commands. Validation is file-based only.",
+  "contribution_requirements": "BEM CSS naming, design tokens from variables.css, IntersectionObserver for scroll reveals, mobile-first responsive design, reduced motion support, semantic HTML, aria attributes, no function >60 lines, no class >400 lines",
+  "key_patterns": "Section controllers: constructor grabs element by ID, reveal() adds --visible class + removes aria-hidden + sets up IntersectionObserver, hide() reverses, destroy() disconnects observer. CSS: section hidden by default (opacity:0, transform), --visible class reveals it. Child elements use [data-reveal] attribute + __element--revealed class for progressive reveals. app.js imports controllers and calls reveal() on DOMContentLoaded.",
+  "relevant_files": [
+    "index.html",
+    "css/main.css",
+    "css/meet-kelza.css",
+    "css/variables.css",
+    "js/app.js",
+    "js/sections/MeetKelzaSection.js"
+  ],
+  "directory_structure": "Root: index.html, css/ (main.css imports all modules), js/ (app.js entry, sections/ for controllers), assets/, data/, docs/, public/"
+}

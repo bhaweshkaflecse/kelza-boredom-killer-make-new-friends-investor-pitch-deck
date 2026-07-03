@@ -1,0 +1,40 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement the 'What is Kelza' section (section 4) with all four parts: core definition, three pillars, ecosystem summary, and bridge to Live Product Experience.",
+  "status": "completed",
+  "steps": [
+    "Create css/what-is-kelza.css following the BEM pattern from css/meet-kelza.css. Include: base section hidden by default (opacity:0, transform), --visible class to reveal, __element--revealed for progressive child reveals, editorial typography using design tokens, a three-column CSS Grid for pillars (collapses to 1-col mobile), generous whitespace/padding, responsive breakpoints at 640px/768px/1024px, reduced motion media query, all colors/spacing/typography from variables.css only.",
+    "Add @import './what-is-kelza.css'; to css/main.css after the meet-kelza.css import.",
+    "Add the new <section id='what-is-kelza-section'> in index.html AFTER the closing </section> of meet-kelza-section and BEFORE </main>. Content structure: Part 1 - one large centered placeholder statement '[One-sentence definition of Kelza]' with premium display typography. Part 2 - three-column grid with three pillars: '[Discover meaningful people.]', '[Build trusted relationships.]', '[Grow through communities.]' - each pillar has a concept heading and brief placeholder description. Part 3 - a text-based ecosystem summary (2-3 sentences explaining how the 9 modules work together as one platform, referencing but NOT duplicating the SVG from meet-kelza-section). Part 4 - bridge sentence '[Now let us experience how Kelza works.]' that transitions to the next section. Use semantic HTML with proper heading hierarchy (h2 for section title, h3 for subsections), data-reveal attributes on child containers, aria-label on the section, aria-hidden='true' initially.",
+    "Create js/sections/WhatIsKelzaSection.js following the exact pattern from MeetKelzaSection.js: constructor gets element by ID 'what-is-kelza-section', reveal() adds 'what-is-kelza--visible' class + removes aria-hidden + sets up IntersectionObserver on [data-reveal] children, hide() reverses, destroy() disconnects observer. Use 'what-is-kelza__element--revealed' as the reveal class for children. Keep the class under 400 lines and no function over 60 lines.",
+    "Update js/app.js: import WhatIsKelzaSection from './sections/WhatIsKelzaSection.js', instantiate it, and call reveal() inside the DOMContentLoaded handler, after meetKelzaSection.reveal()."
+  ],
+  "acceptance_criteria": [
+    "index.html contains a new section with id='what-is-kelza-section' placed after meet-kelza-section",
+    "The section has four distinct parts: core definition, three pillars (grid), ecosystem summary (text only, no SVG), and bridge",
+    "css/what-is-kelza.css exists and uses only CSS custom properties from variables.css",
+    "css/main.css imports what-is-kelza.css",
+    "js/sections/WhatIsKelzaSection.js exists following the MeetKelzaSection controller pattern",
+    "js/app.js imports and instantiates WhatIsKelzaSection",
+    "All content uses placeholder text in square brackets",
+    "Three pillars use CSS Grid with responsive collapse",
+    "Reduced motion support is included",
+    "Semantic heading hierarchy is maintained (h2 then h3)",
+    "Section is intentionally short and editorial in style",
+    "No Canvas, Three.js, or heavy animations used",
+    "No ecosystem SVG duplication from meet-kelza-section"
+  ],
+  "verification": [
+    "Grep index.html for 'what-is-kelza-section' to confirm section exists",
+    "Grep index.html for 'meet-kelza-section' closing tag appears BEFORE 'what-is-kelza-section'",
+    "Confirm css/what-is-kelza.css exists and contains no hardcoded color/spacing values (only var() references)",
+    "Confirm css/main.css contains @import './what-is-kelza.css'",
+    "Confirm js/sections/WhatIsKelzaSection.js exports a class with reveal(), hide(), destroy() methods",
+    "Confirm js/app.js imports WhatIsKelzaSection",
+    "Grep what-is-kelza.css for 'prefers-reduced-motion' to confirm accessibility support",
+    "Grep index.html for 'grid' class or css for 'grid-template-columns' in what-is-kelza.css to confirm grid layout for pillars"
+  ],
+  "blocked_reason": null,
+  "findings": "Implementation complete. All verification checks pass: section placed after meet-kelza-section, CSS uses only var() references with no hardcoded values, grid-template-columns used for 3-col pillar layout, reduced motion support included, JS controller follows MeetKelzaSection pattern exactly, app.js imports and instantiates after meetKelzaSection. Node syntax check passes on the JS file."
+}

@@ -1,0 +1,14 @@
+{
+  "task_id": "task-what-is-kelza-section",
+  "task_description": "Implement investor question 4 - 'What is Kelza?' section. An intentionally short, editorial section placed after meet-kelza-section with four parts: core definition statement, three supporting pillars in a grid, ecosystem summary (text only, references ecosystem SVG), and bridge to Live Product Experience.",
+  "status": "completed",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null,
+  "verification": {
+    "build": "skipped",
+    "tests": "skipped",
+    "test_quality": "skipped",
+    "docker_build": "skipped",
+    "summary": "Build and tests skipped (INTEGRATIONS_ONLY network, no npm available). File-based validation confirms: HTML section correctly placed after meet-kelza-section, CSS uses only design token variables (zero hardcoded colors), JS controller follows MeetKelzaSection pattern with reveal/hide/destroy/IntersectionObserver, CSS Grid used for 3-column pillar layout with mobile collapse, reduced motion support present, proper aria attributes and heading hierarchy. Commit made with correct message."
+  }
+}
