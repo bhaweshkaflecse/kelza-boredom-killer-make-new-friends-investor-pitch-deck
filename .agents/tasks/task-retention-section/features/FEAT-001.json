@@ -1,0 +1,35 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement investor question 6 - retention section. Create the HTML section, CSS stylesheet, and JS controller for a 4-stage relationship progression (Connection, Trust, Community, Belonging) that continues the user story from the product walkthrough. Reuses existing walkthrough UI components.",
+  "status": "in_progress",
+  "steps": [
+    "Create css/retention.css with styles for the retention section. Use BEM naming with 'retention' block. Reuse existing walkthrough-phone, walkthrough-card, walkthrough-chat, walkthrough-chat__bubble, walkthrough-avatar, walkthrough-tag, walkthrough-trust, walkthrough-community classes from css/product-walkthrough.css. Add only new styles needed for: section-level layout (retention-section, retention--visible), stage containers (retention__stage), stage labels and headings, timeline/progression indicator between stages, bridge/transition at the end. Keep motion minimal (less than product walkthrough). Include reduced-motion media query. Include responsive breakpoints (768px, 1024px). Follow design token usage from variables.css.",
+    "Add the HTML section in index.html AFTER the closing </section> of product-walkthrough-section and BEFORE </main>. Section id='retention-section', class='retention-section', aria-label='Why users keep coming back', aria-hidden='true'. Include 4 stages each with [data-reveal]: Stage 1 'Connection' (conversation deepens - show chat history growing with Maya K., deeper topics), Stage 2 'Trust' (verification + shared activities - reuse walkthrough-trust pattern, show growing trust indicators and shared activities count increasing), Stage 3 'Community' (individual to group - reuse walkthrough-community pattern, show Alex bringing Maya to a group, new introductions through trusted connections), Stage 4 'Belonging' (long-term, part of something - show the network grown, multiple communities, Alex now introduces others). End with a bridge div transitioning to the business section. Continue using same characters: Alex (user), Maya K. (MK, indigo), Sam P. (SP, emerald), Jordan L. (JL, amber).",
+    "Create js/sections/RetentionSection.js following the exact pattern of ProductWalkthrough.js: export class RetentionSection with constructor (element = getElementById('retention-section')), _setupObserver() using IntersectionObserver with [data-reveal] targets and 'retention__element--revealed' class, _handleIntersections(), reveal(), hide(), isVisible(), destroy(). Use slightly higher threshold for less motion feel (threshold: [0, 0.15, 0.25]). No function >60 lines, no class >400 lines.",
+    "Add '@import ./retention.css;' to css/main.css AFTER the product-walkthrough.css import line.",
+    "In js/app.js: add 'import { RetentionSection } from ./sections/RetentionSection.js;' after the ProductWalkthrough import. Inside the DOMContentLoaded handler, after productWalkthrough.reveal(), add: const retentionSection = new RetentionSection(); retentionSection.reveal();",
+    "Commit all changes with message: feat(product): implement investor question 6 - why users keep coming back"
+  ],
+  "acceptance_criteria": [
+    "index.html contains section#retention-section after product-walkthrough-section with 4 stages (Connection, Trust, Community, Belonging)",
+    "css/retention.css exists with BEM-named styles, responsive breakpoints, reduced-motion query",
+    "js/sections/RetentionSection.js exists with reveal()/hide()/destroy() methods and IntersectionObserver",
+    "css/main.css imports retention.css after product-walkthrough.css",
+    "js/app.js imports and instantiates RetentionSection after ProductWalkthrough",
+    "No function exceeds 60 lines, no class exceeds 400 lines",
+    "Content focuses on relationship continuity, NOT monetization/revenue",
+    "Reuses existing walkthrough UI component classes (walkthrough-phone, walkthrough-card, walkthrough-chat, etc.)",
+    "Bridge at end transitions to business section",
+    "All stages use [data-reveal] attribute for progressive reveal",
+    "Section uses aria-label and starts with aria-hidden='true'"
+  ],
+  "verification": [
+    "Run NODE_OPTIONS='' node -e \"const fs=require('fs'); const html=fs.readFileSync('index.html','utf8'); console.log(html.includes('retention-section'));\" to confirm section exists",
+    "Run NODE_OPTIONS='' node -e \"const fs=require('fs'); const css=fs.readFileSync('css/main.css','utf8'); console.log(css.includes('retention.css'));\" to confirm CSS import",
+    "Run NODE_OPTIONS='' node -e \"const fs=require('fs'); const js=fs.readFileSync('js/app.js','utf8'); console.log(js.includes('RetentionSection'));\" to confirm JS import",
+    "Run NODE_OPTIONS='' node -e \"const fs=require('fs'); const code=fs.readFileSync('js/sections/RetentionSection.js','utf8'); const lines=code.split('\\n'); const fns=code.match(/\\b(reveal|hide|destroy|_setupObserver|_handleIntersections|isVisible|constructor)\\s*\\(/g); console.log('Methods:', fns.length >= 6 ? 'OK' : 'MISSING');\" to confirm all methods exist"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

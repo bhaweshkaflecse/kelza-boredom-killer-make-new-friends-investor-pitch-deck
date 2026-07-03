@@ -1,0 +1,23 @@
+{
+  "project_type": "Investor pitch deck - immersive web experience (single-page, scroll-driven)",
+  "language": "HTML, CSS, JavaScript (ES modules)",
+  "build_system": "Vite (but npm registry blocked - cannot install deps)",
+  "test_framework": "None (static site, no test runner)",
+  "build_command": "N/A - npm install blocked (INTEGRATIONS_ONLY network)",
+  "test_command": "N/A - AST/lint validation only",
+  "verification_instructions": "1. Validate HTML structure in index.html. 2. Verify CSS imports are correct. 3. Verify JS imports and instantiation in app.js. 4. Check no function exceeds 60 lines, no class exceeds 400 lines.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed - static files only, no npm install possible",
+  "environment_constraints": "INTEGRATIONS_ONLY network - npm registry blocked, no npm install, no Docker. Use AST validation and manual file inspection. Prefix node commands with NODE_OPTIONS=\"\".",
+  "contribution_requirements": "BEM CSS naming, dark theme, IntersectionObserver for reveals, section controllers with reveal()/hide()/destroy(), no function >60 lines, no class >400 lines, no Canvas/Three.js, reuse existing walkthrough components.",
+  "key_patterns": "Section controllers in js/sections/ with reveal()/hide()/destroy(). IntersectionObserver for progressive reveals using [data-reveal] attribute and __element--revealed class. CSS imports in css/main.css. Section instantiation in js/app.js DOMContentLoaded handler. BEM naming with double-underscore for elements, double-hyphen for modifiers. Design tokens in css/variables.css.",
+  "relevant_files": [
+    "index.html",
+    "css/main.css",
+    "css/product-walkthrough.css",
+    "css/variables.css",
+    "js/app.js",
+    "js/sections/ProductWalkthrough.js"
+  ],
+  "directory_structure": "/ - root with index.html, css/ (stylesheets), js/ (app.js entry + engine/ and sections/ directories), assets/, data/, docs/, public/"
+}

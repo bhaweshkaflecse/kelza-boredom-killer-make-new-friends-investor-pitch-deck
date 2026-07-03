@@ -1,0 +1,350 @@
+/**
+ * Retention Section Styles
+ * Why users keep coming back - 4-stage relationship progression.
+ * Triggered by .retention--visible class toggle.
+ * Child elements revealed progressively via .retention__element--revealed.
+ * Reuses walkthrough-phone, walkthrough-card, walkthrough-chat,
+ * walkthrough-avatar, walkthrough-tag, walkthrough-trust, walkthrough-community
+ * from product-walkthrough.css.
+ */
+
+.retention-section {
+  position: relative;
+  z-index: var(--z-above);
+  padding: var(--space-24) var(--space-8);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slowest) var(--ease-out),
+    transform var(--duration-slowest) var(--ease-out);
+}
+
+.retention--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Container
+ * ======================================== */
+.retention__container {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Section Introduction
+ * ======================================== */
+.retention__intro {
+  text-align: center;
+  margin-bottom: var(--space-24);
+  padding: var(--space-12) 0;
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.retention__element--revealed.retention__intro {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.retention__intro-line {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-xl), 2.5vw + 0.5rem, var(--font-size-3xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.retention__intro-line--emphasis {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ========================================
+ * Stage Container
+ * ======================================== */
+.retention__stage {
+  margin-bottom: var(--space-20);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-fast);
+}
+
+.retention__element--revealed.retention__stage {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Stage Labels and Headings
+ * ======================================== */
+.retention__stage-label {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--letter-spacing-widest);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: var(--space-3);
+}
+
+.retention__stage-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 2.5vw + 0.5rem, var(--font-size-3xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.retention__stage-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: var(--container-sm);
+  margin: 0 auto var(--space-8);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Timeline / Progression Indicator
+ * ======================================== */
+.retention__timeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-16);
+  opacity: 0;
+  transition: opacity var(--duration-slower) var(--ease-out);
+}
+
+.retention__element--revealed.retention__timeline {
+  opacity: 1;
+}
+
+.retention__timeline-step {
+  width: var(--space-3);
+  height: var(--space-3);
+  border-radius: var(--radius-full);
+  background-color: var(--color-neutral-700);
+  transition: background-color var(--duration-normal) var(--ease-out);
+}
+
+.retention__timeline-step--active {
+  background-color: var(--color-brand-primary);
+}
+
+.retention__timeline-step--completed {
+  background-color: var(--color-success);
+}
+
+.retention__timeline-connector {
+  width: var(--space-8);
+  height: 2px;
+  background-color: var(--color-neutral-700);
+  border-radius: var(--radius-full);
+}
+
+.retention__timeline-connector--active {
+  background-color: var(--color-brand-primary);
+}
+
+/* ========================================
+ * Stage Content Area
+ * ======================================== */
+.retention__stage-content {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Chat History Enhancement
+ * ======================================== */
+.retention__chat-meta {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  margin: var(--space-4) 0;
+  padding: var(--space-2) 0;
+}
+
+/* ========================================
+ * Trust Growth Indicators
+ * ======================================== */
+.retention__trust-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-4) 0;
+  margin-bottom: var(--space-4);
+}
+
+.retention__trust-stat {
+  text-align: center;
+}
+
+.retention__trust-stat-value {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-brand-primary);
+}
+
+.retention__trust-stat-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-1);
+}
+
+/* ========================================
+ * Community Growth
+ * ======================================== */
+.retention__communities {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ========================================
+ * Network Summary (Belonging stage)
+ * ======================================== */
+.retention__network-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  justify-content: center;
+  padding: var(--space-4) 0;
+}
+
+.retention__network-stat {
+  text-align: center;
+  padding: var(--space-4) var(--space-6);
+  background-color: var(--color-surface-primary);
+  border-radius: var(--radius-lg);
+  border: var(--border-width-thin) solid var(--border-color-default);
+}
+
+.retention__network-stat-value {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.retention__network-stat-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-1);
+}
+
+/* ========================================
+ * Bridge / Transition
+ * ======================================== */
+.retention__bridge {
+  text-align: center;
+  padding-top: var(--space-16);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-slower);
+}
+
+.retention__element--revealed.retention__bridge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.retention__bridge-text {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 1rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* ========================================
+ * Responsive Breakpoints
+ * ======================================== */
+@media (min-width: 768px) {
+  .retention-section {
+    padding: var(--space-32) var(--space-12);
+  }
+
+  .retention__intro {
+    margin-bottom: var(--space-32);
+    padding: var(--space-16) 0;
+  }
+
+  .retention__stage {
+    margin-bottom: var(--space-24);
+  }
+
+  .retention__stage-content {
+    max-width: 440px;
+  }
+
+  .retention__trust-summary {
+    gap: var(--space-8);
+  }
+
+  .retention__network-summary {
+    gap: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .retention-section {
+    padding: var(--space-40) var(--space-16);
+  }
+
+  .retention__intro-line {
+    font-size: clamp(var(--font-size-2xl), 3vw + 0.5rem, var(--font-size-4xl));
+  }
+
+  .retention__stage-heading {
+    font-size: clamp(var(--font-size-3xl), 3vw + 0.5rem, var(--font-size-4xl));
+  }
+
+  .retention__stage-content {
+    max-width: 460px;
+  }
+}
+
+/* ========================================
+ * Reduced Motion
+ * ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .retention-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .retention__intro,
+  .retention__stage,
+  .retention__bridge,
+  .retention__timeline {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

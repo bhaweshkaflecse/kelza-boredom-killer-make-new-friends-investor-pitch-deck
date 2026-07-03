@@ -1,0 +1,7 @@
+{
+  "task_id": "task-retention-section",
+  "task_description": "Implement investor question 6 - why users keep coming back. Add a retention section with 4 stages (Connection, Trust, Community, Belonging) continuing the user story from the product walkthrough, demonstrating long-term value.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null
+}
