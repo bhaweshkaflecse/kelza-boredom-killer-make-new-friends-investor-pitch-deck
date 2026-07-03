@@ -165,17 +165,6 @@
  * ======================================== */
 .meet-kelza__journey {
   margin-bottom: var(--space-32);
-  opacity: 0;
-  transform: translateY(var(--space-4));
-  transition:
-    opacity var(--duration-slower) var(--ease-out),
-    transform var(--duration-slower) var(--ease-out);
-  transition-delay: var(--duration-normal);
-}
-
-.meet-kelza__element--revealed.meet-kelza__journey {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .meet-kelza__journey-heading {
@@ -322,7 +311,6 @@
 
   .meet-kelza__philosophy,
   .meet-kelza__ecosystem,
-  .meet-kelza__journey,
   .meet-kelza__bridge,
   .meet-kelza__step {
     opacity: 1;
