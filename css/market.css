@@ -1,0 +1,432 @@
+/**
+ * Market Section Styles
+ * Investor Question 12: How big is the opportunity - and why Kelza?
+ * Five-part market opportunity section with editorial, premium styling.
+ * Triggered by .market--visible class toggle.
+ * Child elements revealed progressively via .market__element--revealed.
+ */
+
+.market-section {
+  position: relative;
+  z-index: var(--z-above);
+  padding: var(--space-24) var(--space-8);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slowest) var(--ease-out),
+    transform var(--duration-slowest) var(--ease-out);
+}
+
+.market--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Container
+ * ======================================== */
+.market__container {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Section Intro
+ * ======================================== */
+.market__intro {
+  text-align: center;
+  margin-bottom: var(--space-24);
+  padding: var(--space-12) 0;
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.market__element--revealed.market__intro {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.market__intro-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 0.5rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-4);
+}
+
+.market__intro-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: var(--container-sm);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Part: Global Shift
+ * ======================================== */
+.market__global-shift {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.market__element--revealed.market__global-shift {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.market__part-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  margin-bottom: var(--space-3);
+}
+
+.market__part-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-xl), 2.5vw + 0.5rem, var(--font-size-3xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-6);
+}
+
+.market__part-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: var(--container-md);
+  margin-bottom: var(--space-8);
+}
+
+.market__trends {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+.market__trend {
+  padding: var(--space-6);
+  background-color: var(--color-surface-primary);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--duration-normal) var(--ease-out);
+}
+
+.market__trend:hover {
+  border-color: var(--border-color-hover);
+}
+
+.market__trend-name {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.market__trend-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Part: Market Opportunity (TAM/SAM/SOM)
+ * ======================================== */
+.market__opportunity {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.market__element--revealed.market__opportunity {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.market__sizing {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+
+.market__sizing-card {
+  padding: var(--space-8);
+  background-color: var(--color-surface-primary);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: border-color var(--duration-normal) var(--ease-out);
+}
+
+.market__sizing-card:hover {
+  border-color: var(--border-color-hover);
+}
+
+.market__sizing-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  margin-bottom: var(--space-3);
+}
+
+.market__sizing-value {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 0.5rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-3);
+}
+
+.market__sizing-scope {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.market__sizing-explanation {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Part: Why Kelza Fits
+ * ======================================== */
+.market__why-fits {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.market__element--revealed.market__why-fits {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.market__pillars {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.market__pillar {
+  padding: var(--space-6);
+  background-color: var(--color-surface-primary);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--duration-normal) var(--ease-out);
+}
+
+.market__pillar:hover {
+  border-color: var(--border-color-hover);
+}
+
+.market__pillar-heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.market__pillar-text {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Part: Geographic Expansion Vision
+ * ======================================== */
+.market__expansion {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.market__element--revealed.market__expansion {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.market__geo-path {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+
+.market__geo-stage {
+  padding: var(--space-6);
+  background-color: var(--color-surface-primary);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-lg);
+  position: relative;
+  transition: border-color var(--duration-normal) var(--ease-out);
+}
+
+.market__geo-stage:hover {
+  border-color: var(--border-color-hover);
+}
+
+.market__geo-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.market__geo-heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.market__geo-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Part: Bridge / Transition
+ * ======================================== */
+.market__bridge {
+  text-align: center;
+  padding-top: var(--space-16);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-slower);
+}
+
+.market__element--revealed.market__bridge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.market__bridge-text {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 1rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* ========================================
+ * Responsive Breakpoints
+ * ======================================== */
+@media (min-width: 768px) {
+  .market-section {
+    padding: var(--space-32) var(--space-12);
+  }
+
+  .market__intro {
+    margin-bottom: var(--space-32);
+    padding: var(--space-16) 0;
+  }
+
+  .market__trends {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .market__sizing {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .market__pillars {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .market__geo-path {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .market-section {
+    padding: var(--space-40) var(--space-16);
+  }
+
+  .market__intro-heading {
+    font-size: clamp(var(--font-size-3xl), 3vw + 0.5rem, var(--font-size-5xl));
+  }
+
+  .market__trends {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .market__pillars {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ========================================
+ * Reduced Motion
+ * ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .market-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .market__intro,
+  .market__global-shift,
+  .market__opportunity,
+  .market__why-fits,
+  .market__expansion,
+  .market__bridge {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

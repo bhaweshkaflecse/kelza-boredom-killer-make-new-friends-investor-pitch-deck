@@ -14,6 +14,7 @@ import { WhyNowSection } from './sections/WhyNowSection.js';
 import { CompetitiveSection } from './sections/CompetitiveSection.js';
 import { StatusSection } from './sections/StatusSection.js';
 import { RoadmapSection } from './sections/RoadmapSection.js';
+import { MarketSection } from './sections/MarketSection.js';
 import '../css/main.css';
 
 const engine = new Engine();
@@ -50,6 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const roadmapSection = new RoadmapSection();
   roadmapSection.reveal();
+
+  const marketSection = new MarketSection();
+  marketSection.reveal();
 });
 
 export { engine };
