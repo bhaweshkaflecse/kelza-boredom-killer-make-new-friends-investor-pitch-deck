@@ -1,0 +1,38 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement the 'Why Kelza Can Win' competitive advantages section (investor question 9) as a new section after why-now-section. Create css/competitive.css, js/sections/CompetitiveSection.js, add the HTML section to index.html, wire imports in css/main.css and js/app.js.",
+  "status": "in_progress",
+  "steps": [
+    "Create css/competitive.css following the exact BEM + design-token pattern from css/why-now.css. Use .competitive-section as root, .competitive--visible for show, .competitive__element--revealed for child reveals. Include styles for: container, intro heading/description, five advantage cards (community graph, trust graph, AI learning loop, creator ecosystem, platform flywheel), the flywheel SVG (visually distinct from business section flywheel - use --color-brand-secondary (#06b6d4) stroke instead of --color-brand-primary to differentiate), and the bridge/transition text. Use CSS Grid for the advantage card layout (1col mobile, 2col 768px, 3col 1024px). Include responsive breakpoints (768px, 1024px) and reduced motion media query.",
+    "Create js/sections/CompetitiveSection.js following WhyNowSection.js exactly: export class CompetitiveSection with constructor (gets #competitive-section element), _setupObserver (IntersectionObserver on [data-reveal] children, adds 'competitive__element--revealed' on 0.15 ratio), reveal() (removes aria-hidden, adds competitive--visible, calls _setupObserver), hide() (re-adds aria-hidden, removes competitive--visible, disconnects observer, removes revealed classes), isVisible(), destroy(). Keep under 400 lines and no function over 60 lines.",
+    "Add the new section HTML to index.html AFTER the closing </section> of why-now-section (id='why-now-section') and BEFORE </main>. Section id='competitive-section', class='competitive-section', aria-label='Why Kelza can win - competitive advantages', aria-hidden='true'. Structure: container div, intro div with h2 heading '[Why Kelza Can Win]' and description, then five advantage blocks each with [data-reveal], h3 heading, description paragraph, and supporting detail. The fifth advantage (Platform Flywheel) includes an inline SVG with 7 nodes in a circular layout (Better Communities -> Better Experiences -> More Engagement -> More Creators -> Better Marketplace -> More Value -> Better Communities). End with bridge div containing '[Now let us understand the size of the opportunity.]'.",
+    "Add @import './competitive.css'; to css/main.css after the existing @import './why-now.css'; line.",
+    "In js/app.js: add import { CompetitiveSection } from './sections/CompetitiveSection.js'; after the WhyNowSection import. Inside DOMContentLoaded callback, after whyNowSection.reveal(), add: const competitiveSection = new CompetitiveSection(); competitiveSection.reveal();"
+  ],
+  "acceptance_criteria": [
+    "css/competitive.css exists and uses only design tokens from variables.css (no hardcoded colors/sizes)",
+    "js/sections/CompetitiveSection.js exports a class with reveal(), hide(), destroy(), isVisible() methods",
+    "index.html contains section#competitive-section positioned after section#why-now-section",
+    "The competitive section has exactly 5 advantage blocks: Community Graph, Trust Graph, AI Learning Loop, Creator Ecosystem, Platform Flywheel",
+    "Platform Flywheel has an inline SVG with 7 nodes in a cycle, visually distinct from the business section flywheel (uses --color-brand-secondary instead of --color-brand-primary)",
+    "Bridge text reads '[Now let us understand the size of the opportunity.]'",
+    "css/main.css imports competitive.css",
+    "js/app.js imports and instantiates CompetitiveSection",
+    "All content is placeholder copy (wrapped in brackets)",
+    "Reduced motion media query disables all transitions",
+    "Responsive: 1 column mobile, 2 columns at 768px, layout adjusts at 1024px",
+    "No Canvas, no Three.js used anywhere",
+    "No function exceeds 60 lines, no class exceeds 400 lines",
+    "HTML uses semantic headings (h2 for section title, h3 for advantage titles)",
+    "All [data-reveal] elements have corresponding reveal CSS rules"
+  ],
+  "verification": [
+    "Run: NODE_OPTIONS='' npx vite build -- confirms no syntax errors in HTML/CSS/JS imports",
+    "Verify section order in index.html: why-now-section appears before competitive-section",
+    "Verify competitive.css uses only var(--*) tokens and no hardcoded pixel values for colors",
+    "Confirm the flywheel SVG in competitive-section uses --color-brand-secondary stroke while business section uses --color-brand-primary"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

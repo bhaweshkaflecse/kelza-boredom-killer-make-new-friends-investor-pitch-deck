@@ -11,6 +11,7 @@ import { ProductWalkthrough } from './sections/ProductWalkthrough.js';
 import { RetentionSection } from './sections/RetentionSection.js';
 import { BusinessSection } from './sections/BusinessSection.js';
 import { WhyNowSection } from './sections/WhyNowSection.js';
+import { CompetitiveSection } from './sections/CompetitiveSection.js';
 import '../css/main.css';
 
 const engine = new Engine();
@@ -38,6 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const whyNowSection = new WhyNowSection();
   whyNowSection.reveal();
+
+  const competitiveSection = new CompetitiveSection();
+  competitiveSection.reveal();
 });
 
 export { engine };

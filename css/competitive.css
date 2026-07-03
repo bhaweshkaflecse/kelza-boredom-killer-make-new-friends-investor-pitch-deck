@@ -1,0 +1,296 @@
+/**
+ * Competitive Section Styles
+ * Why Kelza can win - five competitive advantages: community graph,
+ * trust graph, AI learning loop, creator ecosystem, and platform flywheel.
+ * Triggered by .competitive--visible class toggle.
+ * Child elements revealed progressively via .competitive__element--revealed.
+ */
+
+.competitive-section {
+  position: relative;
+  z-index: var(--z-above);
+  padding: var(--space-24) var(--space-8);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slowest) var(--ease-out),
+    transform var(--duration-slowest) var(--ease-out);
+}
+
+.competitive--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Container
+ * ======================================== */
+.competitive__container {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Section Intro
+ * ======================================== */
+.competitive__intro {
+  text-align: center;
+  margin-bottom: var(--space-24);
+  padding: var(--space-12) 0;
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.competitive__element--revealed.competitive__intro {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.competitive__intro-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 0.5rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-4);
+}
+
+.competitive__intro-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: var(--container-sm);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Advantage Cards Grid
+ * ======================================== */
+.competitive__advantages {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  margin-bottom: var(--space-24);
+}
+
+/* ========================================
+ * Advantage Card (shared styles)
+ * ======================================== */
+.competitive__advantage {
+  padding: var(--space-8);
+  background-color: var(--color-surface-primary);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-lg);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out),
+    border-color var(--duration-normal) var(--ease-out);
+  transition-delay: var(--duration-fast);
+}
+
+.competitive__element--revealed.competitive__advantage {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.competitive__advantage:hover {
+  border-color: var(--border-color-hover);
+}
+
+.competitive__advantage-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-lg), 2vw + 0.5rem, var(--font-size-xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-3);
+}
+
+.competitive__advantage-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.competitive__advantage-detail {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Platform Flywheel
+ * ======================================== */
+.competitive__flywheel {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-fast);
+}
+
+.competitive__element--revealed.competitive__flywheel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.competitive__flywheel-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-xl), 2.5vw + 0.5rem, var(--font-size-3xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.competitive__flywheel-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: var(--container-sm);
+  margin: 0 auto var(--space-8);
+  line-height: var(--line-height-relaxed);
+}
+
+.competitive__flywheel-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-8) 0;
+}
+
+.competitive__flywheel-svg {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+}
+
+.competitive__flywheel-svg text {
+  font-family: var(--font-family-primary);
+  font-size: 9px;
+  fill: var(--color-text-secondary);
+}
+
+.competitive__flywheel-svg .competitive__flywheel-node-text {
+  font-weight: var(--font-weight-medium);
+  fill: var(--color-text-primary);
+}
+
+.competitive__flywheel-svg .competitive__flywheel-path {
+  fill: none;
+  stroke: var(--color-neutral-700);
+  stroke-width: 2;
+}
+
+.competitive__flywheel-svg .competitive__flywheel-arrow {
+  fill: var(--color-brand-secondary);
+  stroke: none;
+}
+
+.competitive__flywheel-svg .competitive__flywheel-node-circle {
+  fill: var(--color-surface-primary);
+  stroke: var(--color-brand-secondary);
+  stroke-width: 1.5;
+}
+
+/* ========================================
+ * Bridge / Transition
+ * ======================================== */
+.competitive__bridge {
+  text-align: center;
+  padding-top: var(--space-16);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-slower);
+}
+
+.competitive__element--revealed.competitive__bridge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.competitive__bridge-text {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 1rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* ========================================
+ * Responsive Breakpoints
+ * ======================================== */
+@media (min-width: 768px) {
+  .competitive-section {
+    padding: var(--space-32) var(--space-12);
+  }
+
+  .competitive__intro {
+    margin-bottom: var(--space-32);
+    padding: var(--space-16) 0;
+  }
+
+  .competitive__advantages {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .competitive__flywheel {
+    margin-bottom: var(--space-32);
+  }
+}
+
+@media (min-width: 1024px) {
+  .competitive-section {
+    padding: var(--space-40) var(--space-16);
+  }
+
+  .competitive__intro-heading {
+    font-size: clamp(var(--font-size-3xl), 3vw + 0.5rem, var(--font-size-5xl));
+  }
+
+  .competitive__advantages {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .competitive__flywheel-svg {
+    max-width: 420px;
+  }
+}
+
+/* ========================================
+ * Reduced Motion
+ * ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .competitive-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .competitive__intro,
+  .competitive__advantage,
+  .competitive__flywheel,
+  .competitive__bridge {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
