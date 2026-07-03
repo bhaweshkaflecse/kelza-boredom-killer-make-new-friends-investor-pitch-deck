@@ -534,5 +534,37 @@ export const settings = Object.freeze({
       microVariation: 0.008,
       meaningfulnessRate: 0.02
     })
+  }),
+
+  scene011: Object.freeze({
+    conversation: Object.freeze({
+      rhythmSpeed: 0.8,
+      rhythmDepth: 0.4,
+      pauseDuration: 0.6,
+      witnessRadius: 200,
+      witnessOpacityLift: 0.04
+    }),
+    phases: Object.freeze({
+      silence: Object.freeze({ start: 0, duration: 10 }),
+      presence: Object.freeze({ start: 10, duration: 10 }),
+      recognition: Object.freeze({ start: 20, duration: 10 }),
+      humanity: Object.freeze({ start: 30, duration: 10 }),
+      expectation: Object.freeze({ start: 40, duration: 10 })
+    }),
+    environment: Object.freeze({
+      warmthIncrease: 0.03,
+      motionReduction: 0.6,
+      intimacyLevel: 0.85,
+      silenceDepth: 0.9
+    }),
+    lighting: Object.freeze({
+      warmthTarget: 0.15,
+      presenceGlow: 0.05
+    }),
+    camera: Object.freeze({
+      driftMultiplier: 0.005,
+      stillnessRate: 0.03,
+      reducedMotionFactor: 0.2
+    })
   })
 });

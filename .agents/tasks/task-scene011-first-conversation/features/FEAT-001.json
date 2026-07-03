@@ -1,0 +1,37 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement Scene011 First Conversation: ConversationDirector, Scene011_FirstConversation, Scene011Phases, and integrate into Engine.js with config/constants updates.",
+  "status": "in_progress",
+  "steps": [
+    "Add CONVERSATION_STATES to js/config/constants.js: { SILENCE: 'silence', PRESENCE: 'presence', RECOGNITION: 'recognition', HUMANITY: 'humanity', EXPECTATION: 'expectation' }",
+    "Add scene011 config block to js/config/settings.js following the scene010 pattern. Include: conversation (rhythmSpeed, rhythmDepth, pauseDuration, witnessRadius, witnessOpacityLift), phases (silence 0-10s, presence 10-20s, recognition 20-30s, humanity 30-40s, expectation 40-50s), environment (warmthIncrease, motionReduction, intimacyLevel, silenceDepth), lighting (warmthTarget ~0.15, presenceGlow ~0.05), camera (driftMultiplier near 0.005, stillnessRate, reducedMotionFactor 0.2)",
+    "Create js/engine/universe/ConversationDirector.js - lightweight, scene-specific director. Responsibilities: (1) Advance filament from abstract connection to heartbeat-like rhythm via noise-driven timing modulation, (2) Coordinate witness particles (subtle opacity lift of nearby particles facing the connection, not attraction/clustering), (3) Manage presence state (the feeling of aliveness). Methods: init(w, h, midX, midY, config), setReducedMotion(bool), update(dt, pool, activeCount, cam), applyRhythm(dt) - modulates connection breath timing to heartbeat pattern, applyWitnessAwareness(pool, activeCount, dt) - subtle opacity lift for particles within witnessRadius oriented toward connection, applyCameraStillness(cam) - locks camera drift to near-zero. Pre-allocate all state. Zero allocations.",
+    "Create js/scenes/scene011/Scene011Phases.js following the scene010/Scene010Phases.js pattern exactly. 5 phases: Silence (0-10s, world holds breath, minimal change), Presence (10-20s, rhythm emerges in filament, witness particles gain subtle awareness), Recognition (20-30s, heartbeat rhythm deepens, warmth increases), Humanity (30-40s, full emotional presence, maximum intimacy), Expectation (40-50s, scene reaches completion, prepares handoff). Each phase calls scene methods for: updateRhythm, updateWitnessAwareness, updateWarmth, updateIntimacy, updateCameraStillness.",
+    "Create js/scenes/Scene011_FirstConversation.js following Scene010_Arrival.js pattern exactly. Key differences: (1) Uses ConversationDirector instead of ArrivalDirector, (2) Camera drift multiplier starts at 0.01 and goes to 0.005 (nearly locked), (3) Connection rhythm evolves from breathing to heartbeat-like via ConversationDirector, (4) Witness particles get subtle opacity lift not attraction, (5) Audio registers: conversation_begins, mutual_presence, shared_moment. Methods: getId(), setUniverse(), setConnectionData(), load(), enter(), update(dt), leave(), destroy(), isCompleted(). Scene-specific methods: activateSilence(), activatePresence(), activateRecognition(), activateHumanity(), activateExpectation(), updateRhythm(level), updateWitnessAwareness(level), updateWarmth(progress), updateIntimacy(level), updateCameraStillness(level), markCompleted().",
+    "Modify js/engine/Engine.js: (1) Add import for Scene011_FirstConversation, (2) Add scene011Registered/scene011Instance properties in constructor, (3) Add initScene011() method following initScene010() pattern, (4) Add transitionToScene011() method following transitionToScene010() pattern with skipEnvironmentTeardown on scene010, (5) Add Scene010->Scene011 transition check in checkSceneTransition() after the scene009->010 block: if scene011Registered and currentScene is scene010_arrival and scene010Instance.isCompleted(), call transitionToScene011(), (6) Call initScene011() in the init() method after initScene010()"
+  ],
+  "acceptance_criteria": [
+    "NODE_OPTIONS='' node --check passes on all new files: ConversationDirector.js, Scene011_FirstConversation.js, Scene011Phases.js",
+    "NODE_OPTIONS='' node --check passes on all modified files: Engine.js, settings.js, constants.js",
+    "No class exceeds 400 lines",
+    "No function exceeds 60 lines",
+    "ConversationDirector has zero per-frame allocations (no new objects, arrays, or closures in update path)",
+    "Scene011 registers audio events: conversation_begins, mutual_presence, shared_moment",
+    "Scene011 has 5 phases: silence, presence, recognition, humanity, expectation",
+    "Camera drift multiplier approaches near-zero (0.005 or less)",
+    "No UI, phone, chat, text, buttons, forms, avatars, or interface elements exist"
+  ],
+  "verification": [
+    "NODE_OPTIONS='' node --check js/engine/universe/ConversationDirector.js",
+    "NODE_OPTIONS='' node --check js/scenes/Scene011_FirstConversation.js",
+    "NODE_OPTIONS='' node --check js/scenes/scene011/Scene011Phases.js",
+    "NODE_OPTIONS='' node --check js/engine/Engine.js",
+    "NODE_OPTIONS='' node --check js/config/settings.js",
+    "NODE_OPTIONS='' node --check js/config/constants.js",
+    "wc -l on each new file to verify under 400 lines",
+    "grep for 'new ' inside update/render methods to verify zero allocations"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

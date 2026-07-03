@@ -26,6 +26,7 @@ import { Scene007_Memory } from '../scenes/Scene007_Memory.js';
 import { Scene008_Revelation } from '../scenes/Scene008_Revelation.js';
 import { Scene009_Descent } from '../scenes/Scene009_Descent.js';
 import { Scene010_Arrival } from '../scenes/Scene010_Arrival.js';
+import { Scene011_FirstConversation } from '../scenes/Scene011_FirstConversation.js';
 
 export class Engine {
   constructor() {
@@ -57,6 +58,8 @@ export class Engine {
     this.scene009Instance = null;
     this.scene010Registered = false;
     this.scene010Instance = null;
+    this.scene011Registered = false;
+    this.scene011Instance = null;
     this.connectionDataForScene004 = null;
   }
 
@@ -95,6 +98,7 @@ export class Engine {
     this.initScene008();
     this.initScene009();
     this.initScene010();
+    this.initScene011();
     this.state = MANAGER_STATES.READY;
   }
 
@@ -308,6 +312,13 @@ export class Engine {
     if (this.scene010Registered && sceneManager.currentScene === 'scene009_descent') {
       if (this.scene009Instance && this.scene009Instance.isCompleted()) {
         this.transitionToScene010();
+      }
+    }
+
+    // Scene010 -> Scene011 transition (completion-based)
+    if (this.scene011Registered && sceneManager.currentScene === 'scene010_arrival') {
+      if (this.scene010Instance && this.scene010Instance.isCompleted()) {
+        this.transitionToScene011();
       }
     }
   }
@@ -601,6 +612,44 @@ export class Engine {
 
     await sceneManager.loadScene('scene010_arrival');
     await sceneManager.enterScene('scene010_arrival');
+  }
+
+  /**
+   * Register Scene011_FirstConversation for later transition.
+   */
+  initScene011() {
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    const scene = new Scene011_FirstConversation();
+    scene.setUniverse(this.universe);
+    sceneManager.registerScene(scene.getId(), scene);
+    this.scene011Instance = scene;
+    this.scene011Registered = true;
+  }
+
+  /**
+   * Transition from Scene010 to Scene011.
+   * Passes the persistent connection data forward.
+   */
+  async transitionToScene011() {
+    this.scene011Registered = false;
+    const sceneManager = this.managers.get('scene');
+    if (!sceneManager) return;
+
+    // Pass connection data to Scene011 (same persistent connection)
+    if (this.connectionDataForScene004 && this.scene011Instance) {
+      const cd = this.connectionDataForScene004;
+      this.scene011Instance.setConnectionData(cd.midX, cd.midY, cd.indexA, cd.indexB);
+    }
+
+    // Prevent frame-gap flash: tell Scene010 to skip environment teardown
+    if (this.scene010Instance) {
+      this.scene010Instance.skipEnvironmentTeardown = true;
+    }
+
+    await sceneManager.loadScene('scene011_firstConversation');
+    await sceneManager.enterScene('scene011_firstConversation');
   }
 
   /**

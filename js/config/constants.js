@@ -278,3 +278,11 @@ export const ARRIVAL_STATES = Object.freeze({
   ANTICIPATION: 'anticipation',
   ARRIVAL: 'arrival'
 });
+
+export const CONVERSATION_STATES = Object.freeze({
+  SILENCE: 'silence',
+  PRESENCE: 'presence',
+  RECOGNITION: 'recognition',
+  HUMANITY: 'humanity',
+  EXPECTATION: 'expectation'
+});
