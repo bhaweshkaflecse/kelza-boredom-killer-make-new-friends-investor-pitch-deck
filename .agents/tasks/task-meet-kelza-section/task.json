@@ -1,0 +1,7 @@
+{
+  "task_id": "task-meet-kelza-section",
+  "task_description": "Implement investor question 3 section: 'Why is Kelza different?' - the Meet Kelza section with product philosophy, ecosystem visualization, user journey, and transition bridge",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null
+}

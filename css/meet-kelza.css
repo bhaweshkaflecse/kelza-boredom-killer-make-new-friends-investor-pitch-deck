@@ -1,0 +1,338 @@
+/**
+ * Meet Kelza Section Styles
+ * Product philosophy, ecosystem visualization, user journey, and transition.
+ * Triggered by .meet-kelza--visible class toggle.
+ * Child elements revealed progressively via .meet-kelza__element--revealed.
+ */
+
+.meet-kelza-section {
+  position: relative;
+  z-index: var(--z-above);
+  padding: var(--space-24) var(--space-8);
+  opacity: 0;
+  transform: translateY(var(--space-8));
+  transition:
+    opacity var(--duration-slowest) var(--ease-out),
+    transform var(--duration-slowest) var(--ease-out);
+}
+
+.meet-kelza--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Container
+ * ======================================== */
+.meet-kelza__container {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Part 1: Product Philosophy
+ * ======================================== */
+.meet-kelza__philosophy {
+  text-align: center;
+  margin-bottom: var(--space-32);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.meet-kelza__element--revealed.meet-kelza__philosophy {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.meet-kelza__philosophy-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-3xl), 4vw + 1rem, var(--font-size-6xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: var(--space-16);
+}
+
+.meet-kelza__principle {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-xl), 2vw + 0.5rem, var(--font-size-3xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: var(--container-md);
+  margin: 0 auto var(--space-8);
+}
+
+.meet-kelza__principle:last-child {
+  margin-bottom: 0;
+}
+
+/* ========================================
+ * Part 2: Ecosystem Visualization
+ * ======================================== */
+.meet-kelza__ecosystem {
+  margin-bottom: var(--space-32);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-fast);
+}
+
+.meet-kelza__element--revealed.meet-kelza__ecosystem {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.meet-kelza__ecosystem-heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-snug);
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.meet-kelza__ecosystem-svg {
+  display: block;
+  width: 100%;
+  max-width: var(--container-lg);
+  margin: 0 auto;
+  height: auto;
+}
+
+.meet-kelza__connection-line {
+  stroke: var(--border-color-default);
+  stroke-width: 1;
+  transition: stroke var(--duration-normal) var(--ease-out);
+}
+
+.meet-kelza__node-center {
+  fill: var(--color-brand-primary);
+  transition: fill var(--duration-normal) var(--ease-out);
+}
+
+.meet-kelza__node-center-label {
+  fill: var(--color-neutral-0);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.meet-kelza__module-node {
+  outline: none;
+  cursor: pointer;
+}
+
+.meet-kelza__module-circle {
+  fill: var(--color-surface-secondary);
+  stroke: var(--border-color-default);
+  stroke-width: 1;
+  transition:
+    fill var(--duration-normal) var(--ease-out),
+    stroke var(--duration-normal) var(--ease-out),
+    filter var(--duration-normal) var(--ease-out);
+}
+
+.meet-kelza__module-node:hover .meet-kelza__module-circle,
+.meet-kelza__module-node:focus .meet-kelza__module-circle {
+  fill: var(--color-glass-brand-medium);
+  stroke: var(--color-brand-primary-light);
+  filter: drop-shadow(0 0 var(--blur-md) var(--color-glow-primary));
+}
+
+.meet-kelza__module-label {
+  fill: var(--color-text-secondary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  transition: fill var(--duration-normal) var(--ease-out);
+}
+
+.meet-kelza__module-node:hover .meet-kelza__module-label,
+.meet-kelza__module-node:focus .meet-kelza__module-label {
+  fill: var(--color-text-primary);
+}
+
+/* ========================================
+ * Part 3: User Journey
+ * ======================================== */
+.meet-kelza__journey {
+  margin-bottom: var(--space-32);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-normal);
+}
+
+.meet-kelza__element--revealed.meet-kelza__journey {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.meet-kelza__journey-heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-snug);
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.meet-kelza__journey-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: var(--container-sm);
+  margin: 0 auto;
+}
+
+.meet-kelza__step {
+  width: 100%;
+  padding: var(--space-6);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-primary);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out),
+    border-color var(--duration-normal) var(--ease-out),
+    background-color var(--duration-normal) var(--ease-out);
+}
+
+.meet-kelza__element--revealed.meet-kelza__step {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.meet-kelza__step:hover {
+  border-color: var(--border-color-hover);
+  background-color: var(--color-surface-hover);
+}
+
+.meet-kelza__step-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-snug);
+}
+
+.meet-kelza__step-connector {
+  width: var(--border-width-thin);
+  height: var(--space-6);
+  background-color: var(--border-color-default);
+}
+
+/* ========================================
+ * Part 4: Transition Bridge
+ * ======================================== */
+.meet-kelza__bridge {
+  text-align: center;
+  padding-top: var(--space-16);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-slower);
+}
+
+.meet-kelza__element--revealed.meet-kelza__bridge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.meet-kelza__bridge-text {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 1rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* ========================================
+ * Responsive Breakpoints
+ * ======================================== */
+@media (min-width: 640px) {
+  .meet-kelza__principle {
+    font-size: clamp(var(--font-size-xl), 2.5vw + 0.5rem, var(--font-size-3xl));
+  }
+
+  .meet-kelza__step {
+    padding: var(--space-8);
+  }
+}
+
+@media (min-width: 768px) {
+  .meet-kelza-section {
+    padding: var(--space-32) var(--space-12);
+  }
+
+  .meet-kelza__philosophy {
+    margin-bottom: var(--space-40);
+  }
+
+  .meet-kelza__ecosystem {
+    margin-bottom: var(--space-40);
+  }
+
+  .meet-kelza__journey {
+    margin-bottom: var(--space-40);
+  }
+}
+
+@media (min-width: 1024px) {
+  .meet-kelza-section {
+    padding: var(--space-40) var(--space-16);
+  }
+
+  .meet-kelza__philosophy-heading {
+    font-size: clamp(var(--font-size-4xl), 5vw + 1rem, var(--font-size-7xl));
+  }
+
+  .meet-kelza__principle {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+/* ========================================
+ * Reduced Motion
+ * ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .meet-kelza-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .meet-kelza__philosophy,
+  .meet-kelza__ecosystem,
+  .meet-kelza__journey,
+  .meet-kelza__bridge,
+  .meet-kelza__step {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .meet-kelza__module-circle,
+  .meet-kelza__module-label,
+  .meet-kelza__connection-line {
+    transition: none;
+  }
+}

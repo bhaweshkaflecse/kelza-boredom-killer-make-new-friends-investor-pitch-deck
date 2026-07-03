@@ -1,0 +1,36 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement the complete Meet Kelza section (investor question 3: why is Kelza different). This includes the HTML structure in index.html, CSS styles in a new meet-kelza.css file, and a MeetKelzaSection.js controller. The section has 4 parts: Product Philosophy (editorial principles), Ecosystem Visualization (interactive SVG), User Journey (narrative scroll-triggered flow), and a Transition bridge to the next section.",
+  "status": "in_progress",
+  "steps": [
+    "Create css/meet-kelza.css following the pattern from css/why-section.css. Use BEM naming with .meet-kelza prefix. Include: (1) Section container with opacity:0/translateY hidden by default, revealed by .meet-kelza--visible. (2) Part 1 - Philosophy: full-width editorial statements with large typography (clamp-based fluid sizing), generous spacing. (3) Part 2 - Ecosystem: centered SVG layout with interactive hover/focus states on each module node, connection lines between nodes. (4) Part 3 - User Journey: vertical flow with step cards, each hidden by default and revealed via .meet-kelza__element--revealed class on [data-reveal] elements. (5) Part 4 - Transition bridge: single centered statement. (6) Reduced motion media query disabling all transitions and showing content immediately. (7) Responsive breakpoints at 640px, 768px, 1024px. Use only CSS variables from variables.css.",
+    "Add the <section id='meet-kelza-section'> to index.html AFTER the closing </section> of why-section and BEFORE </main>. Structure: (1) Section wrapper with class='meet-kelza-section' aria-label='Meet Kelza - Why Kelza is different' aria-hidden='true'. (2) Container div. (3) Part 1 - Philosophy: h2 heading + series of <p> editorial principle statements (use placeholder text in brackets like [Friendship before followers.]). (4) Part 2 - Ecosystem: h3 heading + inline SVG with central Kelza node and 9 surrounding module nodes (Discover, Match, Chat, Communities, Marketplace, Creator, Events, AI Companion, Trust & Safety). Each node must have role='img' aria-label, tabindex='0', and a visually hidden description element. Include connection lines from center to each module. (5) Part 3 - User Journey: h3 heading + ordered series of step elements with data-reveal attributes showing: New User, Find Interests, Meet People, Build Trust, Real Conversations, Communities, Friendships, Creator Economy, Long-term Engagement. (6) Part 4 - Transition bridge: p element with placeholder text.",
+    "Create js/sections/MeetKelzaSection.js following the WhySection.js pattern exactly. Export a class MeetKelzaSection with: constructor that gets element by id 'meet-kelza-section', _setupObserver() that observes all [data-reveal] children with IntersectionObserver (same thresholds and rootMargin as WhySection), _handleIntersections() that adds 'meet-kelza__element--revealed' class, reveal() that removes aria-hidden and adds 'meet-kelza--visible' class then calls _setupObserver(), hide() that reverses, isVisible(), and destroy(). Keep no function >60 lines, no class >400 lines.",
+    "Add @import './meet-kelza.css'; to css/main.css immediately after the @import './why-section.css'; line.",
+    "Update js/app.js: import { MeetKelzaSection } from './sections/MeetKelzaSection.js'; at the top with other imports, instantiate and call reveal() inside the DOMContentLoaded handler after whySection.reveal()."
+  ],
+  "acceptance_criteria": [
+    "Running NODE_OPTIONS='' npx vite build completes without errors",
+    "index.html contains <section id='meet-kelza-section'> after the why-section",
+    "css/meet-kelza.css exists and uses only CSS variables from variables.css with BEM naming",
+    "js/sections/MeetKelzaSection.js exists with reveal()/hide()/destroy() methods and IntersectionObserver",
+    "css/main.css imports meet-kelza.css after why-section.css",
+    "js/app.js imports and instantiates MeetKelzaSection",
+    "SVG ecosystem visualization has 9 module nodes with aria-labels and tabindex='0'",
+    "All interactive elements are keyboard accessible",
+    "Reduced motion media query makes all content immediately visible",
+    "No function exceeds 60 lines, no class exceeds 400 lines",
+    "Responsive layout works at mobile (single column) and desktop (grid) breakpoints"
+  ],
+  "verification": [
+    "Run NODE_OPTIONS='' npx vite build and confirm exit code 0",
+    "Grep index.html for 'meet-kelza-section' to confirm section exists",
+    "Grep css/main.css for 'meet-kelza.css' to confirm import exists",
+    "Grep js/app.js for 'MeetKelzaSection' to confirm import and usage",
+    "Grep meet-kelza.css for 'prefers-reduced-motion' to confirm accessibility",
+    "Grep the SVG in index.html for tabindex and aria-label attributes on module nodes"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

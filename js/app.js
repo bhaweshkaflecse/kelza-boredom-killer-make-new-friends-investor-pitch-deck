@@ -5,6 +5,7 @@
 
 import { Engine } from './engine/Engine.js';
 import { WhySection } from './sections/WhySection.js';
+import { MeetKelzaSection } from './sections/MeetKelzaSection.js';
 import '../css/main.css';
 
 const engine = new Engine();
@@ -14,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const whySection = new WhySection();
   whySection.reveal();
+
+  const meetKelzaSection = new MeetKelzaSection();
+  meetKelzaSection.reveal();
 });
 
 export { engine };

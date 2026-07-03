@@ -1,0 +1,23 @@
+{
+  "project_type": "Investor pitch deck - immersive HTML/CSS/JS single-page experience with Vite bundler",
+  "language": "HTML, CSS, JavaScript (ES Modules)",
+  "build_system": "Vite (vite.config.js), npm for package management but npm registry is BLOCKED",
+  "test_framework": "No test framework detected - validation is visual/structural",
+  "build_command": "NODE_OPTIONS='' npx vite build",
+  "test_command": "No test command - verify via AST/structure checks",
+  "verification_instructions": "1. Run NODE_OPTIONS='' npx vite build to confirm no build errors. 2. Verify HTML structure with valid section hierarchy. 3. Verify CSS imports resolve. 4. Verify JS module imports resolve.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "Project uses Vite. npm registry is blocked - rely on existing node_modules.",
+  "environment_constraints": "INTEGRATIONS_ONLY network - npm registry blocked. Cannot install new packages. Use only pre-installed tools. Prefix node/npm commands with NODE_OPTIONS=''.",
+  "contribution_requirements": "Commit message: feat(product): implement investor question 3 - why Kelza is different. Work on feat/kelza-platform-foundation branch.",
+  "key_patterns": "BEM CSS naming (block__element--modifier). Sections hidden by default with aria-hidden=true, revealed via class toggle (.section--visible). IntersectionObserver for progressive child reveals using [data-reveal] attributes and __element--revealed class. JS controllers export class with reveal()/hide()/destroy() pattern. Dark theme with CSS custom properties from variables.css. Mobile-first responsive with breakpoints at 640px, 768px, 1024px. Reduced motion: transitions disabled, content visible immediately.",
+  "relevant_files": [
+    "index.html",
+    "css/main.css",
+    "css/why-section.css",
+    "css/variables.css",
+    "js/app.js",
+    "js/sections/WhySection.js"
+  ],
+  "directory_structure": "Root: index.html, vite.config.js, package.json. css/: main.css imports all other CSS modules. js/: app.js entry point, sections/ for section controllers, engine/ for core engine, effects/ for visual effects. assets/, public/, data/, docs/ for static content."
+}
