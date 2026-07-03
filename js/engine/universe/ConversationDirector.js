@@ -171,14 +171,30 @@ export class ConversationDirector {
 
   /**
    * Lock camera drift to near-zero based on stillness level.
+   * For reduced motion: apply target drift immediately (no lerp).
    * @param {Object} cam - Camera controller reference
    */
   applyCameraStillness(cam) {
     if (!cam || !cam.setDriftMultiplier) return;
-    if (this.reducedMotion) return;
+
+    if (this.reducedMotion) {
+      // Reduced motion: apply near-zero drift target immediately
+      cam.setDriftMultiplier(this.driftEnd);
+      return;
+    }
 
     const drift = this.driftStart + (this.driftEnd - this.driftStart) * this.stillnessLevel;
     cam.setDriftMultiplier(drift);
+  }
+
+  /**
+   * Update the connection midpoint for witness awareness tracking.
+   * @param {number} midX - Updated midpoint X
+   * @param {number} midY - Updated midpoint Y
+   */
+  updateMidpoint(midX, midY) {
+    this.connectionMidX = midX;
+    this.connectionMidY = midY;
   }
 
   /**

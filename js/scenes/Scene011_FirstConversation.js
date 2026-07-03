@@ -50,6 +50,7 @@ export class Scene011_FirstConversation {
     this.intimacyLevel = 0;
     this.warmthProgress = 0;
     this.stillnessLevel = 0;
+    this.currentDeltaTime = 0.016;
   }
 
   getId() { return this.id; }
@@ -171,6 +172,7 @@ export class Scene011_FirstConversation {
   update(deltaTime) {
     if (this.state !== SCENE_STATES.ACTIVE) return;
     this.elapsedTime += deltaTime;
+    this.currentDeltaTime = deltaTime;
     this.director.update(deltaTime);
     this.updateSubsystems(deltaTime);
   }
@@ -179,6 +181,11 @@ export class Scene011_FirstConversation {
     const pool = this.universe.particleEngine.pool;
     const activeCount = this.universe.particleEngine.activeCount;
     const cam = this.universe.cameraController;
+    // Refresh midpoint periodically so witness awareness tracks live positions
+    this.refreshConnectionMidpoint();
+    if (this.conversationDirector) {
+      this.conversationDirector.updateMidpoint(this.connectionMidX, this.connectionMidY);
+    }
     this.conversationDirector.update(deltaTime, pool, activeCount, cam);
   }
 
@@ -229,13 +236,14 @@ export class Scene011_FirstConversation {
     lighting.setWarmthOffset(warmth);
   }
 
-  updateIntimacy(level) {
+  updateIntimacy(level, deltaTime) {
     this.intimacyLevel = level;
     // Intimacy expressed through composition: reduce ambient particle motion
     if (!this.universe) return;
     const pool = this.universe.particleEngine.pool;
     const activeCount = this.universe.particleEngine.activeCount;
-    const damping = 1 - level * 0.02;
+    const dt = deltaTime || this.currentDeltaTime || 0.016;
+    const damping = 1 - level * 0.02 * dt;
     const limit = Math.min(activeCount, pool.length);
     for (let i = 0; i < limit; i++) {
       const p = pool[i];
@@ -269,6 +277,7 @@ export class Scene011_FirstConversation {
   async leave() {
     this.state = SCENE_STATES.LEAVING;
     if (!this.skipEnvironmentTeardown) {
+      this.deactivateConstellationsLayer();
       this.destroySubsystems();
       if (this.universe) {
         this.universe.cameraController.clearClusterBias();
@@ -276,6 +285,13 @@ export class Scene011_FirstConversation {
       }
     }
     this.state = SCENE_STATES.CLEANUP;
+  }
+
+  deactivateConstellationsLayer() {
+    if (!this.universe) return;
+    const bgRenderer = this.universe.backgroundRenderer;
+    bgRenderer.setLayerActive(UNIVERSE_LAYERS.CONSTELLATIONS, false);
+    bgRenderer.setLayerRenderer(UNIVERSE_LAYERS.CONSTELLATIONS, null);
   }
 
   destroySubsystems() {
