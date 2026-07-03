@@ -1,0 +1,40 @@
+{
+  "project_type": "Vite-based immersive investor pitch deck SPA with canvas-based cinematic opening",
+  "language": "JavaScript (ES modules)",
+  "build_system": "Vite (vite.config.js) - npm registry blocked under INTEGRATIONS_ONLY network",
+  "test_framework": "No formal test framework installed. Validation via AST/syntax checks only.",
+  "build_command": "NODE_OPTIONS='' npx vite build (may fail due to missing node_modules - use syntax validation instead)",
+  "test_command": "NODE_OPTIONS='' node --check <file> for syntax validation",
+  "verification_instructions": "Run node --check on all created/modified JS files. Verify HTML is well-formed. Check CSS syntax.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup possible - npm registry blocked. node_modules may not exist. Use syntax validation only.",
+  "environment_constraints": "INTEGRATIONS_ONLY network - npm install blocked. No build tools available beyond Node.js 22. Prefix commands with NODE_OPTIONS='' to avoid preload error.",
+  "contribution_requirements": "Work on feat/kelza-platform-foundation branch. Commit message: feat(product): implement The Insight transition from cinematic opening to product experience. Do NOT push.",
+  "key_patterns": [
+    "Scenes are classes with getId(), setUniverse(), load(), enter(), update(), leave(), destroy(), isCompleted() methods",
+    "SceneDirector manages emotional phases with startTime, duration, onEnter/onUpdate/onLeave callbacks",
+    "Engine.js checkSceneTransition() polls scene completion to trigger next transition",
+    "ScrollManager wraps Lenis with lock()/unlock() for scroll control",
+    "UniverseEngine exposes setFogActive(), setGradientsActive(), setCameraDriftActive(), setVignetteActive()",
+    "CSS uses design tokens from variables.css exclusively - no hardcoded values",
+    "main.css imports all CSS modules via @import",
+    "Particles have vx/vy velocities that can be damped per-frame (Scene011 already does this in updateIntimacy)",
+    "ParticleEngine has no global speed multiplier - damping must happen per-particle in update loops"
+  ],
+  "relevant_files": [
+    "index.html",
+    "css/main.css",
+    "css/variables.css",
+    "js/app.js",
+    "js/engine/Engine.js",
+    "js/engine/ScrollManager.js",
+    "js/engine/SceneDirector.js",
+    "js/engine/universe/UniverseEngine.js",
+    "js/engine/universe/ParticleEngine.js",
+    "js/scenes/Scene011_FirstConversation.js",
+    "js/scenes/scene011/Scene011Phases.js",
+    "js/config/constants.js",
+    "js/config/settings.js"
+  ],
+  "directory_structure": "Root: index.html, vite.config.js, package.json. js/: app.js entry, config/ (constants, settings), engine/ (Engine, managers, universe/), scenes/ (Scene001-011), ui/ (empty), utils/. css/: main.css imports reset, variables, typography, layout, utilities, animations, universe, background, particles, lighting, fog, vignette, components."
+}

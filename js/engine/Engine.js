@@ -27,6 +27,7 @@ import { Scene008_Revelation } from '../scenes/Scene008_Revelation.js';
 import { Scene009_Descent } from '../scenes/Scene009_Descent.js';
 import { Scene010_Arrival } from '../scenes/Scene010_Arrival.js';
 import { Scene011_FirstConversation } from '../scenes/Scene011_FirstConversation.js';
+import { InsightTransition } from '../sections/InsightTransition.js';
 
 export class Engine {
   constructor() {
@@ -61,6 +62,8 @@ export class Engine {
     this.scene011Registered = false;
     this.scene011Instance = null;
     this.connectionDataForScene004 = null;
+    this.insightTransition = null;
+    this.insightTriggered = false;
   }
 
   /**
@@ -99,6 +102,7 @@ export class Engine {
     this.initScene009();
     this.initScene010();
     this.initScene011();
+    this.managers.get('scroll').lock();
     this.state = MANAGER_STATES.READY;
   }
 
@@ -319,6 +323,14 @@ export class Engine {
     if (this.scene011Registered && sceneManager.currentScene === 'scene010_arrival') {
       if (this.scene010Instance && this.scene010Instance.isCompleted()) {
         this.transitionToScene011();
+      }
+    }
+
+    // Scene011 -> Insight transition (completion-based)
+    if (!this.insightTriggered && sceneManager.currentScene === 'scene011_firstConversation') {
+      if (this.scene011Instance && this.scene011Instance.isCompleted()) {
+        this.insightTriggered = true;
+        this.triggerInsightTransition();
       }
     }
   }
@@ -653,6 +665,26 @@ export class Engine {
   }
 
   /**
+   * Trigger the Insight transition after Scene011 completes.
+   * Creates InsightTransition and starts the cinematic bridge to the product experience.
+   * The universe canvas stays active as a quiet backdrop.
+   */
+  triggerInsightTransition() {
+    // Keep the universe canvas alive - prevent Scene011 from tearing down environment
+    if (this.scene011Instance) {
+      this.scene011Instance.skipEnvironmentTeardown = true;
+    }
+
+    this.insightTransition = new InsightTransition({
+      engine: this,
+      universe: this.universe,
+      scrollManager: this.managers.get('scroll')
+    });
+
+    this.insightTransition.start();
+  }
+
+  /**
    * Capture connection data from Scene003 before transition.
    * Stores midpoint and particle indices for Scene004.
    */
@@ -722,6 +754,11 @@ export class Engine {
     }
 
     this.universe.destroy();
+
+    if (this.insightTransition) {
+      this.insightTransition.destroy();
+      this.insightTransition = null;
+    }
 
     this.managers.forEach(manager => {
       if (manager.destroy) {

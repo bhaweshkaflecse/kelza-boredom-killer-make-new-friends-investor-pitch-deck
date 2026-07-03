@@ -1,0 +1,7 @@
+{
+  "task_id": "task-insight-transition",
+  "task_description": "Implement The Insight - the bridge between the cinematic opening (Scene011 completion) and the Product Experience. A single editorial statement appears in the DOM after the canvas cinematic completes, universe motion reduces ~80%, and scroll unlocks for user control.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null
+}

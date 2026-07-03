@@ -1,0 +1,55 @@
+/**
+ * Insight Section Styles
+ * Premium editorial typography for the core insight statement.
+ * Triggered by .insight-section--visible class toggle.
+ */
+
+.insight-section {
+  position: relative;
+  z-index: var(--z-above);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--space-8);
+  pointer-events: none;
+}
+
+.insight-section--visible {
+  pointer-events: auto;
+}
+
+.insight-statement {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-4xl), 5vw + 1rem, var(--font-size-8xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  text-align: center;
+  max-width: 20ch;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 2s var(--ease-out),
+    transform 2s var(--ease-out);
+}
+
+.insight-section--visible .insight-statement {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reduced motion: no animation, text simply appears */
+@media (prefers-reduced-motion: reduce) {
+  .insight-statement {
+    transition: none;
+  }
+
+  .insight-section--visible .insight-statement {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

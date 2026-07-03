@@ -1,0 +1,35 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement The Insight transition: after Scene011 completes, bridge cinematic canvas to DOM-based product experience with a single premium editorial statement",
+  "status": "in_progress",
+  "steps": [
+    "1. Add insight section HTML to index.html: inside <main id='main-content'>, add <section id='insight-section' class='insight-section' aria-label='Core insight'> containing a single <p class='insight-statement'>[Core Insight Statement]</p>. Initially hidden via CSS (opacity: 0).",
+    "2. Create css/insight.css with premium editorial styling: .insight-section is full viewport height, flexbox centered both axes, z-index above canvas (use --z-above or higher), position: relative. .insight-statement uses clamp() for responsive sizing (from --font-size-4xl to --font-size-8xl), --font-weight-light (300), --color-text-primary, --line-height-tight, --letter-spacing-tight, generous max-width (~20ch), text-align center. Opacity/transform transition for reveal: opacity 0 -> 1 with translateY(8px) -> 0 over ~2s ease-out. @media (prefers-reduced-motion: reduce) removes animation, text simply visible. Transition triggered by adding .insight-section--visible class.",
+    "3. Add @import './insight.css' to css/main.css after the existing @import './components.css' line.",
+    "4. Create js/sections/InsightTransition.js - a reusable bridge class. Constructor takes { engine, universe, scrollManager }. Methods: start() begins the transition sequence: (a) 1-second silence delay via setTimeout/rAF, (b) reduces universe particle motion by damping all particle velocities to ~20% over 2 seconds, (c) after motion reduction settles (~2s), adds .insight-section--visible class to #insight-section element, (d) after text appears (~2s more), calls scrollManager.unlock() to enable scrolling. Should store state (idle, transitioning, complete). Reduced motion path: skip delays, immediately show text, unlock scroll. destroy() for cleanup.",
+    "5. Create js/sections/InsightSection.js - manages the insight DOM element lifecycle. Constructor takes no args, uses document.getElementById('insight-section'). Methods: reveal() adds the --visible class, hide() removes it, isVisible() getter, destroy(). Simple, lightweight, no animation engine.",
+    "6. Modify js/engine/Engine.js: (a) import InsightTransition from '../sections/InsightTransition.js', (b) add insightTransition property initialized to null in constructor, (c) add insightTriggered = false property, (d) in checkSceneTransition(), after the Scene010->Scene011 block, add a new block: if scene011 is current and scene011Instance.isCompleted() and !insightTriggered, set insightTriggered = true and call this.triggerInsightTransition(), (e) add triggerInsightTransition() method that creates new InsightTransition({ engine: this, universe: this.universe, scrollManager: this.managers.get('scroll') }) and calls .start(), (f) also tell Scene011 to skipEnvironmentTeardown so the universe canvas stays.",
+    "7. Update Engine.js init() method: after all scenes are initialized but before setting state to READY, lock scroll via this.managers.get('scroll').lock() so scroll is disabled during cinematic. InsightTransition.start() will unlock it after the insight text appears."
+  ],
+  "acceptance_criteria": [
+    "Running NODE_OPTIONS='' node --check on all JS files (Engine.js, InsightTransition.js, InsightSection.js) passes with no syntax errors",
+    "index.html contains a semantic <section id='insight-section'> inside <main> with one paragraph element for the statement",
+    "css/insight.css exists with responsive typography using design tokens from variables.css",
+    "css/main.css imports insight.css",
+    "Engine.js detects Scene011 completion and triggers InsightTransition",
+    "InsightTransition reduces universe motion and reveals text in DOM via CSS class toggle",
+    "ScrollManager is locked during cinematic and unlocked after insight text appears",
+    "Reduced motion is respected - no animation, text simply visible immediately",
+    "No new animation engine, no canvas text rendering, no extra sections, no navigation"
+  ],
+  "verification": [
+    "NODE_OPTIONS='' node --check js/sections/InsightTransition.js",
+    "NODE_OPTIONS='' node --check js/sections/InsightSection.js",
+    "NODE_OPTIONS='' node --check js/engine/Engine.js",
+    "NODE_OPTIONS='' node --check js/app.js",
+    "Verify HTML well-formedness with node -e to parse index.html"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
