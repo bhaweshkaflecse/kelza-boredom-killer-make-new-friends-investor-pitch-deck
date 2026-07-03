@@ -1,0 +1,282 @@
+/**
+ * Roadmap Section Styles
+ * Investor Question 11: What will this investment unlock?
+ * Four-stage execution roadmap with editorial, minimal, premium styling.
+ * Triggered by .roadmap--visible class toggle.
+ * Child elements revealed progressively via .roadmap__element--revealed.
+ */
+
+.roadmap-section {
+  position: relative;
+  z-index: var(--z-above);
+  padding: var(--space-24) var(--space-8);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slowest) var(--ease-out),
+    transform var(--duration-slowest) var(--ease-out);
+}
+
+.roadmap--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Container
+ * ======================================== */
+.roadmap__container {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Section Intro
+ * ======================================== */
+.roadmap__intro {
+  text-align: center;
+  margin-bottom: var(--space-24);
+  padding: var(--space-12) 0;
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.roadmap__element--revealed.roadmap__intro {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.roadmap__intro-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 0.5rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-4);
+}
+
+.roadmap__intro-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: var(--container-sm);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Stages Grid
+ * ======================================== */
+.roadmap__stages {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-12);
+  margin-bottom: var(--space-24);
+}
+
+/* ========================================
+ * Stage Card
+ * ======================================== */
+.roadmap__stage {
+  padding: var(--space-8);
+  background-color: var(--color-surface-primary);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-lg);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out),
+    border-color var(--duration-normal) var(--ease-out);
+}
+
+.roadmap__element--revealed.roadmap__stage {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.roadmap__stage:hover {
+  border-color: var(--border-color-hover);
+}
+
+/* ========================================
+ * Stage Header
+ * ======================================== */
+.roadmap__stage-header {
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-width-thin) solid var(--border-color-default);
+}
+
+.roadmap__stage-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.roadmap__stage-heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-lg), 2vw + 0.5rem, var(--font-size-xl));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+}
+
+/* ========================================
+ * Stage Items
+ * ======================================== */
+.roadmap__stage-items {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-6) 0;
+}
+
+.roadmap__stage-item {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  padding: var(--space-2) 0;
+  border-bottom: var(--border-width-thin) solid var(--border-color-default);
+}
+
+.roadmap__stage-item:last-child {
+  border-bottom: none;
+}
+
+/* ========================================
+ * Stage Philosophy (Why it matters / Risk reduced)
+ * ======================================== */
+.roadmap__stage-philosophy {
+  padding-top: var(--space-4);
+  border-top: var(--border-width-thin) solid var(--border-color-default);
+}
+
+.roadmap__philosophy-block {
+  margin-bottom: var(--space-4);
+}
+
+.roadmap__philosophy-block:last-child {
+  margin-bottom: 0;
+}
+
+.roadmap__philosophy-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  margin-bottom: var(--space-1);
+}
+
+.roadmap__philosophy-text {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Bridge / Transition
+ * ======================================== */
+.roadmap__bridge {
+  text-align: center;
+  padding-top: var(--space-16);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-slower);
+}
+
+.roadmap__element--revealed.roadmap__bridge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.roadmap__bridge-text {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 1rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* ========================================
+ * Responsive Breakpoints
+ * ======================================== */
+@media (min-width: 768px) {
+  .roadmap-section {
+    padding: var(--space-32) var(--space-12);
+  }
+
+  .roadmap__intro {
+    margin-bottom: var(--space-32);
+    padding: var(--space-16) 0;
+  }
+
+  .roadmap__stages {
+    gap: var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .roadmap-section {
+    padding: var(--space-40) var(--space-16);
+  }
+
+  .roadmap__intro-heading {
+    font-size: clamp(var(--font-size-3xl), 3vw + 0.5rem, var(--font-size-5xl));
+  }
+
+  .roadmap__stages {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+
+  /* Staggered reveal for stages at desktop */
+  .roadmap__stage:nth-child(1) {
+    transition-delay: var(--duration-fast);
+  }
+
+  .roadmap__stage:nth-child(2) {
+    transition-delay: var(--duration-normal);
+  }
+
+  .roadmap__stage:nth-child(3) {
+    transition-delay: var(--duration-slow);
+  }
+
+  .roadmap__stage:nth-child(4) {
+    transition-delay: var(--duration-slower);
+  }
+}
+
+/* ========================================
+ * Reduced Motion
+ * ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .roadmap-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .roadmap__intro,
+  .roadmap__stage,
+  .roadmap__bridge {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

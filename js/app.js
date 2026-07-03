@@ -13,6 +13,7 @@ import { BusinessSection } from './sections/BusinessSection.js';
 import { WhyNowSection } from './sections/WhyNowSection.js';
 import { CompetitiveSection } from './sections/CompetitiveSection.js';
 import { StatusSection } from './sections/StatusSection.js';
+import { RoadmapSection } from './sections/RoadmapSection.js';
 import '../css/main.css';
 
 const engine = new Engine();
@@ -46,6 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const statusSection = new StatusSection();
   statusSection.reveal();
+
+  const roadmapSection = new RoadmapSection();
+  roadmapSection.reveal();
 });
 
 export { engine };
