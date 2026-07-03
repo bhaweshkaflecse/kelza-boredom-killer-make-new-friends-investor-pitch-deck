@@ -22,7 +22,8 @@ const DAMPING_TARGET = 0.2;
 const TRANSITION_STATE = {
   IDLE: 'idle',
   TRANSITIONING: 'transitioning',
-  COMPLETE: 'complete'
+  COMPLETE: 'complete',
+  DESTROYED: 'destroyed'
 };
 
 export class InsightTransition {
@@ -87,7 +88,8 @@ export class InsightTransition {
 
   /**
    * Gradually reduce particle velocities to ~20% of original over DAMPING_DURATION_MS.
-   * Iterates the particle pool and applies per-frame damping toward the target.
+   * Stores original velocities at the start and interpolates toward the target,
+   * avoiding compounding per-frame multiplication.
    */
   dampParticleMotion() {
     if (!this.universe || !this.universe.particleEngine) return;
@@ -95,6 +97,12 @@ export class InsightTransition {
     const particleEngine = this.universe.particleEngine;
     const pool = particleEngine.pool;
     if (!pool || pool.length === 0) return;
+
+    // Store original velocities to lerp from
+    const originalVelocities = [];
+    for (let i = 0; i < pool.length; i++) {
+      originalVelocities.push({ vx: pool[i].vx, vy: pool[i].vy });
+    }
 
     const startTime = performance.now();
 
@@ -109,8 +117,8 @@ export class InsightTransition {
       for (let i = 0; i < pool.length; i++) {
         const particle = pool[i];
         if (!particle.active) continue;
-        particle.vx *= dampingFactor;
-        particle.vy *= dampingFactor;
+        particle.vx = originalVelocities[i].vx * dampingFactor;
+        particle.vy = originalVelocities[i].vy * dampingFactor;
       }
 
       if (progress < 1) {
@@ -140,6 +148,6 @@ export class InsightTransition {
       this.insightSection = null;
     }
 
-    this.state = TRANSITION_STATE.IDLE;
+    this.state = TRANSITION_STATE.DESTROYED;
   }
 }

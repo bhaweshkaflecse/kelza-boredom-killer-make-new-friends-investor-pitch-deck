@@ -10,13 +10,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding: var(--space-8);
+  min-height: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  padding: 0;
   pointer-events: none;
 }
 
 .insight-section--visible {
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: auto;
+  overflow: visible;
+  visibility: visible;
+  padding: var(--space-8);
   pointer-events: auto;
 }
 
