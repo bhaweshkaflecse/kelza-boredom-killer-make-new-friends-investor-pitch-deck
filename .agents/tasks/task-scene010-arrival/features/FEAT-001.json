@@ -2,7 +2,7 @@
   "id": "FEAT-001",
   "type": "feat",
   "description": "Implement Scene010 Arrival - the first human-scale scene with ArrivalDirector, spatial compression, environmental quieting, camera settling, and Engine integration",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "1. Add ARRIVAL_STATES constant to js/config/constants.js following the JOURNEY_STATES pattern. States: APPROACH, PRESENCE, STILLNESS, ANTICIPATION, ARRIVAL.",
     "2. Add scene010 config block to js/config/settings.js (Object.freeze) following scene009 pattern. Include: arrival (speed: 0.00015 - even slower than journey, settlingDuration: 6, compressionRate: 0.02, reducedMotionFactor: 0.3), phases (approach: {start:0, duration:9}, presence: {start:9, duration:9}, stillness: {start:18, duration:9}, anticipation: {start:27, duration:9}, arrival: {start:36, duration:9}), environment (driftReduction: 0.85, particleDamping: 0.4, ambientFade: 0.5, focusEnhancement: 0.6, compressionTarget: 0.7), lighting (warmthTarget: 0.12, presenceGlow: 0.04), connection (breathDepth: 0.3, microVariation: 0.008, meaningfulnessRate: 0.02).",
@@ -31,5 +31,5 @@
     "Grep for forbidden concepts (UI, phone, Earth, globe, logo, chat, Hero) in new files"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All files pass node --check. ArrivalDirector is 257 lines (under 400). Scene010_Arrival is 322 lines (under 400). No function exceeds 60 lines. No forbidden terms. Zero per-frame allocations. Scene continues from Scene009 end state (camera near connection mid, warmth ~7%, recognition 0.55, memory 0.25). Engine successfully registers Scene010 and transitions from Scene009 on completion."
 }
