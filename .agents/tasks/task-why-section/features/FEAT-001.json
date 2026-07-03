@@ -31,5 +31,5 @@
     "Count lines in WhySection.js to confirm <400 lines total and no function >60 lines"
   ],
   "blocked_reason": null,
-  "findings": "All acceptance criteria met. JS syntax validates clean. No hardcoded colors or px values in CSS (only breakpoint media queries use px, which is standard). CSS is 342 lines, JS is 103 lines, both well within limits. IntersectionObserver uses data-reveal attribute on child divs for progressive reveal targeting."
+  "findings": "All acceptance criteria met. JS syntax validates clean. No hardcoded colors or px values in CSS (only breakpoint media queries use px, which is standard). CSS is 342 lines, JS is 103 lines, both well within limits. IntersectionObserver uses data-reveal attribute on child divs for progressive reveal targeting. Review fix: moved _setupObserver() from constructor into reveal() to prevent premature --revealed class additions. Wired WhySection into app.js by importing and instantiating on DOMContentLoaded with immediate reveal() call so IntersectionObserver handles progressive child animations as user scrolls."
 }
