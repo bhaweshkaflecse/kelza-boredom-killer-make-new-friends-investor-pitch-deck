@@ -15,6 +15,7 @@ import { CompetitiveSection } from './sections/CompetitiveSection.js';
 import { StatusSection } from './sections/StatusSection.js';
 import { RoadmapSection } from './sections/RoadmapSection.js';
 import { MarketSection } from './sections/MarketSection.js';
+import { InvestmentSection } from './sections/InvestmentSection.js';
 import '../css/main.css';
 
 const engine = new Engine();
@@ -54,6 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const marketSection = new MarketSection();
   marketSection.reveal();
+
+  const investmentSection = new InvestmentSection();
+  investmentSection.reveal();
 });
 
 export { engine };
