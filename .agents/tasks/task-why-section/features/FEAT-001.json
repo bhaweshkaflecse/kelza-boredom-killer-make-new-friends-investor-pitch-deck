@@ -1,0 +1,35 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement the 'Why the world needs Kelza' section: HTML structure in index.html, CSS stylesheet (why-section.css imported in main.css), and JavaScript controller (WhySection.js) with IntersectionObserver-driven scroll reveals. Content covers: The Reality (loneliness/isolation stats), Platform Comparison (dating apps, social media, messaging, communities), Why Now (AI maturity, remote work, rising loneliness), and Bridge sentence to Meet Kelza.",
+  "status": "in_progress",
+  "steps": [
+    "Add semantic HTML section with id='why-section' inside <main> in index.html, after the insight-section. Structure: full-width opening statement (h2 + paragraph with loneliness stats), three-column problem grid (loneliness, superficial connections, fragmented communities), platform comparison (4-column grid: Dating Apps, Social Media, Messaging Apps, Communities - each with category name, arrow, optimization focus), Why Now section (grid of factors: AI maturity, Remote Work, Rising Loneliness, Digital Communities, Creator Economy, Global Connectivity), and bridge sentence. Use proper heading hierarchy (h2 for section, h3 for subsections). All content in placeholder brackets where real data would go.",
+    "Create css/why-section.css following insight.css pattern: section hidden by default (opacity 0, transform translateY), revealed via .why-section--visible class toggle. Style sub-elements with progressive reveal delays using .why-section__element--revealed class. Use CSS Grid for platform comparison (4 columns desktop, 2 tablet, 1 mobile). Use CSS Grid for Why Now factors. Editorial typography with generous whitespace. All values from variables.css tokens. Include @media (prefers-reduced-motion: reduce) to disable animations.",
+    "Add @import './why-section.css' to css/main.css after the insight.css import line.",
+    "Create js/sections/WhySection.js following InsightSection.js pattern: constructor finds #why-section, sets up IntersectionObserver with threshold array to progressively reveal child elements as they scroll into view. reveal()/hide()/destroy() methods. Observer adds --revealed class to child elements when they enter viewport. Disconnect observer on destroy(). No function >60 lines, no class >400 lines."
+  ],
+  "acceptance_criteria": [
+    "index.html contains a <section id='why-section'> after the insight-section inside <main>",
+    "css/why-section.css exists and uses BEM naming (why-section, why-section__*, why-section--*)",
+    "css/why-section.css uses only design tokens from variables.css (no hardcoded colors, sizes, spacing)",
+    "css/main.css imports why-section.css",
+    "js/sections/WhySection.js exists and exports a WhySection class with reveal(), hide(), destroy() methods",
+    "WhySection.js uses IntersectionObserver for scroll-triggered reveals",
+    "Section is aria-hidden='true' by default, managed by the JS controller",
+    "Responsive layout: 4-col grid on desktop becomes 2-col on tablet, 1-col on mobile for platform comparison",
+    "Reduced motion: @media (prefers-reduced-motion: reduce) makes content visible without animations",
+    "Proper heading hierarchy: h2 for main section title, h3 for subsections",
+    "No function exceeds 60 lines, no class exceeds 400 lines",
+    "Content covers all four areas: The Reality, Platform Comparison, Why Now, Bridge to Meet Kelza"
+  ],
+  "verification": [
+    "Run: node --check js/sections/WhySection.js to verify valid JavaScript syntax",
+    "Run: grep 'why-section' index.html to confirm section exists in HTML",
+    "Run: grep 'why-section.css' css/main.css to confirm CSS import exists",
+    "Visually inspect css/why-section.css for design token usage (no hex colors, no px values except borders)",
+    "Count lines in WhySection.js to confirm <400 lines total and no function >60 lines"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

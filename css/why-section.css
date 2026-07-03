@@ -1,0 +1,342 @@
+/**
+ * Why Section Styles
+ * Editorial layout for "Why the world needs Kelza" investor education.
+ * Triggered by .why-section--visible class toggle.
+ * Child elements revealed progressively via .why-section__element--revealed.
+ */
+
+.why-section {
+  position: relative;
+  z-index: var(--z-above);
+  padding: var(--space-24) var(--space-8);
+  opacity: 0;
+  transform: translateY(var(--space-8));
+  transition:
+    opacity var(--duration-slowest) var(--ease-out),
+    transform var(--duration-slowest) var(--ease-out);
+}
+
+.why-section--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Container
+ * ======================================== */
+.why-section__container {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Opening Statement (The Reality)
+ * ======================================== */
+.why-section__opening {
+  text-align: center;
+  margin-bottom: var(--space-32);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.why-section__element--revealed.why-section__opening {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.why-section__title {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-3xl), 4vw + 1rem, var(--font-size-6xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: var(--space-8);
+}
+
+.why-section__subtitle {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: var(--container-md);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Problem Grid (Three columns)
+ * ======================================== */
+.why-section__problems {
+  margin-bottom: var(--space-32);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-fast);
+}
+
+.why-section__element--revealed.why-section__problems {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.why-section__problems-heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-snug);
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.why-section__problems-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .why-section__problems-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.why-section__problem-card {
+  padding: var(--space-8);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-surface-primary);
+  text-align: center;
+}
+
+.why-section__problem-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-snug);
+  margin-bottom: var(--space-4);
+}
+
+.why-section__problem-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Platform Comparison (Four columns)
+ * ======================================== */
+.why-section__comparison {
+  margin-bottom: var(--space-32);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-normal);
+}
+
+.why-section__element--revealed.why-section__comparison {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.why-section__comparison-heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-snug);
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.why-section__comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 640px) {
+  .why-section__comparison-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .why-section__comparison-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.why-section__comparison-card {
+  padding: var(--space-8);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-surface-primary);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.why-section__comparison-category {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-snug);
+}
+
+.why-section__comparison-arrow {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xl);
+  color: var(--color-text-tertiary);
+  line-height: var(--line-height-none);
+}
+
+.why-section__comparison-result {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+.why-section__comparison-gap {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-brand-primary-light);
+  text-align: center;
+  margin-top: var(--space-10);
+}
+
+/* ========================================
+ * Why Now Section
+ * ======================================== */
+.why-section__why-now {
+  margin-bottom: var(--space-32);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-slow);
+}
+
+.why-section__element--revealed.why-section__why-now {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.why-section__why-now-heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-snug);
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.why-section__why-now-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 640px) {
+  .why-section__why-now-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .why-section__why-now-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.why-section__factor {
+  padding: var(--space-6);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-primary);
+}
+
+.why-section__factor-name {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-snug);
+  margin-bottom: var(--space-2);
+}
+
+.why-section__factor-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Bridge (Transition to Meet Kelza)
+ * ======================================== */
+.why-section__bridge {
+  text-align: center;
+  padding-top: var(--space-16);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-slower);
+}
+
+.why-section__element--revealed.why-section__bridge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.why-section__bridge-text {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 1rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* ========================================
+ * Reduced Motion
+ * ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .why-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .why-section__opening,
+  .why-section__problems,
+  .why-section__comparison,
+  .why-section__why-now,
+  .why-section__bridge {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "project_type": "Vite-powered immersive investor pitch deck SPA",
+  "language": "JavaScript (ES modules), HTML, CSS",
+  "build_system": "Vite 6 - but npm registry is blocked so no npm install possible",
+  "test_framework": "None - no test files exist in this project",
+  "build_command": "Cannot run vite build (no node_modules). Validate via static file analysis.",
+  "test_command": "No tests exist. Verify via file structure and syntax checks.",
+  "verification_instructions": "1. Check all new files exist and have correct syntax. 2. Verify CSS imports are added to main.css. 3. Verify HTML section is added to index.html in correct position. 4. Verify JS module follows InsightSection.js pattern.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup possible - INTEGRATIONS_ONLY network mode blocks npm install.",
+  "environment_constraints": "INTEGRATIONS_ONLY network mode. npm registry blocked. No node_modules available. Cannot run vite build or dev server. Validation must be done via AST/syntax checks only.",
+  "contribution_requirements": "Commit message: feat(product): implement investor question 2 - why the world needs Kelza. No function >60 lines, no class >400 lines.",
+  "key_patterns": "CSS: BEM-style naming (section-name, section-name--modifier). JS sections: lightweight controller classes with reveal()/hide()/destroy() methods. CSS transitions triggered by class toggle. aria-hidden managed for accessibility. All CSS values from variables.css tokens. main.css imports all CSS modules. Sections hidden by default, revealed via class addition.",
+  "relevant_files": [
+    "index.html",
+    "css/main.css",
+    "css/variables.css",
+    "css/insight.css",
+    "css/layout.css",
+    "css/typography.css",
+    "js/sections/InsightSection.js",
+    "js/sections/InsightTransition.js",
+    "js/app.js"
+  ],
+  "directory_structure": "Root: index.html, package.json, vite.config.js. css/: design system (variables, layout, typography, etc.). js/: app.js entry, engine/ (Engine, managers), sections/ (InsightSection, InsightTransition), effects/, scenes/, ui/, utils/, config/."
+}
