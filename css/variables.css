@@ -58,6 +58,9 @@
   --color-glass-darkest: rgba(0, 0, 0, 0.8);
   --color-glass-brand: rgba(99, 102, 241, 0.1);
   --color-glass-brand-medium: rgba(99, 102, 241, 0.2);
+  --color-glass-success: rgba(16, 185, 129, 0.2);
+  --color-glass-accent: rgba(245, 158, 11, 0.2);
+  --color-glass-rose: rgba(244, 63, 94, 0.2);
 
   /* ========================================
    * COLORS - Lighting / Glow

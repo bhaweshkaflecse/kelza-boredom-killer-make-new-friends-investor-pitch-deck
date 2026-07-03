@@ -1,0 +1,34 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement the complete product walkthrough section (Section 5) - HTML structure in index.html, CSS styles in css/product-walkthrough.css, JS controller in js/sections/ProductWalkthrough.js, and wire everything together in main.css and app.js.",
+  "status": "completed",
+  "steps": [
+    "Create css/product-walkthrough.css with full styles for the walkthrough section. Follow patterns from css/what-is-kelza.css: section hidden by default (opacity:0, transform:translateY), revealed via .product-walkthrough--visible class. Child elements use .product-walkthrough__element--revealed for progressive reveal. Use BEM naming with 'product-walkthrough' block. Include: (1) Section container with padding matching other sections. (2) Story introduction - centered text, editorial typography. (3) Step containers (.walkthrough-step) that show/hide on scroll. (4) Phone-shaped container (.walkthrough-phone) using border-radius + aspect-ratio (approx 9:19.5 ratio, rounded corners ~40px, border using --border-color-default, background --color-bg-secondary). (5) Glass cards (.walkthrough-card) with backdrop-filter, --color-glass-light bg, --border-color-default border, --radius-xl. (6) Interest tags (.walkthrough-tag) as small pills with --color-glass-brand bg, --radius-full, small text. (7) Chat bubbles (.walkthrough-chat) alternating left/right alignment, brand color for sent, surface color for received. (8) Avatar circles (.walkthrough-avatar) with colored background and initials, --radius-full. (9) Bridge/transition text at end. (10) Responsive breakpoints at 768px and 1024px. (11) Reduced motion media query. All colors/spacing/radius from variables.css tokens only.",
+    "Create js/sections/ProductWalkthrough.js following the exact pattern from js/sections/WhatIsKelzaSection.js: export class ProductWalkthrough with constructor (gets element by ID 'product-walkthrough-section'), _setupObserver (IntersectionObserver on [data-reveal] children, rootMargin '0px 0px -10% 0px', threshold [0, 0.1, 0.2, 0.3]), _handleIntersections (adds 'product-walkthrough__element--revealed' class at intersectionRatio >= 0.1 and unobserves), reveal() (removes aria-hidden, adds 'product-walkthrough--visible', calls _setupObserver), hide(), isVisible(), destroy(). Keep class under 400 lines, no function over 60 lines.",
+    "Add the walkthrough section HTML to index.html AFTER the closing </section> of what-is-kelza-section and BEFORE </main>. Use id='product-walkthrough-section', class='product-walkthrough-section', aria-label='Product walkthrough - what using Kelza feels like', aria-hidden='true'. Structure: (1) div.product-walkthrough__container > (2) Story intro div.product-walkthrough__intro[data-reveal] with scenario text lines (Imagine you just moved to a new city / You don't know anyone yet / You want real friendships, not just contacts / You open Kelza / Here's what happens next). (3) Step 1: div.product-walkthrough__step[data-reveal] with heading 'Opening Kelza' - inside, a .walkthrough-phone container showing a minimal home screen with nav items (Discover, Connect, Communities) and a welcome message. (4) Step 2: div.product-walkthrough__step[data-reveal] 'People Who Get You' - .walkthrough-phone with 2-3 .walkthrough-card profile cards each having a .walkthrough-avatar (colored circle with initials like 'MK', 'SP', 'JL'), name, and .walkthrough-tag interest pills (Photography, Hiking, Jazz, Cooking, etc), plus a brief AI match reason line. (5) Step 3: div.product-walkthrough__step[data-reveal] 'First Conversation' - .walkthrough-phone with chat interface: .walkthrough-chat bubbles showing natural conversation opener. (6) Step 4: div.product-walkthrough__step[data-reveal] 'Trust Builds Naturally' - show verification badges, shared activity indicators, mutual connections. (7) Step 5: div.product-walkthrough__step[data-reveal] 'Your Community' - show group/community card with member avatars, topic, activity indicator. (8) Bridge div.product-walkthrough__bridge[data-reveal] with transition text.",
+    "Add @import './product-walkthrough.css'; to css/main.css after the @import './what-is-kelza.css'; line.",
+    "In js/app.js: add import { ProductWalkthrough } from './sections/ProductWalkthrough.js'; after the WhatIsKelzaSection import. In the DOMContentLoaded callback, after whatIsKelzaSection.reveal(), add: const productWalkthrough = new ProductWalkthrough(); productWalkthrough.reveal();"
+  ],
+  "acceptance_criteria": [
+    "css/product-walkthrough.css exists with BEM-named styles using only design tokens from variables.css",
+    "js/sections/ProductWalkthrough.js exists following the same IntersectionObserver pattern as WhatIsKelzaSection.js",
+    "index.html has a new section#product-walkthrough-section after what-is-kelza-section with all 5 walkthrough steps",
+    "css/main.css imports product-walkthrough.css",
+    "js/app.js imports and instantiates ProductWalkthrough",
+    "No function exceeds 60 lines, no class exceeds 400 lines",
+    "Reduced motion support included in CSS",
+    "All UI components use CSS-only placeholders (no images, no external resources)",
+    "Section follows scroll-driven progressive reveal pattern with data-reveal attributes",
+    "HTML uses semantic structure with proper aria labels"
+  ],
+  "verification": [
+    "Read css/product-walkthrough.css and confirm it uses only CSS variables from variables.css, has BEM naming, includes reduced motion query",
+    "Read js/sections/ProductWalkthrough.js and confirm it follows the WhatIsKelzaSection.js pattern exactly, class under 400 lines",
+    "Read index.html and confirm new section is placed after what-is-kelza-section, has all 5 steps with data-reveal attributes",
+    "Read css/main.css and confirm the new import is present after what-is-kelza.css",
+    "Read js/app.js and confirm import and instantiation are added"
+  ],
+  "blocked_reason": null,
+  "findings": "Implementation complete. Post-review fixes applied: (1) Added --color-glass-success, --color-glass-accent, --color-glass-rose tokens to variables.css and updated avatar classes to use them. (2) Added visually-hidden h2 'Product Walkthrough' heading and demoted step headings to h3 for proper heading hierarchy. Issues 1 (premature reveal) and 4 (bridge text coupling) were intentionally not fixed - issue 1 is the established pattern shared by all sections, issue 4 is intentional per the task spec."
+}
