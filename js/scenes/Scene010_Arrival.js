@@ -211,6 +211,7 @@ export class Scene010_Arrival {
     const midX = this.connectionMidX;
     const midY = this.connectionMidY;
     const focusRadius = 200;
+    const focusRadiusSq = focusRadius * focusRadius;
     const strength = this.focusLevel * enhancement;
     const limit = Math.min(activeCount, pool.length);
 
@@ -219,11 +220,14 @@ export class Scene010_Arrival {
       if (!p || p.opacity <= 0) continue;
       const dx = p.x - midX;
       const dy = p.y - midY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < focusRadius) {
-        const factor = 1 - dist / focusRadius;
+      const distSq = dx * dx + dy * dy;
+      if (distSq < focusRadiusSq) {
+        if (p.baseTargetOpacity === undefined) {
+          p.baseTargetOpacity = p.targetOpacity || p.opacity;
+        }
+        const factor = 1 - distSq / focusRadiusSq;
         const boost = factor * strength * 0.1;
-        p.targetOpacity = Math.min((p.targetOpacity || p.opacity) + boost, 0.7);
+        p.targetOpacity = Math.min(p.baseTargetOpacity + boost, 0.7);
       }
     }
   }
@@ -251,10 +255,16 @@ export class Scene010_Arrival {
 
   updateCompression(level) {
     this.compressionLevel = level;
+    if (this.arrivalDirector) {
+      this.arrivalDirector.setPhaseTargets(level, this.quietingLevel);
+    }
   }
 
   updateQuieting(level) {
     this.quietingLevel = level;
+    if (this.arrivalDirector) {
+      this.arrivalDirector.setPhaseTargets(this.compressionLevel, level);
+    }
   }
 
   updateWarmth(progress) {

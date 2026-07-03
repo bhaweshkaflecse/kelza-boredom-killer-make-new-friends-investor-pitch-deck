@@ -101,6 +101,17 @@ export class ArrivalDirector {
   }
 
   /**
+   * Set phase-driven targets for compression and quieting.
+   * Called by the scene when phases update these levels.
+   * @param {number} compression - Compression target (0 to 1)
+   * @param {number} quieting - Quieting target (0 to 1)
+   */
+  setPhaseTargets(compression, quieting) {
+    this.compressionTarget = compression;
+    this.driftReduction = quieting;
+  }
+
+  /**
    * Advance spatial compression factor toward target.
    * @param {number} deltaTime - Frame delta in seconds
    */
@@ -224,13 +235,6 @@ export class ArrivalDirector {
    */
   isSettled() {
     return this.state === STATE_SETTLING || this.state === STATE_COMPLETE;
-  }
-
-  /**
-   * Mark director as complete.
-   */
-  complete() {
-    this.state = STATE_COMPLETE;
   }
 
   /**
