@@ -1,0 +1,265 @@
+/**
+ * Founder Section Styles
+ * Investor Question 14: Why this founder?
+ * The most minimal section in the experience.
+ * Typography-first, editorial, confident, honest, quiet.
+ * Triggered by .founder--visible class toggle.
+ * Child elements revealed progressively via .founder__element--revealed.
+ */
+
+.founder-section {
+  position: relative;
+  z-index: var(--z-above);
+  padding: var(--space-24) var(--space-8);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slowest) var(--ease-out),
+    transform var(--duration-slowest) var(--ease-out);
+}
+
+.founder--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Container
+ * ======================================== */
+.founder__container {
+  max-width: var(--container-md);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Part 1: The Mission
+ * ======================================== */
+.founder__mission {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.founder__element--revealed.founder__mission {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.founder__label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  margin-bottom: var(--space-6);
+}
+
+.founder__heading {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 0.5rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: var(--space-8);
+}
+
+.founder__text {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.founder__text:last-child {
+  margin-bottom: 0;
+}
+
+/* ========================================
+ * Part 2: The Builder
+ * ======================================== */
+.founder__builder {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.founder__element--revealed.founder__builder {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.founder__approach-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.founder__approach-item {
+  padding: var(--space-5) var(--space-6);
+  border-left: var(--border-width-medium) solid var(--border-color-default);
+  transition: border-color var(--duration-normal) var(--ease-out);
+}
+
+.founder__approach-item:hover {
+  border-color: var(--color-text-tertiary);
+}
+
+.founder__approach-name {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.founder__approach-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========================================
+ * Part 3: The Philosophy
+ * ======================================== */
+.founder__philosophy {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.founder__element--revealed.founder__philosophy {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.founder__principles {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+.founder__principle {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+  padding: var(--space-4) 0;
+  border-bottom: var(--border-width-thin) solid var(--border-color-default);
+}
+
+.founder__principle:last-child {
+  border-bottom: none;
+}
+
+/* ========================================
+ * Part 4: The Commitment
+ * ======================================== */
+.founder__commitment {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.founder__element--revealed.founder__commitment {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Part 5: Closing Statement
+ * ======================================== */
+.founder__closing {
+  text-align: center;
+  padding-top: var(--space-16);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+  transition-delay: var(--duration-slower);
+}
+
+.founder__element--revealed.founder__closing {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.founder__closing-text {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-xl), 2.5vw + 0.5rem, var(--font-size-3xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* ========================================
+ * Responsive Breakpoints
+ * ======================================== */
+@media (min-width: 768px) {
+  .founder-section {
+    padding: var(--space-32) var(--space-12);
+  }
+
+  .founder__mission {
+    margin-bottom: var(--space-32);
+  }
+
+  .founder__builder {
+    margin-bottom: var(--space-32);
+  }
+
+  .founder__philosophy {
+    margin-bottom: var(--space-32);
+  }
+
+  .founder__commitment {
+    margin-bottom: var(--space-32);
+  }
+}
+
+@media (min-width: 1024px) {
+  .founder-section {
+    padding: var(--space-40) var(--space-16);
+  }
+}
+
+/* ========================================
+ * Reduced Motion
+ * ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .founder-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .founder__mission,
+  .founder__builder,
+  .founder__philosophy,
+  .founder__commitment,
+  .founder__closing {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

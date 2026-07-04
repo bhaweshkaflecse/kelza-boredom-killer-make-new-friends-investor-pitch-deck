@@ -16,6 +16,7 @@ import { StatusSection } from './sections/StatusSection.js';
 import { RoadmapSection } from './sections/RoadmapSection.js';
 import { MarketSection } from './sections/MarketSection.js';
 import { InvestmentSection } from './sections/InvestmentSection.js';
+import { FounderSection } from './sections/FounderSection.js';
 import '../css/main.css';
 
 const engine = new Engine();
@@ -58,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const investmentSection = new InvestmentSection();
   investmentSection.reveal();
+
+  const founderSection = new FounderSection();
+  founderSection.reveal();
 });
 
 export { engine };
