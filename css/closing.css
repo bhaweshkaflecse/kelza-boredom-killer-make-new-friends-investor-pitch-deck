@@ -1,0 +1,359 @@
+/**
+ * Closing Section Styles
+ * Final Chapter: "Join the Journey"
+ * The quietest section in the experience.
+ * Typography-first, generous whitespace, almost no animation.
+ * Triggered by .closing--visible class toggle.
+ * Child elements revealed progressively via .closing__element--revealed.
+ */
+
+.closing-section {
+  position: relative;
+  z-index: var(--z-above);
+  padding: var(--space-24) var(--space-8);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slowest) var(--ease-out),
+    transform var(--duration-slowest) var(--ease-out);
+}
+
+.closing--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+ * Container
+ * ======================================== */
+.closing__container {
+  max-width: var(--container-md);
+  margin: 0 auto;
+}
+
+/* ========================================
+ * Part 1: Final Reflection
+ * ======================================== */
+.closing__reflection {
+  margin-bottom: var(--space-24);
+  text-align: center;
+  padding: var(--space-16) 0;
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.closing__element--revealed.closing__reflection {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.closing__reflection-text {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--font-size-2xl), 3vw + 0.5rem, var(--font-size-4xl));
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* ========================================
+ * Part 2: Call to Action
+ * ======================================== */
+.closing__cta {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.closing__element--revealed.closing__cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.closing__cta-heading {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  margin-bottom: var(--space-8);
+}
+
+.closing__cta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+.closing__cta-link {
+  display: block;
+  padding: var(--space-5) var(--space-6);
+  border: var(--border-width-thin) solid var(--border-color-default);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-normal) var(--ease-out),
+    background-color var(--duration-normal) var(--ease-out);
+}
+
+.closing__cta-link:hover {
+  border-color: var(--border-color-hover);
+  background-color: var(--color-surface-hover);
+}
+
+.closing__cta-link:focus-visible {
+  outline: var(--border-width-medium) solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+.closing__cta-label {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.closing__cta-description {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+}
+
+/* ========================================
+ * Part 3: What Happens Next
+ * ======================================== */
+.closing__next {
+  margin-bottom: var(--space-24);
+  opacity: 0;
+  transform: translateY(var(--space-4));
+  transition:
+    opacity var(--duration-slower) var(--ease-out),
+    transform var(--duration-slower) var(--ease-out);
+}
+
+.closing__element--revealed.closing__next {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.closing__next-heading {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  margin-bottom: var(--space-8);
+}
+
+.closing__next-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+.closing__next-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: var(--border-width-thin) solid var(--border-color-default);
+}
+
+.closing__next-item:last-child {
+  border-bottom: none;
+}
+
+.closing__next-number {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  min-width: var(--space-6);
+}
+
+.closing__next-text {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+}
+
+/* ========================================
+ * Part 4: Cinematic Callback
+ * CSS-only visual - thin glowing line representing connection
+ * ======================================== */
+.closing__callback {
+  margin-bottom: var(--space-24);
+  padding: var(--space-16) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--duration-slowest) var(--ease-out);
+}
+
+.closing__element--revealed.closing__callback {
+  opacity: 1;
+}
+
+.closing__callback-visual {
+  position: relative;
+  width: 100%;
+  max-width: 20rem;
+  height: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closing__callback-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-neutral-700) 20%,
+    var(--color-brand-primary-light) 50%,
+    var(--color-neutral-700) 80%,
+    transparent 100%
+  );
+  transform: translateY(-50%);
+}
+
+.closing__callback-dot {
+  position: relative;
+  z-index: 1;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-brand-primary-light);
+  box-shadow: 0 0 8px var(--color-glow-primary), 0 0 16px var(--color-glow-primary);
+}
+
+/* ========================================
+ * Footer
+ * ======================================== */
+.site-footer {
+  padding: var(--space-16) var(--space-8);
+  border-top: var(--border-width-thin) solid var(--border-color-default);
+}
+
+.footer__container {
+  max-width: var(--container-md);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.footer__copyright {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+}
+
+.footer__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.footer__link {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.footer__link:hover {
+  color: var(--color-text-secondary);
+}
+
+.footer__link:focus-visible {
+  outline: var(--border-width-medium) solid var(--color-brand-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ========================================
+ * Responsive Breakpoints
+ * ======================================== */
+@media (min-width: 768px) {
+  .closing-section {
+    padding: var(--space-32) var(--space-12);
+  }
+
+  .closing__reflection {
+    margin-bottom: var(--space-32);
+    padding: var(--space-24) 0;
+  }
+
+  .closing__cta {
+    margin-bottom: var(--space-32);
+  }
+
+  .closing__cta-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .closing__next {
+    margin-bottom: var(--space-32);
+  }
+
+  .closing__callback {
+    margin-bottom: var(--space-32);
+  }
+
+  .site-footer {
+    padding: var(--space-16) var(--space-12);
+  }
+
+  .footer__container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 1024px) {
+  .closing-section {
+    padding: var(--space-40) var(--space-16);
+  }
+
+  .closing__cta-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* ========================================
+ * Reduced Motion
+ * ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .closing-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .closing__reflection,
+  .closing__cta,
+  .closing__next,
+  .closing__callback {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
